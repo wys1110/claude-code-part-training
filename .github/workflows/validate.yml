@@ -1,0 +1,52 @@
+name: Validate training site
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Validate slide count and timing
+        run: |
+          python - <<'PY'
+          import pathlib, re
+          text = pathlib.Path('slides/deck.ts').read_text(encoding='utf-8')
+          ids = re.findall(r'\bid:\s*(\d+)', text)
+          minutes = [float(value) for value in re.findall(r'\bminutes:\s*([0-9.]+)', text)]
+          assert len(ids) == 44, f'expected 44 slides, found {len(ids)}'
+          assert len(minutes) == 44, f'expected 44 timing values, found {len(minutes)}'
+          assert abs(sum(minutes) - 120) < 0.001, f'expected 120 minutes, found {sum(minutes)}'
+          assert ids == [str(i) for i in range(1, 45)], 'slide ids must be sequential 1..44'
+          print(f'Validated {len(ids)} slides / {sum(minutes):g} minutes')
+          PY
+
+      - name: Check required presentation files
+        run: |
+          test -f slides/index.md
+          test -f slides/deck.ts
+          test -f .vitepress/theme/SlideDeck.vue
+          test -f .vitepress/theme/SlideFrame.vue
+          test -f instructor/slide-speaker-notes.md
+          test -f instructor/live-demo-script.md
+          test -f instructor/lab-answer-key.md
+          test -f guide/04-latest-feature-map.md
+
+      - name: Build VitePress site
+        run: npm run docs:build
