@@ -4,7 +4,7 @@ layout: home
 hero:
   name: "Claude Code"
   text: "2시간 실무 교육"
-  tagline: Solution PE팀 Staff를 대상으로 VS Code, GitHub, Claude Code를 연결해 분석부터 Pull Request까지 직접 수행합니다.
+  tagline: Solution PE팀 Staff를 대상으로 VS Code, GitHub 저장소·Pages, Claude Code를 연결해 공개 페이지 생성부터 코드 수정·검증까지 직접 수행합니다.
   image:
     src: /logo.svg
     alt: Claude Code Training
@@ -12,6 +12,9 @@ hero:
     - theme: brand
       text: 🎤 발표 모드 시작
       link: /slides/
+    - theme: alt
+      text: GitHub Pages 실습
+      link: /guide/04-github-repository-pages
     - theme: alt
       text: 참가자용 교재
       link: /guide/00-course-overview
@@ -23,9 +26,9 @@ features:
   - icon: 🎤
     title: 44장 발표 모드
     details: 키보드·클릭·모바일 스와이프, 진행률, 개요, 발표자 노트, 전체 화면, PDF 출력을 지원합니다.
-  - icon: 🖥️
-    title: VS Code·GitHub
-    details: 폴더, 터미널, Source Control, diff, branch, commit, push, Pull Request를 직접 익힙니다.
+  - icon: 🌐
+    title: GitHub 저장소·Pages
+    details: Public Repository 생성, index.html Commit, Deploy from a branch, Actions 확인과 재배포를 직접 익힙니다.
   - icon: 🤖
     title: 최신 Claude Code
     details: 2026-07-21 공식 문서와 v2.1.216 릴리스를 기준으로 권한 모드, Memory, Skills와 확장 기능을 검증했습니다.
@@ -35,7 +38,7 @@ features:
 
 **Solution PE팀 Staff**
 
-개발 경험이 서로 다른 참가자가 함께 들을 수 있도록 기본 도구부터 시작하며, 고급 기능은 도입 시점과 판단 기준 중심으로 설명합니다.
+개발 경험이 서로 다른 참가자가 함께 들을 수 있도록 GitHub 웹 UI와 VS Code의 기본부터 시작하며, 고급 기능은 도입 시점과 판단 기준 중심으로 설명합니다.
 
 ## 발표 모드 사용법
 
@@ -48,9 +51,9 @@ features:
 ## 교육 목표
 
 <div class="training-grid">
-  <div class="training-card"><strong>도구를 연결한다</strong><p>VS Code, Git, GitHub, Claude Code의 역할과 상태를 구분합니다.</p></div>
-  <div class="training-card"><strong>검증하며 작업한다</strong><p>분석·계획·수정·테스트·diff 순서로 결과를 닫습니다.</p></div>
-  <div class="training-card"><strong>안전하게 공유한다</strong><p>branch, commit, push, Pull Request로 검토 가능한 변경을 만듭니다.</p></div>
+  <div class="training-card"><strong>직접 공개한다</strong><p>GitHub Repository를 만들고 index.html을 Commit해 Pages URL까지 연결합니다.</p></div>
+  <div class="training-card"><strong>검증하며 작업한다</strong><p>분석·계획·수정·테스트·diff 순서로 Claude Code 결과를 닫습니다.</p></div>
+  <div class="training-card"><strong>안전하게 공유한다</strong><p>Public 범위와 민감정보를 판단하고 branch, commit, Pull Request로 변경을 전달합니다.</p></div>
 </div>
 
 ## 120분 과정
@@ -59,7 +62,7 @@ features:
 |---:|---|---|
 | 0~5분 | 오프닝과 완료 목표 | 발표 |
 | 5~20분 | VS Code 기본 | 시연 + 따라 하기 |
-| 20~35분 | Git·GitHub 기본 | 설명 + 짧은 실습 |
+| 20~35분 | GitHub 저장소 생성·Pages 활성화 | 웹 UI 실습 |
 | 35~50분 | Claude Code 개념과 에이전트 루프 | 설명 + 질문 |
 | 50~65분 | 권한 모드·Plan·Memory·확장 기능 | 기능 시연 |
 | 65~75분 | 휴식과 환경 점검 | 휴식 |
@@ -71,9 +74,10 @@ features:
 ## 교육 종료 후 할 수 있는 것
 
 <ul class="checklist">
-<li>GitHub 저장소를 Fork 또는 Clone한다.</li>
+<li>GitHub에서 Public 실습 저장소를 만든다.</li>
+<li>index.html을 Commit하고 Pages를 활성화한다.</li>
+<li>Actions에서 배포 상태와 공개 URL을 확인한다.</li>
 <li>VS Code에서 폴더·터미널·Source Control을 사용한다.</li>
-<li>작업 branch를 생성하고 현재 상태를 확인한다.</li>
 <li>Claude Code에 구조 분석과 수정 계획을 요청한다.</li>
 <li>테스트와 diff를 직접 확인한다.</li>
 <li>검토한 파일만 commit하고 가능한 경우 Pull Request를 만든다.</li>
@@ -82,6 +86,7 @@ features:
 ## 자료 구성
 
 - [🎤 발표 모드](/slides/)
+- [GitHub 저장소·Pages 실습](/guide/04-github-repository-pages)
 - [2시간 과정 개요](/guide/00-course-overview)
 - [최신 기능 검증표](/guide/04-latest-feature-map)
 - [교육 전 환경 준비](/guide/01-environment)
@@ -89,10 +94,11 @@ features:
 - [Git·GitHub 기본](/guide/03-git-github-basics)
 - [통합 라이브 시연](/guide/09-integrated-demo)
 - [참가자 실습](/guide/05-lab)
+- [GitHub Pages 15분 시연 대본](/instructor/github-pages-demo-script)
 - [슬라이드별 발표자 노트](/instructor/slide-speaker-notes)
-- [15분 라이브 데모 대본](/instructor/live-demo-script)
+- [Claude Code 15분 라이브 데모](/instructor/live-demo-script)
 - [실습 정답과 힌트](/instructor/lab-answer-key)
 
 ::: warning 교육 전 확인
-실제 회사 코드나 문서를 사용하기 전에 조직의 AI 사용 정책, 허용 계정, 데이터 처리 기준을 반드시 확인하세요. 교육 실습은 이 저장소의 공개 예제 코드만 사용합니다.
+Public 저장소와 Pages 사이트에는 회사 코드, 업무 문서, 실제 로그, 개인정보, 인증 정보, 비공개 URL을 넣지 않습니다. 실제 업무 자료와 Claude Code 사용은 조직의 AI·보안 정책과 허용 계정을 먼저 확인합니다.
 :::
