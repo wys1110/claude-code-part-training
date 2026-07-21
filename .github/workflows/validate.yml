@@ -43,11 +43,14 @@ jobs:
           assert len(replacement_minutes) == 7, f'expected 7 replacement timings, found {len(replacement_minutes)}'
           assert abs(sum(replacement_minutes) - 15) < 0.001, f'GitHub section must remain 15 minutes, found {sum(replacement_minutes)}'
           assert 'baseSlides.map' in pages, 'presentation deck must preserve the 44-slide base deck'
+          assert 'participantPrompt' in pages, 'GitHub section must include the copyable participant prompt'
+          assert 'gh api' in pages, 'GitHub section must include Pages API automation'
+          assert "source[branch]=main" in pages and "source[path]=/" in pages
 
           index = pathlib.Path('slides/index.md').read_text(encoding='utf-8')
           assert "from './pages-deck'" in index, 'slides/index.md must use pages-deck'
 
-          print(f'Validated 44 slides / 120 minutes; GitHub Pages replacements 10-16 / {sum(replacement_minutes):g} minutes')
+          print(f'Validated 44 slides / 120 minutes; automated Pages replacements 10-16 / {sum(replacement_minutes):g} minutes')
           PY
 
       - name: Check required presentation files
@@ -63,29 +66,17 @@ jobs:
           test -f instructor/github-pages-demo-script.md
           test -f guide/04-latest-feature-map.md
           test -f guide/04-github-repository-pages.md
-          test -f labs/github-pages-starter/index.html
-          test -f labs/github-pages-starter/README.md
 
-      - name: Validate GitHub Pages starter HTML
-        run: |
-          python - <<'PY'
-          import pathlib
-          html = pathlib.Path('labs/github-pages-starter/index.html').read_text(encoding='utf-8').lower()
-          assert '<!doctype html>' in html
-          assert '<meta name="viewport"' in html
-          assert '<title>' in html and '</title>' in html
-          assert '<h1>' in html and '</h1>' in html
-          assert '</html>' in html
-          print('Validated standalone GitHub Pages starter HTML')
-          PY
-
-      - name: Check GitHub Pages base and links
+      - name: Check repository URL to Pages guidance
         run: |
           grep -q "base: '/claude-code-part-training/'" .vitepress/config.mts
           grep -q "/guide/04-github-repository-pages" .vitepress/config.mts
           grep -q "/guide/04-github-repository-pages" slides/pages-deck.ts
-          grep -q "Deploy from a branch" guide/04-github-repository-pages.md
-          grep -q "GitHub Actions" guide/04-github-repository-pages.md
+          grep -q "Repository URL" guide/04-github-repository-pages.md
+          grep -q "gh api" guide/04-github-repository-pages.md
+          grep -q "source\[branch\]=main" guide/04-github-repository-pages.md
+          grep -q "source\[path\]=/" guide/04-github-repository-pages.md
+          grep -q "발표자료 전용" guide/04-github-repository-pages.md
 
       - name: Build VitePress site
         run: npm run docs:build
