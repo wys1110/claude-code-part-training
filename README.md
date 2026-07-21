@@ -2,6 +2,10 @@
 
 Claude Code의 **개념 → 유용한 기능 → 실습 → 팀 적용·보안**을 한 번에 진행할 수 있는 GitHub Pages 교육 사이트입니다.
 
+## 교육 대상
+
+- Solution PE팀 Staff
+
 ## 구성
 
 - 60분 / 90분 교육안
