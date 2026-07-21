@@ -21,13 +21,21 @@ export default defineConfig({
     sidebarMenuLabel: '메뉴',
     darkModeSwitchLabel: '테마',
     nav: [
+      { text: '🎤 발표 모드', link: '/slides/' },
       { text: '2시간 과정', link: '/guide/00-course-overview' },
-      { text: 'VS Code', link: '/guide/02-vscode-basics' },
+      { text: '최신 기능표', link: '/guide/04-latest-feature-map' },
       { text: '실습', link: '/guide/05-lab' },
       { text: '강사용', link: '/instructor/120min-runbook' },
       { text: 'GitHub', link: 'https://github.com/wys1110/claude-code-part-training' }
     ],
     sidebar: [
+      {
+        text: '발표',
+        items: [
+          { text: '🎤 44장 발표 모드', link: '/slides/' },
+          { text: '슬라이드별 발표자 노트', link: '/instructor/slide-speaker-notes' }
+        ]
+      },
       {
         text: '2시간 교육 과정',
         items: [
@@ -38,9 +46,10 @@ export default defineConfig({
           { text: '4. Claude Code 개념', link: '/guide/01-concept' },
           { text: '5. 첫 세션과 기본 흐름', link: '/guide/02-first-session' },
           { text: '6. 유용한 기능', link: '/guide/03-useful-features' },
-          { text: '7. 잘 시키는 방법', link: '/guide/04-prompt-patterns' },
-          { text: '8. 통합 라이브 시연', link: '/guide/09-integrated-demo' },
-          { text: '9. 참가자 실습', link: '/guide/05-lab' }
+          { text: '7. 최신 기능 검증표', link: '/guide/04-latest-feature-map' },
+          { text: '8. 잘 시키는 방법', link: '/guide/04-prompt-patterns' },
+          { text: '9. 통합 라이브 시연', link: '/guide/09-integrated-demo' },
+          { text: '10. 참가자 실습', link: '/guide/05-lab' }
         ]
       },
       {
@@ -56,6 +65,9 @@ export default defineConfig({
         collapsed: true,
         items: [
           { text: '120분 분 단위 운영안', link: '/instructor/120min-runbook' },
+          { text: '슬라이드별 발표자 노트', link: '/instructor/slide-speaker-notes' },
+          { text: '15분 라이브 데모 대본', link: '/instructor/live-demo-script' },
+          { text: '실습 정답과 힌트', link: '/instructor/lab-answer-key' },
           { text: '세부 내용 터치 전략', link: '/instructor/content-touch-strategy' },
           { text: '사전 점검·실패 대응', link: '/instructor/preflight-checklist' }
         ]
