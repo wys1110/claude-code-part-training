@@ -9,7 +9,8 @@
 - 한 번에 10분 이상 설명하지 않습니다.
 - 슬라이드의 문구를 그대로 읽지 말고 **왜 필요한지 → 화면에서 무엇을 볼지 → 참가자가 무엇을 할지** 순서로 말합니다.
 - 라이브 데모에서는 결과보다 branch, baseline, Plan, test, diff를 반복해서 확인합니다.
-- 시간이 밀리면 Awareness 항목을 줄이고 VS Code diff·branch·Plan·test는 유지합니다.
+- GitHub Pages 구간은 메뉴 암기보다 **저장소 URL + 완료 기준 + 검토 지점**을 강조합니다.
+- 시간이 밀리면 Awareness 항목을 줄이고 VS Code diff·Plan·test·공개 설정 검토는 유지합니다.
 
 ## 1~3. 오프닝 — 5분
 
@@ -82,53 +83,78 @@ npm test
 - 메뉴 위치 암기 대신 명령 이름 검색을 보여줍니다.
 - 확장은 시각적 검토, CLI는 터미널·고급 설정에 강하다고 정리합니다.
 
-## 10~16. Git·GitHub — 15분
+## 10~16. GitHub 저장소·Pages 자동화 — 15분
 
-### 10. Git과 GitHub — 2분
+### 10. 역할 분리 — 2분
 
-반복할 문장:
+- 사람: Public Repository 생성, URL 복사, 변경·Push·공개 설정 승인
+- Claude Code: Clone, 발표자료 생성, Commit·Push, Pages 활성화
+- 핵심 문장: “자동화하더라도 공개 범위와 변경 파일은 사람이 확인합니다.”
+
+### 11. Public Repository 생성 — 2분
 
 ```text
-Save ≠ Commit
-Commit ≠ Push
-Push ≠ Merge
++ → New repository → 이름 → Public → README → Create repository
 ```
 
-### 11. Local ↔ Remote — 2분
+- Owner가 개인 계정인지 확인합니다.
+- README를 추가해 `main` 브랜치를 바로 만듭니다.
+- 회사 코드·문서·로그·개인정보·인증 정보는 넣지 않습니다.
 
-- pull과 push로 파일이 아니라 commit 이력이 이동한다고 설명합니다.
-- 처음 내려받기는 clone, 이후 동기화는 pull/push입니다.
+### 12. Repository URL 복사 — 2분
 
-### 12. Fork와 Clone — 2분
+```text
+Code → HTTPS → Copy URL
+```
 
-- Fork: GitHub 서버에서 내 계정으로 복사
-- Clone: 원격 저장소를 PC로 복사
-- 참가자 충돌 방지를 위해 Fork → Clone 경로를 권장합니다.
+- URL의 owner/repository가 방금 만든 저장소와 일치하는지 확인합니다.
+- Repository URL만 복사하며 토큰이나 비밀번호는 공유하지 않습니다.
 
-### 13. Branch first — 3분
+### 13. Claude Code에 요청 — 2분
+
+화면의 프롬프트에 실제 URL을 넣습니다.
+
+- 대상: 어떤 저장소인가?
+- 최종 결과: Pages 루트에서 발표자료가 바로 실행되는가?
+- 금지사항: 기존 파일 삭제와 force push 금지
+- 검증: Commit 전 diff, Push 전 branch와 remote 확인
+
+질문: “이 프롬프트에서 가장 중요한 완료 기준은 무엇입니까?”
+
+### 14. Claude Code 작업 흐름 — 2분
+
+```text
+환경·권한 확인 → Clone → 발표자료 생성 → Diff → Commit → Push
+```
+
+- 기본 파일은 `index.html`, `styles.css`, `presentation.js`입니다.
+- 문서 사이트나 불필요한 프레임워크를 만들지 않게 합니다.
+- Push 승인 전에 `main`과 `origin`을 확인합니다.
+
+### 15. Pages API 활성화 — 3분
 
 ```bash
-git switch -c practice/<github-id>
-git branch --show-current
+gh api repos/<owner>/<repo>/pages
 ```
 
-- branch를 만든 뒤 현재 branch를 명령과 VS Code 좌측 하단에서 이중 확인합니다.
+Pages가 없으면:
 
-### 14. Stage와 Commit — 2분
+```bash
+gh api --method POST repos/<owner>/<repo>/pages \
+  -f build_type=legacy \
+  -f 'source[branch]=main' \
+  -f 'source[path]=/'
+```
 
-- Stage는 다음 저장점에 넣을 변경 선택입니다.
-- Commit은 원격 전송이 아니라 로컬 이력입니다.
-- 검토한 파일만 stage합니다.
+- `gh` 로그인과 Pages 관리 권한이 필요합니다.
+- 404를 무조건 Pages 미생성으로 단정하지 않고 주소와 권한을 함께 확인합니다.
+- 응답의 `status`, `html_url`, `source.branch`, `source.path`를 읽습니다.
 
-### 15. Push와 PR — 2분
+### 16. 공개 URL 검증 — 2분
 
-- Push는 원격 branch 전송입니다.
-- PR은 무엇·왜·검증·남은 위험을 전달하는 리뷰 단위입니다.
-
-### 16. 표준 협업 흐름 — 2분
-
-- 이후 Claude Code 데모도 같은 흐름으로 진행한다고 예고합니다.
-- 참가자에게 다음 단계를 순서대로 말하게 합니다.
+- Pages 루트 주소에서 발표 첫 장이 바로 보여야 합니다.
+- 방향키·Space, `#slide=번호`, 전체 화면, 개요, 노트, PDF, 모바일 화면을 확인합니다.
+- 핵심 문장: “Pages를 켠 것이 아니라 공개 URL에서 발표가 동작해야 완료입니다.”
 
 ## 17~22. Claude Code 개념 — 15분
 
