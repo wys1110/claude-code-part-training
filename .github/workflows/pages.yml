@@ -1,0 +1,57 @@
+name: Deploy presentation to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Validate presentation
+        run: |
+          python - <<'PY'
+          import pathlib, re
+          text = ''.join(pathlib.Path(f'slides-{i}.js').read_text(encoding='utf-8') for i in range(1, 5))
+          ids = re.findall(r'\{id:(\d+),', text)
+          minutes = [float(v) for v in re.findall(r'\{id:\d+,section:[^\n]+?minutes:([0-9.]+),', text)]
+          assert ids == [str(i) for i in range(1, 45)], f'slide ids: {ids}'
+          assert len(minutes) == 44, f'timing count: {len(minutes)}'
+          assert abs(sum(minutes) - 120) < 0.001, f'total: {sum(minutes)}'
+          for required in ('index.html','styles.css','slides-1.js','slides-2.js','slides-3.js','slides-4.js','app.js'):
+              assert pathlib.Path(required).is_file(), f'missing {required}'
+          print('Validated 44 slides / 120 minutes')
+          PY
+          node --check slides-1.js
+          node --check slides-2.js
+          node --check slides-3.js
+          node --check slides-4.js
+          node --check app.js
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload static presentation
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: .
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
