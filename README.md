@@ -15,7 +15,7 @@ Claude Code의 **개념 → 유용한 기능 → 실습 → 팀 적용·보안**
 ## 로컬 실행
 
 ```bash
-npm ci
+npm install
 npm run docs:dev
 ```
 
