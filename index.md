@@ -4,7 +4,7 @@ layout: home
 hero:
   name: "Claude Code"
   text: "파트 전파 교육"
-  tagline: 개념을 이해하고, 유용한 기능을 익힌 뒤, 실제 코드로 직접 실습합니다.
+  tagline: Solution PE팀 Staff를 대상으로, 개념을 이해하고 유용한 기능을 익힌 뒤 실제 코드로 직접 실습합니다.
   image:
     src: /logo.svg
     alt: Claude Code Training
@@ -27,6 +27,10 @@ features:
     title: 실습
     details: 코드 탐색, 버그 수정, 기능 추가, 테스트 검증을 단계별로 직접 수행합니다.
 ---
+
+## 교육 대상
+
+**Solution PE팀 Staff**
 
 ## 교육 목표
 
