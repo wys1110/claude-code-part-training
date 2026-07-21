@@ -5,7 +5,7 @@
 - Keep examples generic and safe for a public repository.
 
 ## Commands
-- Install dependencies: `npm ci`
+- Install dependencies: `npm install`
 - Run docs locally: `npm run docs:dev`
 - Build docs: `npm run docs:build`
 - Run lab tests: `cd labs/task-board && npm test`
