@@ -4,7 +4,7 @@ layout: home
 hero:
   name: "Claude Code"
   text: "2시간 실무 교육"
-  tagline: Solution PE팀 Staff를 대상으로 VS Code, GitHub 저장소·Pages, Claude Code를 연결해 공개 페이지 생성부터 코드 수정·검증까지 직접 수행합니다.
+  tagline: Solution PE팀 Staff를 대상으로 VS Code, GitHub 저장소·Pages, Claude Code를 연결해 발표자료 배포부터 코드 수정·검증까지 직접 수행합니다.
   image:
     src: /logo.svg
     alt: Claude Code Training
@@ -13,7 +13,7 @@ hero:
       text: 🎤 발표 모드 시작
       link: /slides/
     - theme: alt
-      text: GitHub Pages 실습
+      text: Repository URL → Pages
       link: /guide/04-github-repository-pages
     - theme: alt
       text: 참가자용 교재
@@ -27,8 +27,8 @@ features:
     title: 44장 발표 모드
     details: 키보드·클릭·모바일 스와이프, 진행률, 개요, 발표자 노트, 전체 화면, PDF 출력을 지원합니다.
   - icon: 🌐
-    title: GitHub 저장소·Pages
-    details: Public Repository 생성, index.html Commit, Deploy from a branch, Actions 확인과 재배포를 직접 익힙니다.
+    title: 저장소 URL로 Pages 자동화
+    details: Public Repository를 만들고 URL을 Claude Code에 전달해 발표자료 생성, Commit·Push, Pages 활성화와 공개 URL 검증까지 진행합니다.
   - icon: 🤖
     title: 최신 Claude Code
     details: 2026-07-21 공식 문서와 v2.1.216 릴리스를 기준으로 권한 모드, Memory, Skills와 확장 기능을 검증했습니다.
@@ -38,7 +38,7 @@ features:
 
 **Solution PE팀 Staff**
 
-개발 경험이 서로 다른 참가자가 함께 들을 수 있도록 GitHub 웹 UI와 VS Code의 기본부터 시작하며, 고급 기능은 도입 시점과 판단 기준 중심으로 설명합니다.
+개발 경험이 서로 다른 참가자가 함께 들을 수 있도록 GitHub 저장소 생성과 VS Code 기본부터 시작하며, 고급 기능은 도입 시점과 판단 기준 중심으로 설명합니다.
 
 ## 발표 모드 사용법
 
@@ -51,9 +51,9 @@ features:
 ## 교육 목표
 
 <div class="training-grid">
-  <div class="training-card"><strong>직접 공개한다</strong><p>GitHub Repository를 만들고 index.html을 Commit해 Pages URL까지 연결합니다.</p></div>
+  <div class="training-card"><strong>자동화해 공개한다</strong><p>Public Repository 주소를 Claude Code에 전달해 발표자료 생성·Push·Pages URL까지 연결합니다.</p></div>
   <div class="training-card"><strong>검증하며 작업한다</strong><p>분석·계획·수정·테스트·diff 순서로 Claude Code 결과를 닫습니다.</p></div>
-  <div class="training-card"><strong>안전하게 공유한다</strong><p>Public 범위와 민감정보를 판단하고 branch, commit, Pull Request로 변경을 전달합니다.</p></div>
+  <div class="training-card"><strong>안전하게 승인한다</strong><p>Public 범위와 민감정보를 판단하고 Commit 전 diff, Push 대상과 Pages source를 확인합니다.</p></div>
 </div>
 
 ## 120분 과정
@@ -62,7 +62,7 @@ features:
 |---:|---|---|
 | 0~5분 | 오프닝과 완료 목표 | 발표 |
 | 5~20분 | VS Code 기본 | 시연 + 따라 하기 |
-| 20~35분 | GitHub 저장소 생성·Pages 활성화 | 웹 UI 실습 |
+| 20~35분 | Repository URL → 발표자료 Pages | 자동화 실습 |
 | 35~50분 | Claude Code 개념과 에이전트 루프 | 설명 + 질문 |
 | 50~65분 | 권한 모드·Plan·Memory·확장 기능 | 기능 시연 |
 | 65~75분 | 휴식과 환경 점검 | 휴식 |
@@ -75,8 +75,11 @@ features:
 
 <ul class="checklist">
 <li>GitHub에서 Public 실습 저장소를 만든다.</li>
-<li>index.html을 Commit하고 Pages를 활성화한다.</li>
-<li>Actions에서 배포 상태와 공개 URL을 확인한다.</li>
+<li>Repository HTTPS URL을 복사한다.</li>
+<li>URL과 완료 기준을 Claude Code에 전달한다.</li>
+<li>Commit 전에 변경 파일과 diff를 검토한다.</li>
+<li>main과 origin을 확인하고 Push를 승인한다.</li>
+<li>Pages source와 공개 발표 URL을 확인한다.</li>
 <li>VS Code에서 폴더·터미널·Source Control을 사용한다.</li>
 <li>Claude Code에 구조 분석과 수정 계획을 요청한다.</li>
 <li>테스트와 diff를 직접 확인한다.</li>
@@ -86,7 +89,7 @@ features:
 ## 자료 구성
 
 - [🎤 발표 모드](/slides/)
-- [GitHub 저장소·Pages 실습](/guide/04-github-repository-pages)
+- [Repository URL로 발표자료 Pages 만들기](/guide/04-github-repository-pages)
 - [2시간 과정 개요](/guide/00-course-overview)
 - [최신 기능 검증표](/guide/04-latest-feature-map)
 - [교육 전 환경 준비](/guide/01-environment)
