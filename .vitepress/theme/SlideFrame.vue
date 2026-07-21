@@ -39,7 +39,7 @@ defineProps<{
         <div class="repo-node"><span>☁️</span><strong>Remote repository</strong><small>GitHub</small></div>
       </div>
 
-      <div v-if="slide.columns?.length" class="slide-columns" :class="`cols-${Math.min(slide.columns.length, 3)}`">
+      <div v-if="slide.columns?.length" class="slide-columns" :class="`cols-${Math.min(slide.columns.length, 4)}`">
         <section v-for="column in slide.columns" :key="column.title" class="slide-column">
           <h2>{{ column.title }}</h2>
           <p v-if="column.body">{{ column.body }}</p>
