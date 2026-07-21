@@ -3,7 +3,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   lang: 'ko-KR',
   title: 'Claude Code 파트 전파 교육',
-  description: 'Solution PE팀 Staff 대상 VS Code, GitHub, Claude Code 2시간 실습 과정',
+  description: 'Solution PE팀 Staff 대상 VS Code, GitHub Pages, Claude Code 2시간 실습 과정',
   base: '/claude-code-part-training/',
   cleanUrls: true,
   lastUpdated: true,
@@ -22,6 +22,7 @@ export default defineConfig({
     darkModeSwitchLabel: '테마',
     nav: [
       { text: '🎤 발표 모드', link: '/slides/' },
+      { text: 'GitHub Pages 실습', link: '/guide/04-github-repository-pages' },
       { text: '2시간 과정', link: '/guide/00-course-overview' },
       { text: '최신 기능표', link: '/guide/04-latest-feature-map' },
       { text: '실습', link: '/guide/05-lab' },
@@ -43,13 +44,14 @@ export default defineConfig({
           { text: '1. 교육 전 환경 준비', link: '/guide/01-environment' },
           { text: '2. VS Code 기본', link: '/guide/02-vscode-basics' },
           { text: '3. Git·GitHub 기본', link: '/guide/03-git-github-basics' },
-          { text: '4. Claude Code 개념', link: '/guide/01-concept' },
-          { text: '5. 첫 세션과 기본 흐름', link: '/guide/02-first-session' },
-          { text: '6. 유용한 기능', link: '/guide/03-useful-features' },
-          { text: '7. 최신 기능 검증표', link: '/guide/04-latest-feature-map' },
-          { text: '8. 잘 시키는 방법', link: '/guide/04-prompt-patterns' },
-          { text: '9. 통합 라이브 시연', link: '/guide/09-integrated-demo' },
-          { text: '10. 참가자 실습', link: '/guide/05-lab' }
+          { text: '4. 저장소 만들기·Pages', link: '/guide/04-github-repository-pages' },
+          { text: '5. Claude Code 개념', link: '/guide/01-concept' },
+          { text: '6. 첫 세션과 기본 흐름', link: '/guide/02-first-session' },
+          { text: '7. 유용한 기능', link: '/guide/03-useful-features' },
+          { text: '8. 최신 기능 검증표', link: '/guide/04-latest-feature-map' },
+          { text: '9. 잘 시키는 방법', link: '/guide/04-prompt-patterns' },
+          { text: '10. 통합 라이브 시연', link: '/guide/09-integrated-demo' },
+          { text: '11. 참가자 실습', link: '/guide/05-lab' }
         ]
       },
       {
@@ -65,8 +67,9 @@ export default defineConfig({
         collapsed: true,
         items: [
           { text: '120분 분 단위 운영안', link: '/instructor/120min-runbook' },
+          { text: 'GitHub Pages 15분 대본', link: '/instructor/github-pages-demo-script' },
           { text: '슬라이드별 발표자 노트', link: '/instructor/slide-speaker-notes' },
-          { text: '15분 라이브 데모 대본', link: '/instructor/live-demo-script' },
+          { text: '15분 Claude 라이브 데모', link: '/instructor/live-demo-script' },
           { text: '실습 정답과 힌트', link: '/instructor/lab-answer-key' },
           { text: '세부 내용 터치 전략', link: '/instructor/content-touch-strategy' },
           { text: '사전 점검·실패 대응', link: '/instructor/preflight-checklist' }
