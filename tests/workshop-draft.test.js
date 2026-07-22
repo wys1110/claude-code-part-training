@@ -126,8 +126,31 @@ test('publication and troubleshooting end with observable evidence', () => {
   ]) assert.match(html, new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
 });
 
+test('copyable command displays omit literal shell prompt glyphs', () => {
+  assert.doesNotMatch(readDeck(), /\$ (?:git|pwd|ls|cd|claude)\b/);
+});
+
 test('speaker script has one section for every slide', () => {
   const script = fs.readFileSync(path.join(root, 'drafts', 'solution-pe-portfolio-workshop', 'script.md'), 'utf8');
   const headings = [...script.matchAll(/^## Slide (\d+) — /gm)].map(match => Number(match[1]));
   assert.deepEqual(headings, Array.from({ length: 63 }, (_, i) => i + 1));
+});
+
+test('embedded full speaker notes exactly match all 63 script sections', () => {
+  const script = fs.readFileSync(path.join(root, 'drafts', 'solution-pe-portfolio-workshop', 'script.md'), 'utf8');
+  const headings = [...script.matchAll(/^## Slide (\d+) — (.+)$/gm)];
+  const expected = headings.map((match, index) => ({
+    slide: Number(match[1]),
+    title: match[2],
+    body: script.slice(
+      match.index + match[0].length,
+      headings[index + 1]?.index ?? script.length,
+    ).trim(),
+  }));
+  const html = readDeck();
+  const payload = html.match(/<script type="application\/json" id="speaker-notes-data">([\s\S]*?)<\/script>/)?.[1];
+  assert.ok(payload, 'standalone deck should embed full speaker notes JSON');
+  assert.doesNotMatch(payload, /</, 'embedded JSON should escape script-closing input');
+  assert.deepEqual(JSON.parse(payload), expected);
+  assert.match(html, /speakerNotes\[current\]\?\.body\s*\|\|\s*slides\[current\]\.dataset\.notes/);
 });
