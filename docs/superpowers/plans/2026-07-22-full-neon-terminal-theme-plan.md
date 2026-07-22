@@ -4,7 +4,7 @@
 
 **Goal:** Apply the strong Neon Terminal visual system to all 73 workshop slides, verify every delivery format, and deploy the stable deck path through `wys1110/claude-code-part-training` GitHub Pages.
 
-**Architecture:** Keep the deck as one standalone HTML artifact and promote the existing `.skill-slide` visual rules into shared `.slide` rules. Preserve all content and runtime behavior, add regression contracts around the global theme and Pages validation, then publish the existing `drafts/solution-pe-portfolio-workshop/` path through the repository's current main-branch Pages workflow.
+**Architecture:** Keep the deck as one standalone HTML artifact and promote the existing `.skill-slide` visual rules into shared `.slide` rules. Preserve all content and runtime behavior, add regression contracts around the global theme and Pages validation, then have the current main-branch Pages workflow build a minimal `_site/` artifact that maps the source deck to the clean public path `/solution-pe-portfolio-workshop/`.
 
 **Tech Stack:** Static HTML/CSS/JavaScript, Node `node:test`, Playwright/Chromium render checks, GitHub Actions Pages, GitHub CLI.
 
@@ -198,19 +198,20 @@ Skip this commit when no source defect is found.
 
 **Interfaces:**
 - Consumes: verified `drafts/solution-pe-portfolio-workshop/index.html` and the existing main-branch Pages workflow.
-- Produces: CI validation for the 73-slide workshop and public URL `https://wys1110.github.io/claude-code-part-training/drafts/solution-pe-portfolio-workshop/`.
+- Produces: CI validation for the 73-slide workshop, a minimal `_site/` artifact, and public URL `https://wys1110.github.io/claude-code-part-training/solution-pe-portfolio-workshop/`.
 
 - [ ] **Step 1: Add a failing workflow contract**
 
 In `tests/deck.test.js`, read `.github/workflows/pages.yml` and assert that it validates the workshop file, exact slide count, and exact 120-minute sum:
 
 ```js
-test('Pages workflow validates and uploads the 73-slide workshop path', () => {
+test('Pages workflow validates and publishes the 73-slide workshop at a clean path', () => {
   const workflow = fs.readFileSync(path.join(ROOT, '.github/workflows/pages.yml'), 'utf8');
   assert.match(workflow, /drafts\/solution-pe-portfolio-workshop\/index\.html/);
   assert.match(workflow, /workshop slide ids/);
   assert.match(workflow, /workshop total/);
-  assert.match(workflow, /path:\s*\./);
+  assert.match(workflow, /_site\/solution-pe-portfolio-workshop\/index\.html/);
+  assert.match(workflow, /path:\s*\.\/_site/);
 });
 ```
 
@@ -220,7 +221,7 @@ Run: `node --test tests/deck.test.js`
 
 Expected: FAIL because the existing workflow validates only the root presentation.
 
-- [ ] **Step 3: Extend the existing Python validation in `pages.yml`**
+- [ ] **Step 3: Extend validation and build a minimal `_site/` artifact in `pages.yml`**
 
 Read `drafts/solution-pe-portfolio-workshop/index.html`, extract `data-slide` and `data-minutes`, and add exact assertions:
 
@@ -233,6 +234,17 @@ assert len(workshop_minutes) == 73, f'workshop timing count: {len(workshop_minut
 assert abs(sum(workshop_minutes) - 120) < 0.001, f'workshop total: {sum(workshop_minutes)}'
 print('Validated workshop 73 slides / 120 minutes')
 ```
+
+After validation, add a shell step that copies only the existing root presentation assets and the workshop HTML into the deployment artifact:
+
+```bash
+mkdir -p _site/solution-pe-portfolio-workshop
+cp index.html styles.css app.js slides-1.js slides-2.js slides-3.js slides-4.js _site/
+cp drafts/solution-pe-portfolio-workshop/index.html _site/solution-pe-portfolio-workshop/index.html
+touch _site/.nojekyll
+```
+
+Change `actions/upload-pages-artifact@v4` to upload `./_site`. This preserves the existing root presentation while excluding tests, plans, source notes, worktree metadata, and unrelated repository files from the public artifact.
 
 - [ ] **Step 4: Run final local verification and commit**
 
@@ -263,4 +275,4 @@ Confirm required checks pass, merge the PR into `main`, and wait for `Deploy pre
 
 - [ ] **Step 7: Verify the live public deck**
 
-Open `https://wys1110.github.io/claude-code-part-training/drafts/solution-pe-portfolio-workshop/` and verify HTTP 200, title `Solution PE팀 Staff · 업무 포트폴리오 워크숍`, `73 / 73` navigation reachability, representative slides `2`, `12`, `52`, and `73`, and strong Neon Terminal styling. Report the workflow run and final URL.
+Open `https://wys1110.github.io/claude-code-part-training/solution-pe-portfolio-workshop/` and verify HTTP 200, title `Solution PE팀 Staff · 업무 포트폴리오 워크숍`, `73 / 73` navigation reachability, representative slides `2`, `12`, `52`, and `73`, and strong Neon Terminal styling. Report the workflow run and final URL.
