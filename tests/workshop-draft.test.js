@@ -24,8 +24,25 @@ test('draft is a standalone Minimal Dark HTML deck with required controls', () =
     'function updateProgress',
     'function updateCounter',
     "addEventListener('touchstart'",
+    "addEventListener('touchend'",
     '@media print',
   ]) assert.match(html, new RegExp(required.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+});
+
+test('navigation opens every slide at its top edge', () => {
+  assert.match(readDeck(), /slides\[index\]\.scrollTop\s*=\s*0/);
+});
+
+test('mobile wide slides align tall content from the top', () => {
+  assert.match(readDeck(), /\.slide\.wide\{align-content:start\}/);
+});
+
+test('print layout releases the screen viewport clipping', () => {
+  assert.match(readDeck(), /@media print\{html,body\{height:auto;overflow:visible\}/);
+});
+
+test('print layout keeps full slides horizontally centered', () => {
+  assert.match(readDeck(), /\.slide\.full\{display:flex!important;justify-content:center\}/);
 });
 
 test('opening and core sections contain the approved practical story', () => {
@@ -99,4 +116,10 @@ test('publication and troubleshooting end with observable evidence', () => {
     '404', 'index.html', 'Push', '민감정보', '공개 URL', 'git status',
     '시키고 끝내지 말고, 결과를 직접 확인한다',
   ]) assert.match(html, new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+});
+
+test('speaker script has one section for every slide', () => {
+  const script = fs.readFileSync(path.join(root, 'drafts', 'solution-pe-portfolio-workshop', 'script.md'), 'utf8');
+  const headings = [...script.matchAll(/^## Slide (\d+) — /gm)].map(match => Number(match[1]));
+  assert.deepEqual(headings, Array.from({ length: 63 }, (_, i) => i + 1));
 });
