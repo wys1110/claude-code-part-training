@@ -48,3 +48,11 @@ test('instructor demo reaches a reviewed first version before the break', () => 
   ]) assert.match(html, new RegExp(phrase));
   assert.match(html, /data-slide="30"/);
 });
+
+test('instructor demo reviews untracked first-version files with no-index diffs', () => {
+  const html = readDeck();
+  for (const file of ['index.html', 'styles.css', 'app.js']) {
+    assert.match(html, new RegExp(`git diff --no-index --check /dev/null ${file}`));
+  }
+  assert.match(html, /exit 1은 파일 차이를 알리는 정상 결과/);
+});
