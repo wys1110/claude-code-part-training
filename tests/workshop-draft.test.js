@@ -225,6 +225,16 @@ test('skill chapter explains all five skills through before-and-after behavior',
   }
 });
 
+test('skill chapter uses neon terminal treatment and workflow badges', () => {
+  const html = readDeck();
+  for (const token of ['skill-slide', 'neon-grid', 'skill-badge', '--neon-green', '--neon-cyan']) {
+    assert.match(html, new RegExp(token));
+  }
+  for (const skill of ['brainstorming', 'writing-plans', 'frontend-design', 'systematic-debugging', 'verification-before-completion']) {
+    assert.ok((html.match(new RegExp(`skill-badge[^>]*>${skill}`, 'g')) || []).length >= 1);
+  }
+});
+
 test('publication and troubleshooting end with observable evidence', () => {
   const html = readDeck();
   for (const phrase of [
