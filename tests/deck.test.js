@@ -5,6 +5,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
+const ROOT = path.join(__dirname, '..');
 
 function loadSlides() {
   const context = vm.createContext({ window: {} });
@@ -46,4 +47,14 @@ test('every slide has complete presenter guidance', () => {
     assert.ok(slide.action);
     assert.ok(slide.transition);
   }
+});
+
+test('Pages workflow validates and publishes the 73-slide workshop at a clean path', () => {
+  const workflow = fs.readFileSync(path.join(ROOT, '.github/workflows/pages.yml'), 'utf8');
+  assert.match(workflow, /range\(1, 30\)/);
+  assert.match(workflow, /drafts\/solution-pe-portfolio-workshop\/index\.html/);
+  assert.match(workflow, /workshop slide ids/);
+  assert.match(workflow, /workshop total/);
+  assert.match(workflow, /_site\/solution-pe-portfolio-workshop\/index\.html/);
+  assert.match(workflow, /path:\s*\.\/_site/);
 });
