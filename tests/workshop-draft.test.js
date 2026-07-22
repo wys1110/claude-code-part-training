@@ -56,3 +56,14 @@ test('instructor demo reviews untracked first-version files with no-index diffs'
   }
   assert.match(html, /exit 1은 파일 차이를 알리는 정상 결과/);
 });
+
+test('participant lab contains all twelve numbered steps and completion checks', () => {
+  const html = readDeck();
+  for (let step = 1; step <= 12; step += 1) {
+    assert.match(html, new RegExp(`STEP ${String(step).padStart(2, '0')}`));
+  }
+  for (const phrase of ['복사할 프롬프트', '정상 결과', '직접 확인', '안 될 때 먼저']) {
+    assert.match(html, new RegExp(phrase));
+  }
+  assert.match(html, /data-slide="53"/);
+});
