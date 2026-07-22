@@ -175,6 +175,36 @@
     <section class="slide full" data-slide="53" data-minutes="3" data-notes="[3분] STEP 12는 Pages 설정 전에 배포 체크를 끝내는 단계입니다. 공개될 내용, GitHub 반영, 링크, 모바일, Pages 공개 범위를 확인합니다. 실제 Pages 설정과 공개 URL은 이후 세션 범위입니다.">
       <div><span class="tag">STEP 12 · 3분</span><h1>Pages 설정 전에<br><span class="accent">배포 체크 완료</span></h1><div class="four-grid"><div class="panel"><h3>복사할 프롬프트</h3><p>없음. 사람이 공개 전 체크를 완료합니다.</p></div><div class="panel"><h3>정상 결과</h3><p>GitHub에 확인한 Commit이 있고, 공개 가능한 내용만 포함됩니다.</p></div><div class="panel"><h3>직접 확인</h3><p>데스크톱·390×844·모든 링크·<code>git status</code>·GitHub 최신 Commit을 체크합니다.</p></div><div class="panel"><h3>안 될 때 먼저</h3><p>하나라도 불확실하면 Pages를 켜지 말고, 수정 → Diff → Commit → Push → 재확인으로 돌아갑니다.</p></div></div><p>이제 사람의 판단으로 Pages 설정 단계로 넘어갈 준비가 됐습니다.</p></div>
     </section>
+    <section class="slide full" data-slide="54" data-minutes="1" data-notes="[1분] GitHub Pages는 확인하고 Push한 정적 파일을 공개 URL로 연결합니다. 배포 전에 GitHub의 최신 Commit과 파일을 다시 확인합니다.">
+      <div><span class="tag">Pages · 1분</span><h1>Pages는 확인한 정적 파일을<br><span class="accent">공개 URL로 연결한다</span></h1><p>로컬 파일이 아니라 GitHub에 Push된 Commit이 배포 대상입니다.</p></div>
+    </section>
+    <section class="slide wide" data-slide="55" data-minutes="1" data-notes="[1분] 저장소 화면에서 Pages 설정 경로를 그대로 따라갑니다. branch는 main, 폴더는 /(root)로 선택하고 저장 결과를 확인합니다.">
+      <p class="eyebrow">Pages 설정</p><h2>설정 경로는 <span class="accent">main과 /(root)</span>를 선택한다</h2><div class="panel code">Settings → Pages → Deploy from a branch → main → /(root)<br><br><strong>직접 확인</strong><br>Save 뒤 선택값이 main / (root)로 남아 있는지 봅니다.</div>
+    </section>
+    <section class="slide" data-slide="56" data-minutes="2" data-notes="[2분] Pages가 배포를 시작해도 즉시 열리지 않을 수 있습니다. 잠시 기다린 다음 GitHub가 표시한 공개 URL을 새 탭에서 직접 엽니다.">
+      <div><p class="eyebrow">배포 확인</p><h2>배포는 잠시 기다린 뒤<br><span class="accent">공개 URL을 직접 연다</span></h2></div><div class="stack"><div class="panel"><h3>기다림</h3><p>Pages 상태가 배포 완료로 바뀔 때까지 잠시 기다립니다.</p></div><div class="panel"><h3>직접 열기</h3><p>GitHub Pages가 표시한 공개 URL을 새 탭에서 열고 새로고침합니다.</p></div><div class="panel"><h3>확인</h3><p>제목, 카드, 링크를 클릭하고 모바일 폭에서도 다시 봅니다.</p></div></div>
+    </section>
+    <section class="slide" data-slide="57" data-minutes="1" data-notes="[1분] 404에서는 추측으로 설정을 반복하지 않습니다. Git 상태, 원격 반영, Pages 원본, 파일 경로, URL 순서로 확인해 원인을 좁힙니다.">
+      <div><p class="eyebrow">404 첫 대응</p><h2>404가 나오면 Git 상태부터<br><span class="accent">순서대로 확인한다</span></h2></div><ol class="steps"><li><code>git status</code>와 최신 Commit을 확인</li><li>GitHub에 Push된 파일을 확인</li><li>Pages의 main / (root) 설정을 확인</li><li><code>index.html</code>과 공개 URL 경로를 확인</li></ol>
+    </section>
+    <section class="slide wide" data-slide="58" data-minutes="2" data-notes="[2분] 로컬에서 보이는 변경도 Push하지 않으면 GitHub Pages에는 없습니다. status, diff, Commit, Push, GitHub 최신 Commit을 순서대로 확인합니다.">
+      <p class="eyebrow">404 원인 · 동기화</p><h2>Push하지 않은 변경은<br><span class="accent">GitHub Pages에 보이지 않는다</span></h2><div class="panel code">$ git status<br>$ git diff<br>$ git add [검토·승인한 실제 파일]<br>$ git commit -m "feat: update portfolio"<br>$ git push origin main<br><br><strong>직접 확인</strong><br>GitHub 최신 Commit과 파일이 로컬에서 검토한 내용과 같은지 봅니다.</div>
+    </section>
+    <section class="slide" data-slide="59" data-minutes="2" data-notes="[2분] 404의 다음 원인은 시작 파일과 주소 경로입니다. 배포 원본의 최상위에 index.html이 있는지, 프로젝트 사이트 URL에 저장소 이름 경로가 포함되는지 확인합니다.">
+      <div><p class="eyebrow">404 원인 · 경로</p><h2><code>index.html</code> 위치와 프로젝트 URL 경로를 확인한다</h2></div><div class="two-up"><div class="panel"><h3>파일 위치</h3><p>main 브랜치의 /(root)에 <code>index.html</code>이 있어야 합니다. 하위 폴더만 확인하지 않습니다.</p></div><div class="panel"><h3>프로젝트 URL</h3><p>프로젝트 사이트는 보통 <code>https://계정.github.io/저장소이름/</code> 경로입니다. 주소를 GitHub에서 복사합니다.</p></div></div>
+    </section>
+    <section class="slide" data-slide="60" data-minutes="1" data-notes="[1분] 민감정보를 공개 저장소에 올렸다면 파일에서 지우는 것만으로 끝나지 않습니다. 노출된 토큰이나 비밀번호는 즉시 폐기하고 새 자격 증명으로 교체합니다.">
+      <div><p class="eyebrow">사고 대응</p><h2>민감정보를 노출했다면 삭제만 하지 말고<br><span class="accent">자격 증명을 폐기한다</span></h2></div><div class="panel"><p>토큰·비밀번호·키를 즉시 비활성화하거나 회전하고, 새 자격 증명은 공개 파일 대신 안전한 비밀 관리 위치에 둡니다.</p></div>
+    </section>
+    <section class="slide" data-slide="61" data-minutes="2" data-notes="[2분] 완료는 한 가지 화면이 아니라 세 가지 독립 증거로 남깁니다. 공개 URL, Git 동기화, 모바일 화면을 각각 직접 확인하고 기록합니다.">
+      <div><p class="eyebrow">완료 증거</p><h2>공개 URL·Git 동기화·모바일 화면이<br><span class="accent">완료 증거</span>다</h2></div><div class="stack"><div class="panel"><h3>01 공개 URL</h3><p>새 탭에서 직접 열고 링크를 클릭합니다.</p></div><div class="panel"><h3>02 Git 동기화</h3><p><code>git status</code>와 GitHub 최신 Commit을 대조합니다.</p></div><div class="panel"><h3>03 모바일 화면</h3><p>390×844에서 넘침과 터치 대상을 확인합니다.</p></div></div>
+    </section>
+    <section class="slide" data-slide="62" data-minutes="2" data-notes="[2분] 오늘의 흐름은 큰 결과 하나에만 쓰지 않습니다. 다음 업무에서는 더 작은 작업을 정해 같은 확인 고리를 반복해 안전하게 속도를 높입니다.">
+      <div><p class="eyebrow">다음 업무</p><h2>다음 업무에서는 같은 루프를<br><span class="accent">더 작은 작업에 적용한다</span></h2></div><ol class="steps"><li>작은 결과와 완료 기준을 정한다</li><li>Plan을 읽고 범위를 승인한다</li><li>화면과 Diff를 직접 확인한다</li><li>Commit · Push · 공개 URL 증거를 남긴다</li></ol>
+    </section>
+    <section class="slide full" data-slide="63" data-minutes="1" data-notes="[1분] 마지막으로 오늘의 원칙을 다시 말합니다. 작업 파트너에게 맡긴 뒤에도 화면, Git 상태, 공개 URL을 직접 확인하는 사람이 결과를 완성합니다.">
+      <div><span class="tag">Closing · 1분</span><h1>시키고 끝내지 말고, 결과를 직접 확인한다</h1><p>Plan → 제작 → 화면·Diff → Commit·Push → 공개 URL</p></div>
+    </section>
   </main>
   <script>
     const slides = [...document.querySelectorAll('.slide')];

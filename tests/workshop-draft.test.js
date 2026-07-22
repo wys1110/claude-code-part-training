@@ -82,3 +82,21 @@ test('participant lab teaches a clean baseline and reviews actual approved files
   assert.match(slide(51), /Plan에서.*검토.*승인/);
   assert.match(slide(51), /실제 파일/);
 });
+
+test('draft has 63 slides totaling 120 minutes with complete notes', () => {
+  const html = readDeck();
+  const tags = [...html.matchAll(/<section\s+class="slide[^"]*"[^>]*data-slide="(\d+)"[^>]*data-minutes="(\d+)"[^>]*data-notes="([^"]+)"/g)];
+  assert.equal(tags.length, 63);
+  assert.deepEqual(tags.map(match => Number(match[1])), Array.from({ length: 63 }, (_, i) => i + 1));
+  assert.equal(tags.reduce((sum, match) => sum + Number(match[2]), 0), 120);
+  assert.ok(tags.every(match => match[3].trim().length >= 20));
+});
+
+test('publication and troubleshooting end with observable evidence', () => {
+  const html = readDeck();
+  for (const phrase of [
+    'Settings → Pages → Deploy from a branch → main → /(root)',
+    '404', 'index.html', 'Push', '민감정보', '공개 URL', 'git status',
+    '시키고 끝내지 말고, 결과를 직접 확인한다',
+  ]) assert.match(html, new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+});
