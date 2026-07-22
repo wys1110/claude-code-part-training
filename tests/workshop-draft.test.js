@@ -29,19 +29,19 @@ test('draft is a standalone Minimal Dark HTML deck with required controls', () =
   ]) assert.match(html, new RegExp(required.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
 });
 
-test('navigation opens every slide at its top edge', () => {
+test('deck source resets each destination slide to its top edge', () => {
   assert.match(readDeck(), /slides\[index\]\.scrollTop\s*=\s*0/);
 });
 
-test('mobile wide slides align tall content from the top', () => {
+test('mobile CSS contract top-aligns tall wide slides', () => {
   assert.match(readDeck(), /\.slide\.wide\{align-content:start\}/);
 });
 
-test('print layout releases the screen viewport clipping', () => {
+test('print CSS contract releases the screen viewport clipping', () => {
   assert.match(readDeck(), /@media print\{html,body\{height:auto;overflow:visible\}/);
 });
 
-test('print layout keeps full slides horizontally centered', () => {
+test('print CSS contract keeps full slides horizontally centered', () => {
   assert.match(readDeck(), /\.slide\.full\{display:flex!important;justify-content:center\}/);
 });
 
@@ -98,6 +98,14 @@ test('participant lab teaches a clean baseline and reviews actual approved files
   assert.match(slide(50), /exit 1.*정상/);
   assert.match(slide(51), /Plan에서.*검토.*승인/);
   assert.match(slide(51), /실제 파일/);
+});
+
+test('slide 53 notes proceed to Pages and the public URL in this session', () => {
+  const html = readDeck();
+  const notes = html.match(/<section class="slide full" data-slide="53"[\s\S]*?data-notes="([^"]+)"/)?.[1];
+  assert.ok(notes, 'slide 53 notes should exist');
+  assert.doesNotMatch(notes, /이후 세션|다음 세션|나중/);
+  assert.match(notes, /이번 세션에서 바로 Pages 설정과 공개 URL 확인/);
 });
 
 test('draft has 63 slides totaling 120 minutes with complete notes', () => {
