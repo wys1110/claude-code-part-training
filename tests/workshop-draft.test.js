@@ -21,7 +21,11 @@ function parseDeckSlides(html) {
         slide: Number(match[1]),
         minutes: Number(match[2]),
         notes: match[3],
-        title: heading.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(),
+        title: heading
+          .replace(/<br\s*\/?\s*>/gi, ' ')
+          .replace(/<[^>]+>/g, '')
+          .replace(/\s+/g, ' ')
+          .trim(),
         html: match[0],
       };
     });
@@ -251,10 +255,10 @@ test('copyable command displays omit literal shell prompt glyphs', () => {
 test('speaker script has one section for every slide', () => {
   const script = fs.readFileSync(path.join(root, 'drafts', 'solution-pe-portfolio-workshop', 'script.md'), 'utf8');
   const headings = [...script.matchAll(/^## Slide (\d+) — /gm)].map(match => Number(match[1]));
-  assert.deepEqual(headings, Array.from({ length: 63 }, (_, i) => i + 1));
+  assert.deepEqual(headings, Array.from({ length: 73 }, (_, i) => i + 1));
 });
 
-test('embedded full speaker notes exactly match all 63 script sections', () => {
+test('embedded full speaker notes exactly match all 73 script sections', () => {
   const script = fs.readFileSync(path.join(root, 'drafts', 'solution-pe-portfolio-workshop', 'script.md'), 'utf8');
   const headings = [...script.matchAll(/^## Slide (\d+) — (.+)$/gm)];
   const expected = headings.map((match, index) => ({
@@ -265,6 +269,7 @@ test('embedded full speaker notes exactly match all 63 script sections', () => {
       headings[index + 1]?.index ?? script.length,
     ).trim(),
   }));
+  assert.equal(expected.length, 73);
   const html = readDeck();
   const payload = html.match(/<script type="application\/json" id="speaker-notes-data">([\s\S]*?)<\/script>/)?.[1];
   assert.ok(payload, 'standalone deck should embed full speaker notes JSON');
@@ -277,7 +282,7 @@ test('stale 63-entry full notes fall back to the current slide summary', () => {
   const slides = parseDeckSlides(html);
   const payload = html.match(/<script type="application\/json" id="speaker-notes-data">([\s\S]*?)<\/script>/)?.[1];
   assert.ok(payload, 'standalone deck should embed full speaker notes JSON');
-  const embeddedNotes = JSON.parse(payload);
+  const embeddedNotes = JSON.parse(payload).slice(0, 63);
   assert.equal(slides.length, 73);
   assert.equal(embeddedNotes.length, 63);
 
@@ -286,6 +291,21 @@ test('stale 63-entry full notes fall back to the current slide summary', () => {
   assert.equal(popup.body, slides[11].notes);
   assert.notEqual(popup.body, embeddedNotes[11].body);
   assert.equal(popup.counter, 'Slide 12 / 73');
+});
+
+test('representative skill slide popup uses full timing, prose, cue, and transition', () => {
+  const html = readDeck();
+  const payload = html.match(/<script type="application\/json" id="speaker-notes-data">([\s\S]*?)<\/script>/)?.[1];
+  assert.ok(payload, 'standalone deck should embed full speaker notes JSON');
+
+  const popup = renderPopupNotes(html, JSON.parse(payload), 14);
+  assert.equal(popup.title, 'brainstorming은 만들기 전에 목적과 범위를 맞춘다');
+  assert.match(popup.body, /^\[약 2분\]/);
+  assert.match(popup.body, /포트폴리오/);
+  assert.match(popup.body, /brainstorming/);
+  assert.match(popup.body, /\[(?:DEMO|PRACTICE)\]/);
+  assert.match(popup.body, /다음 장/);
+  assert.equal(popup.counter, 'Slide 15 / 73');
 });
 
 test('full notes require matching slide IDs and titles before positional use', () => {
