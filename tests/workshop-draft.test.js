@@ -67,3 +67,18 @@ test('participant lab contains all twelve numbered steps and completion checks',
   }
   assert.match(html, /data-slide="53"/);
 });
+
+test('participant lab teaches a clean baseline and reviews actual approved files before staging', () => {
+  const html = readDeck();
+  const slide = (number) => html.match(new RegExp(`<section class="slide[^>]*data-slide="${number}"[\\s\\S]*?<\\/section>`))?.[0] || '';
+
+  assert.match(slide(35), /README/);
+  assert.match(slide(35), /초기 Commit/);
+  for (const file of ['index.html', 'styles.css', 'app.js']) {
+    assert.match(slide(50), new RegExp(`git diff --no-index /dev/null ${file}`));
+    assert.match(slide(50), new RegExp(`git diff --no-index --check /dev/null ${file}`));
+  }
+  assert.match(slide(50), /exit 1.*정상/);
+  assert.match(slide(51), /Plan에서.*검토.*승인/);
+  assert.match(slide(51), /실제 파일/);
+});
