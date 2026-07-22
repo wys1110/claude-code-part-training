@@ -23,7 +23,7 @@
     h1{font-size:clamp(46px,5vw,76px);line-height:1.08;letter-spacing:-.045em;margin-bottom:22px}h2{font-size:clamp(34px,3.4vw,54px);line-height:1.12;letter-spacing:-.035em;margin-bottom:18px}h3{font-size:20px;margin-bottom:12px}p{font-size:clamp(18px,1.7vw,26px);line-height:1.55;color:var(--muted)}
     .accent{color:var(--accent)}.nowrap{white-space:nowrap}.mobile-only{display:none}.tag{display:inline-block;margin-bottom:20px;border-radius:999px;background:var(--accent);padding:6px 13px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
     .eyebrow{color:var(--accent);font:600 14px var(--mono);letter-spacing:.06em;margin-bottom:16px}.panel{border:1px solid var(--border);border-radius:16px;background:var(--surface);padding:26px}.panel p{font-size:19px}.stack{display:grid;gap:14px}.steps{display:grid;gap:12px;list-style:none}.steps li{border-left:3px solid var(--accent);padding:10px 14px;background:var(--surface);font-size:18px;line-height:1.5}.code{font:600 20px/1.7 var(--mono);white-space:pre-wrap;color:#dbeafe}.code strong{color:var(--good)}.bad{color:var(--bad)}.good{color:var(--good)}.four-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.four-grid .panel{min-height:128px}.two-up{display:grid;grid-template-columns:1fr 1fr;gap:18px}.small{font-size:16px}.evidence{font:600 18px var(--mono);color:var(--good)}
-    @media(min-width:761px){.slide[data-slide="44"],.slide[data-slide="51"]{padding-block:52px}.slide[data-slide="50"]{padding-block:36px}}
+    @media(min-width:761px){.slide[data-slide="54"],.slide[data-slide="61"]{padding-block:52px}.slide[data-slide="60"]{padding-block:36px}}
     @media(max-width:760px){.slide{grid-template-columns:1fr;padding:72px 28px 80px;gap:24px}.slide.full{grid-template-columns:1fr}.slide.wide{align-content:start}.two-up,.four-grid{grid-template-columns:1fr}.panel{padding:19px}h1{font-size:42px}h2{font-size:34px}.hint{display:none}.code{font-size:16px}.mobile-only{display:inline}}
     @media print{html,body{height:auto;overflow:visible}.progress,.counter,.hint,.fullscreen-btn{display:none!important}.slide{page-break-after:always;position:relative!important;opacity:1!important;display:grid!important;width:100vw;height:100vh}.slide.full{display:flex!important;justify-content:center}@page{size:landscape;margin:0}}
   </style>
@@ -46,164 +46,204 @@
       <div><p class="eyebrow">완료 판단</p><h2>완료는 메시지가 아니라<br><span class="accent">세 가지 증거</span>로 판단한다</h2></div>
       <div class="stack"><div class="panel"><h3>01 화면</h3><p>읽히고, 넘치지 않는가?</p></div><div class="panel"><h3>02 Git</h3><p>바뀐 파일과 Diff가 맞는가?</p></div><div class="panel"><h3>03 URL</h3><p>공개 주소에서 직접 열리는가?</p></div></div>
     </section>
-    <section class="slide full" data-slide="4" data-minutes="2" data-notes="[2분] 실습에는 공개 가능한 역할과 성과만 사용합니다. 삭제, Commit, Push처럼 영향이 큰 행동은 반드시 사람이 승인합니다.">
+    <section class="slide full" data-slide="4" data-minutes="1" data-notes="[1분] 실습에는 공개 가능한 역할과 성과만 사용합니다. 삭제, Commit, Push처럼 영향이 큰 행동은 반드시 사람이 승인합니다.">
       <div><span class="tag">안전 경계</span><h1>공개 가능한 정보만 사용하고<br><span class="accent">중요한 행동은 확인한다</span></h1><p>개인정보 · 회사 비공개 자료 · 비밀값은 넣지 않습니다</p><div class="four-grid"><div class="panel"><h3>사용 가능</h3><p>공개 가능한 역할, 일반화한 사례</p></div><div class="panel"><h3>사용 금지</h3><p>고객·직원 정보, 토큰, 사내 URL</p></div><div class="panel"><h3>사람 확인</h3><p>삭제, Commit, Push</p></div><div class="panel"><h3>작업 범위</h3><p>현재 저장소 안의 필요한 파일</p></div></div></div>
     </section>
-    <section class="slide full" data-slide="5" data-minutes="2" data-notes="[2분] Claude Code는 채팅 답변만 하는 도구가 아니라, 지시를 이해하고 파일과 터미널을 사용해 작업하는 파트너입니다.">
+    <section class="slide full" data-slide="5" data-minutes="1" data-notes="[1분] Claude Code는 채팅 답변만 하는 도구가 아니라, 지시를 이해하고 파일과 터미널을 사용해 작업하는 파트너입니다.">
       <div><span class="tag">Claude Code</span><h1>Claude Code는 말을 듣고<br>도구를 쓰는 <span class="accent">작업 파트너</span>다</h1><p>읽기 → Plan → 만들기 → 확인 → 사람이 승인</p></div>
     </section>
-    <section class="slide" data-slide="6" data-minutes="2" data-notes="[2분] 사람의 역할은 더 중요해집니다. 목적, 금지사항, 완료 기준을 정하고 결과를 승인합니다.">
+    <section class="slide" data-slide="6" data-minutes="1" data-notes="[1분] 사람의 역할은 더 중요해집니다. 목적, 금지사항, 완료 기준을 정하고 결과를 승인합니다.">
       <div><p class="eyebrow">사람의 역할</p><h2>사람은 목적과 금지사항과<br><span class="accent">완료 기준</span>을 정한다</h2></div><div class="stack"><div class="panel"><h3>목적</h3><p>누가 무엇을 이해해야 하는가?</p></div><div class="panel"><h3>금지사항</h3><p>무엇을 넣거나 실행하면 안 되는가?</p></div><div class="panel"><h3>완료 기준</h3><p>어떤 화면·파일·URL을 확인할 것인가?</p></div></div>
     </section>
-    <section class="slide" data-slide="7" data-minutes="2" data-notes="[2분] 작업 폴더의 경계를 먼저 이해합니다. 파일은 재료이고 터미널은 상태 확인과 명령 실행 도구입니다.">
+    <section class="slide" data-slide="7" data-minutes="1" data-notes="[1분] 작업 폴더의 경계를 먼저 이해합니다. 파일은 재료이고 터미널은 상태 확인과 명령 실행 도구입니다.">
       <div><p class="eyebrow">작업 공간</p><h2>작업 폴더는 책상이고<br>파일과 터미널은 <span class="accent">도구</span>다</h2><p>저장소 밖 파일은 건드리지 않는다고 명시합니다.</p></div><div class="panel code">portfolio/<br>├─ index.html<br>├─ styles.css<br>└─ app.js<br><br><strong>git status</strong></div>
     </section>
-    <section class="slide" data-slide="8" data-minutes="2" data-notes="[2분] 안전한 작업은 한 번에 끝내지 않습니다. 확인부터 Diff까지 작은 고리로 반복합니다.">
+    <section class="slide" data-slide="8" data-minutes="1" data-notes="[1분] 안전한 작업은 한 번에 끝내지 않습니다. 확인부터 Diff까지 작은 고리로 반복합니다.">
       <div><p class="eyebrow">안전한 반복</p><h2>안전한 작업은 확인부터<br><span class="accent">Diff</span>까지 반복한다</h2></div><ol class="steps"><li>현재 상태를 확인한다</li><li>Plan과 범위를 읽는다</li><li>사람이 제작을 승인한다</li><li>화면과 <code>git diff</code>를 확인한다</li></ol>
     </section>
     <section class="slide" data-slide="9" data-minutes="1" data-notes="[1분] Plan은 실행 전의 작업 도면입니다. 무엇을 만들고 어떻게 확인할지 미리 읽어 불필요한 수정을 막습니다."><div><p class="eyebrow">Plan</p><h2>Plan은 만들기 전에 보는<br><span class="accent">작업 도면</span>이다</h2></div><div class="panel"><h3>Plan에서 볼 네 가지</h3><p>파일 · 화면 구성 · 검증 방법 · 배포 전 확인</p></div></section>
     <section class="slide" data-slide="10" data-minutes="1" data-notes="[1분] 권한 확인은 기다림이 아니라 사고 방지 장치입니다. 특히 삭제와 외부 공개에는 확인이 필요합니다."><div><p class="eyebrow">권한</p><h2>권한 확인은 실수를 막는<br><span class="accent">문지기</span>다</h2></div><div class="panel"><p>읽기와 조사 → 먼저 진행 가능<br>파일 수정 → 범위 확인<br>Commit · Push · 삭제 → 내 확인 후 실행</p></div></section>
-    <section class="slide" data-slide="11" data-minutes="2" data-notes="[2분] 결과를 말로만 받지 않습니다. 브라우저 화면과 Git 상태를 함께 보고 다음 행동을 결정합니다."><div><p class="eyebrow">검증</p><h2>“완료했습니다”보다<br><span class="accent">화면과 Git 상태</span>를 본다</h2></div><div class="two-up"><div class="panel"><h3>브라우저</h3><p>데스크톱과 모바일에서 글자, 링크, 넘침을 확인</p></div><div class="panel"><h3>Git</h3><p><code>git status</code>와 <code>git diff</code>로 변경을 확인</p></div></div></section>
-    <section class="slide full" data-slide="12" data-minutes="2" data-notes="[2분] 이 요청은 결과의 모습, 금지사항, 확인 방법이 빠졌습니다. 그래서 작업 파트너도 임의로 판단하게 됩니다."><div><span class="tag">약한 요청</span><h1>“포트폴리오 만들어줘”에는<br><span class="accent">판단 기준이 없다</span></h1><div class="panel code bad">약한 요청: 포트폴리오 하나 만들어줘.</div><p>누구를 위한지 · 무엇을 빼야 하는지 · 무엇을 확인할지 알 수 없습니다.</p></div></section>
-    <section class="slide" data-slide="13" data-minutes="2" data-notes="[2분] 좋은 요청은 네 칸으로 구성합니다. 이 틀을 사용하면 작업 중 임의 판단이 줄고 결과를 검증하기 쉬워집니다."><div><p class="eyebrow">좋은 요청의 네 칸</p><h2>좋은 요청은 대상·결과·금지·확인의 <span class="accent">네 칸</span>이다</h2></div><div class="four-grid"><div class="panel"><h3>대상</h3><p>비개발자 동료</p></div><div class="panel"><h3>결과</h3><p>1분 안에 역할을 이해</p></div><div class="panel"><h3>금지</h3><p>개인정보·비공개 자료 제외</p></div><div class="panel"><h3>확인</h3><p>링크·넘침·변경 파일</p></div></div></section>
-    <section class="slide" data-slide="14" data-minutes="1" data-notes="[1분] 약한 요청과 강한 요청의 차이를 비교합니다. 강한 요청의 문장을 읽고, 네 칸이 실제 문장에 어떻게 들어갔는지 짚습니다."><div><p class="eyebrow">같은 목표, 다른 결과</p><h2>같은 목표도 요청이 구체적이면<br><span class="accent">결과가 달라진다</span></h2></div><div class="panel code"><span class="good">강한 요청:</span> 비개발자 동료가 1분 안에 내 역할을 이해하도록 한 페이지로 만들어줘.<br>모바일에서도 읽기 쉽게 하고, 개인정보와 회사 비공개 자료는 넣지 마.<br>완료 전에 깨진 링크, 화면 넘침, 변경 파일을 확인해줘.<br>내 확인 전에는 Commit이나 Push를 하지 마.</div></section>
-    <section class="slide" data-slide="15" data-minutes="1" data-notes="[1분] 개인 업무 포트폴리오에는 공개 가능 여부를 먼저 분류합니다. 실제 회사 정보가 아니라 일반화한 문장만 사용합니다."><div><p class="eyebrow">공개 전 분류</p><h2>공개할 내용과 공개하면 안 될<br><span class="accent">내용을 먼저 나눈다</span></h2></div><div class="two-up"><div class="panel"><h3 class="good">공개 가능</h3><p>나의 역할, 일반화한 업무 방식, 공개된 성과</p></div><div class="panel"><h3 class="bad">공개 금지</h3><p>고객명, 내부 수치, 화면 캡처, 비밀값</p></div></div></section>
-    <section class="slide" data-slide="16" data-minutes="2" data-notes="[2분] 제작을 바로 지시하지 않고 Plan의 네 항목을 먼저 확인합니다. 범위와 검증 기준이 맞을 때만 승인을 줍니다."><div><p class="eyebrow">제작 승인</p><h2>제작 승인은 Plan의 네 항목을<br>확인한 뒤에 한다</h2></div><ol class="steps"><li>만들거나 바꿀 파일</li><li>한 페이지의 화면 구성</li><li>데스크톱·모바일 확인 방법</li><li>GitHub 공개 전에 사람이 확인할 내용</li></ol></section>
-    <section class="slide full" data-slide="17" data-minutes="2" data-notes="[2분] Git은 실험을 두렵지 않게 하는 기록 장치입니다. 확인된 상태마다 돌아올 수 있는 저장 지점을 남깁니다."><div><span class="tag">Git</span><h1>Git은 되돌아갈 수 있는<br><span class="accent">저장 지점</span>을 만든다</h1><p>확인 → Commit → Push 순서로 공개 가능한 상태를 남깁니다.</p></div></section>
-    <section class="slide wide" data-slide="18" data-minutes="1" data-notes="[1분] git status는 지금 무엇이 바뀌었는지 알려줍니다. Commit 전에 반드시 확인할 첫 명령입니다."><p class="eyebrow">Git 상태</p><h2><code>git status</code>는 지금 바뀐 것을 알려준다</h2><div class="panel code">git status<br><strong>modified: index.html</strong><br><strong>modified: styles.css</strong><br><p class="small">의도한 파일만 바뀌었는지 확인합니다.</p></div></section>
-    <section class="slide wide" data-slide="19" data-minutes="2" data-notes="[2분] git diff는 파일 이름이 아니라 실제 변경 줄을 보여줍니다. 공개하면 안 되는 내용이 섞이지 않았는지 검토합니다."><p class="eyebrow">변경 내용</p><h2><code>git diff</code>는 실제로 바뀐 내용을 보여준다</h2><div class="panel code">git diff<br><span class="bad">- &lt;h2&gt;임시 제목&lt;/h2&gt;</span><br><span class="good">+ &lt;h2&gt;개인 업무 포트폴리오&lt;/h2&gt;</span><br><p class="small">예상한 내용만 추가·수정되었는지 봅니다.</p></div></section>
-    <section class="slide" data-slide="20" data-minutes="1" data-notes="[1분] Commit은 확인된 변경에 설명을 붙여 저장하는 시점입니다. 아직 GitHub 공개는 아닙니다."><div><p class="eyebrow">Commit</p><h2>Commit은 설명이 붙은<br><span class="accent">저장 지점</span>이다</h2></div><div class="panel code">git commit -m "feat: add portfolio page"<br><span class="good">확인한 변경만 기록</span></div></section>
-    <section class="slide" data-slide="21" data-minutes="2" data-notes="[2분] Push는 확인한 Commit을 GitHub로 보내는 행동입니다. 공개 URL을 만들기 전 마지막 사람 확인 지점입니다."><div><p class="eyebrow">Push</p><h2>Push는 확인한 저장 지점을<br><span class="accent">GitHub로 보낸다</span></h2></div><div class="panel code">git push origin main<br><br><span class="good">사람 확인 후 공개 URL을 연다</span></div></section>
-    <section class="slide full" data-slide="22" data-minutes="2" data-notes="[2분] 이제 실제 강사 시연을 시작합니다. 빈 저장소에서 시작하고, 포트폴리오에는 공개 가능한 역할과 일반화한 사례만 넣겠다고 다시 확인합니다.">
+    <section class="slide" data-slide="11" data-minutes="1" data-notes="[1분] 결과를 말로만 받지 않습니다. 브라우저 화면과 Git 상태를 함께 보고 다음 행동을 결정합니다."><div><p class="eyebrow">검증</p><h2>“완료했습니다”보다<br><span class="accent">화면과 Git 상태</span>를 본다</h2></div><div class="two-up"><div class="panel"><h3>브라우저</h3><p>데스크톱과 모바일에서 글자, 링크, 넘침을 확인</p></div><div class="panel"><h3>Git</h3><p><code>git status</code>와 <code>git diff</code>로 변경을 확인</p></div></div></section>
+    <section class="slide full skill-slide" data-slide="12" data-minutes="1" data-notes="[1분] 스킬은 긴 지시를 외우는 대신 검증된 업무 절차를 다시 불러오는 방법입니다. 같은 포트폴리오 업무에서 행동이 어떻게 달라지는지 살펴봅니다.">
+      <div><span class="tag">Claude Code Skills</span><h1>스킬은 반복 가능한<br><span class="accent">업무 절차를 불러온다</span></h1><p>요구사항 정리 → 계획 → 디자인 → 오류 해결 → 완료 검증</p></div>
+    </section>
+    <section class="slide wide skill-slide" data-slide="13" data-minutes="2" data-notes="[2분] 스킬이 없을 때는 절차와 금지사항을 긴 프롬프트로 직접 적어야 합니다. 스킬을 사용하면 요청은 짧아지지만 사람이 정할 목적과 안전 경계는 그대로 남습니다.">
+      <div><p class="eyebrow">같은 포트폴리오, 다른 요청</p><h2>스킬이 없으면 절차를 긴 프롬프트로 직접 적는다</h2></div>
+      <div class="two-up neon-grid"><div class="panel compare-bad"><h3 class="bad">스킬 없음</h3><p>질문을 하나씩 하고, 범위를 정리하고, 파일은 아직 바꾸지 말고, 계획과 검증 방법을 먼저 보여주고, 원인을 찾기 전에는 수정하지 말고…</p></div><div class="panel compare-good"><h3 class="good">스킬 사용</h3><p class="code">brainstorming으로 목적과 범위를 먼저 정리해줘.</p><p class="small">절차는 스킬에 맡기고 사람은 결과·금지·승인·완료 기준을 말합니다.</p></div></div>
+    </section>
+    <section class="slide skill-slide" data-slide="14" data-minutes="1" data-notes="[1분] 처음 연습할 때는 스킬 이름을 직접 불러 행동 차이를 관찰합니다. 익숙해진 뒤에는 Claude Code가 요청 상황을 감지해 적절한 스킬을 선택하도록 맡길 수 있습니다.">
+      <div><p class="eyebrow">스킬 센싱 원칙</p><h2>처음에는 이름을 부르고 익숙해지면 상황에 맡긴다</h2></div>
+      <div class="stack"><div class="panel"><h3>처음</h3><p><code>brainstorming 스킬을 사용해줘.</code>처럼 이름을 직접 부릅니다.</p></div><div class="panel"><h3>익숙해진 뒤</h3><p>Claude Code가 상황을 감지해 필요한 절차를 선택하게 합니다.</p></div><p class="small">어떤 경우에도 최종 판단과 승인은 사람이 합니다.</p></div>
+    </section>
+    <section class="slide wide skill-slide" data-slide="15" data-minutes="2" data-notes="[2분] brainstorming은 파일을 만들기 전에 목적과 대상과 범위를 질문으로 구체화합니다. 참가자는 공개 금지 정보와 한 번에 끝낼 범위와 완료 기준을 직접 확인해야 합니다.">
+      <div><p class="eyebrow">01 · 요구사항 정리</p><h2>brainstorming은 만들기 전에 목적과 범위를 맞춘다</h2></div>
+      <div class="two-up neon-grid"><div class="panel compare-bad"><h3 class="bad">스킬 없음</h3><p class="code">포트폴리오 만들어줘.</p><p class="small">대상과 범위를 도구가 추측합니다.</p></div><div class="panel compare-good"><h3 class="good">스킬 사용</h3><p class="code">brainstorming 스킬을 사용해줘. 파일은 수정하지 말고 대상·핵심 내용·완료 기준을 질문해줘.</p><p class="small">사람 확인: 필요한 결과 · 공개 금지 정보 · 한 번에 끝낼 범위</p></div></div>
+    </section>
+    <section class="slide wide skill-slide" data-slide="16" data-minutes="2" data-notes="[2분] writing-plans는 합의된 방향을 파일과 순서와 정상 결과와 확인 방법으로 바꿉니다. 사람은 요청하지 않은 삭제나 구조 변경이 없는지 승인 전에 읽습니다.">
+      <div><p class="eyebrow">02 · 실행 계획</p><h2>writing-plans는 합의한 일을 실행 순서로 바꾼다</h2></div>
+      <div class="two-up neon-grid"><div class="panel compare-bad"><h3 class="bad">스킬 없음</h3><p class="code">이제 계획 세워줘.</p><p class="small">파일 범위와 검증 순서가 빠질 수 있습니다.</p></div><div class="panel compare-good"><h3 class="good">스킬 사용</h3><p class="code">writing-plans 스킬로 바꿀 파일, 작업, 정상 결과, 확인 방법을 적어줘. 승인 전에는 수정하지 마.</p><p class="small">사람 확인: 삭제·구조 변경 없음 · 단계별 확인 · 쉬운 용어</p></div></div>
+    </section>
+    <section class="slide wide skill-slide" data-slide="17" data-minutes="2" data-notes="[2분] frontend-design은 단순히 예쁘게 만드는 대신 대상과 전달 목적에 맞춰 정보 순서와 타이포그래피와 색상과 모바일 가독성을 설계합니다. 사람은 전달력과 사용 권한을 확인합니다.">
+      <div><p class="eyebrow">03 · 화면 개선</p><h2>frontend-design은 예쁨보다 전달 목적을 설계한다</h2></div>
+      <div class="two-up neon-grid"><div class="panel compare-bad"><h3 class="bad">스킬 없음</h3><p class="code">좀 더 예쁘게 해줘.</p><p class="small">평범한 카드와 의미 없는 장식으로 끝날 수 있습니다.</p></div><div class="panel compare-good"><h3 class="good">스킬 사용</h3><p class="code">frontend-design으로 Solution PE팀 동료가 내 역할을 30초 안에 이해하게 개선해줘. 내용은 유지하고 모바일도 확인해줘.</p><p class="small">사람 확인: 전달 목적 · 모바일 잘림 · 로고·이미지·글꼴 권한</p></div></div>
+    </section>
+    <section class="slide wide skill-slide" data-slide="18" data-minutes="2" data-notes="[2분] systematic-debugging은 404를 바로 고치지 않고 재현과 Git 상태와 Push와 Pages 설정과 파일 경로를 증거로 대조합니다. 사람은 원인 증거와 변경 범위를 확인합니다.">
+      <div><p class="eyebrow">04 · 오류 해결</p><h2>systematic-debugging은 수정 전에 원인을 증명한다</h2></div>
+      <div class="two-up neon-grid"><div class="panel compare-bad"><h3 class="bad">스킬 없음</h3><p class="code">Pages 404 고쳐줘.</p><p class="small">설정과 파일을 추측으로 여러 번 바꿀 수 있습니다.</p></div><div class="panel compare-good"><h3 class="good">스킬 사용</h3><p class="code">systematic-debugging으로 404를 재현하고 Git·Push·Pages 설정·index.html·URL을 확인해 원인을 증거로 설명해줘.</p><p class="small">사람 확인: 실제 재현 · 로그나 화면 · 한 원인씩 검증</p></div></div>
+    </section>
+    <section class="slide wide skill-slide" data-slide="19" data-minutes="2" data-notes="[2분] verification-before-completion은 완료 문장을 최신 테스트와 화면과 변경 파일과 Git 상태의 증거로 바꿉니다. 사람은 공개 URL을 직접 열어 최종 결과를 승인합니다.">
+      <div><p class="eyebrow">05 · 완료 검증</p><h2>verification-before-completion은 완료를 증거로 바꾼다</h2></div>
+      <div class="two-up neon-grid"><div class="panel compare-bad"><h3 class="bad">스킬 없음</h3><p class="code">다 끝났지?</p><p class="small">완료 메시지만 받고 실제 사용 가능 여부를 놓칩니다.</p></div><div class="panel compare-good"><h3 class="good">스킬 사용</h3><p class="code">verification-before-completion으로 루트 index.html, 두 화면, 링크·오류, git status를 직접 확인하고 결과를 알려줘.</p><p class="small">사람 확인: 최신 증거 · 테스트와 화면 구분 · 공개 URL 직접 열기</p></div></div>
+    </section>
+    <section class="slide wide skill-slide" data-slide="20" data-minutes="1" data-notes="[1분] Superpowers 한 번과 Anthropic 예제 스킬 한 번으로 다섯 스킬을 준비합니다. Claude Code 입력창에서 순서대로 실행하고 필요하면 플러그인을 다시 불러옵니다. 출처와 확인일을 함께 읽습니다.">
+      <div><p class="eyebrow">검증된 설치 명령</p><h2>입문자는 두 번의 설치로 다섯 스킬을 준비한다</h2></div>
+      <div class="panel code">/plugin install superpowers@claude-plugins-official<br>/plugin marketplace add anthropics/skills<br>/plugin install example-skills@anthropic-agent-skills<br>/reload-plugins</div>
+      <p class="small">Claude Code Docs · obra/superpowers · anthropics/skills · 2026-07-22 확인</p>
+    </section>
+    <section class="slide skill-slide" data-slide="21" data-minutes="1" data-notes="[1분] 스킬이 절차를 맡아 프롬프트가 짧아져도 원하는 결과와 대상과 공개 금지 정보와 승인 경계와 완료 기준은 사람이 정합니다. 요구사항과 최종 승인의 책임은 사람에게 있습니다.">
+      <div><p class="eyebrow">사람의 책임</p><h2>프롬프트는 짧아져도 요구사항의 책임은 사람에게 있다</h2></div>
+      <div class="stack"><div class="panel"><h3>사람이 반드시 말할 것</h3><p>원하는 결과 · 대상 · 공개 금지 정보 · 승인 경계 · 완료 기준</p></div><div class="panel"><h3>사람이 마지막에 할 것</h3><p>화면, 변경 파일, Git 상태, 공개 URL의 증거를 직접 확인하고 승인</p></div></div>
+    </section>
+    <section class="slide full" data-slide="22" data-minutes="1" data-notes="[1분] 이 요청은 결과의 모습, 금지사항, 확인 방법이 빠졌습니다. 그래서 작업 파트너도 임의로 판단하게 됩니다."><div><span class="tag">약한 요청</span><h1>“포트폴리오 만들어줘”에는<br><span class="accent">판단 기준이 없다</span></h1><div class="panel code bad">약한 요청: 포트폴리오 하나 만들어줘.</div><p>누구를 위한지 · 무엇을 빼야 하는지 · 무엇을 확인할지 알 수 없습니다.</p></div></section>
+    <section class="slide" data-slide="23" data-minutes="1" data-notes="[1분] 좋은 요청은 네 칸으로 구성합니다. 이 틀을 사용하면 작업 중 임의 판단이 줄고 결과를 검증하기 쉬워집니다."><div><p class="eyebrow">좋은 요청의 네 칸</p><h2>좋은 요청은 대상·결과·금지·확인의 <span class="accent">네 칸</span>이다</h2></div><div class="four-grid"><div class="panel"><h3>대상</h3><p>비개발자 동료</p></div><div class="panel"><h3>결과</h3><p>1분 안에 역할을 이해</p></div><div class="panel"><h3>금지</h3><p>개인정보·비공개 자료 제외</p></div><div class="panel"><h3>확인</h3><p>링크·넘침·변경 파일</p></div></div></section>
+    <section class="slide" data-slide="24" data-minutes="1" data-notes="[1분] 약한 요청과 강한 요청의 차이를 비교합니다. 강한 요청의 문장을 읽고, 네 칸이 실제 문장에 어떻게 들어갔는지 짚습니다."><div><p class="eyebrow">같은 목표, 다른 결과</p><h2>같은 목표도 요청이 구체적이면<br><span class="accent">결과가 달라진다</span></h2></div><div class="panel code"><span class="good">강한 요청:</span> 비개발자 동료가 1분 안에 내 역할을 이해하도록 한 페이지로 만들어줘.<br>모바일에서도 읽기 쉽게 하고, 개인정보와 회사 비공개 자료는 넣지 마.<br>완료 전에 깨진 링크, 화면 넘침, 변경 파일을 확인해줘.<br>내 확인 전에는 Commit이나 Push를 하지 마.</div></section>
+    <section class="slide" data-slide="25" data-minutes="1" data-notes="[1분] 개인 업무 포트폴리오에는 공개 가능 여부를 먼저 분류합니다. 실제 회사 정보가 아니라 일반화한 문장만 사용합니다."><div><p class="eyebrow">공개 전 분류</p><h2>공개할 내용과 공개하면 안 될<br><span class="accent">내용을 먼저 나눈다</span></h2></div><div class="two-up"><div class="panel"><h3 class="good">공개 가능</h3><p>나의 역할, 일반화한 업무 방식, 공개된 성과</p></div><div class="panel"><h3 class="bad">공개 금지</h3><p>고객명, 내부 수치, 화면 캡처, 비밀값</p></div></div></section>
+    <section class="slide" data-slide="26" data-minutes="1" data-notes="[1분] 제작을 바로 지시하지 않고 Plan의 네 항목을 먼저 확인합니다. 범위와 검증 기준이 맞을 때만 승인을 줍니다."><div><p class="eyebrow">제작 승인</p><h2>제작 승인은 Plan의 네 항목을<br>확인한 뒤에 한다</h2></div><ol class="steps"><li>만들거나 바꿀 파일</li><li>한 페이지의 화면 구성</li><li>데스크톱·모바일 확인 방법</li><li>GitHub 공개 전에 사람이 확인할 내용</li></ol></section>
+    <section class="slide full" data-slide="27" data-minutes="1" data-notes="[1분] Git은 실험을 두렵지 않게 하는 기록 장치입니다. 확인된 상태마다 돌아올 수 있는 저장 지점을 남깁니다."><div><span class="tag">Git</span><h1>Git은 되돌아갈 수 있는<br><span class="accent">저장 지점</span>을 만든다</h1><p>확인 → Commit → Push 순서로 공개 가능한 상태를 남깁니다.</p></div></section>
+    <section class="slide wide" data-slide="28" data-minutes="1" data-notes="[1분] git status는 지금 무엇이 바뀌었는지 알려줍니다. Commit 전에 반드시 확인할 첫 명령입니다."><p class="eyebrow">Git 상태</p><h2><code>git status</code>는 지금 바뀐 것을 알려준다</h2><div class="panel code">git status<br><strong>modified: index.html</strong><br><strong>modified: styles.css</strong><br><p class="small">의도한 파일만 바뀌었는지 확인합니다.</p></div></section>
+    <section class="slide wide" data-slide="29" data-minutes="1" data-notes="[1분] git diff는 파일 이름이 아니라 실제 변경 줄을 보여줍니다. 공개하면 안 되는 내용이 섞이지 않았는지 검토합니다."><p class="eyebrow">변경 내용</p><h2><code>git diff</code>는 실제로 바뀐 내용을 보여준다</h2><div class="panel code">git diff<br><span class="bad">- &lt;h2&gt;임시 제목&lt;/h2&gt;</span><br><span class="good">+ &lt;h2&gt;개인 업무 포트폴리오&lt;/h2&gt;</span><br><p class="small">예상한 내용만 추가·수정되었는지 봅니다.</p></div></section>
+    <section class="slide" data-slide="30" data-minutes="1" data-notes="[1분] Commit은 확인된 변경에 설명을 붙여 저장하는 시점입니다. 아직 GitHub 공개는 아닙니다."><div><p class="eyebrow">Commit</p><h2>Commit은 설명이 붙은<br><span class="accent">저장 지점</span>이다</h2></div><div class="panel code">git commit -m "feat: add portfolio page"<br><span class="good">확인한 변경만 기록</span></div></section>
+    <section class="slide" data-slide="31" data-minutes="1" data-notes="[1분] Push는 확인한 Commit을 GitHub로 보내는 행동입니다. 공개 URL을 만들기 전 마지막 사람 확인 지점입니다."><div><p class="eyebrow">Push</p><h2>Push는 확인한 저장 지점을<br><span class="accent">GitHub로 보낸다</span></h2></div><div class="panel code">git push origin main<br><br><span class="good">사람 확인 후 공개 URL을 연다</span></div></section>
+    <section class="slide full" data-slide="32" data-minutes="1" data-notes="[1분] 이제 실제 강사 시연을 시작합니다. 빈 저장소에서 시작하고, 포트폴리오에는 공개 가능한 역할과 일반화한 사례만 넣겠다고 다시 확인합니다.">
       <div><span class="tag">강사 시연 · 시작</span><h1>시연은 빈 저장소와<br><span class="accent">공개 가능한 문장</span>으로 시작한다</h1><p>개인정보·비공개 자료·비밀값 없이, 한 페이지 개인 업무 포트폴리오를 만듭니다.</p><div class="panel code">portfolio/<br>└─ <span class="good">(아직 작업 파일 없음)</span></div></div>
     </section>
-    <section class="slide" data-slide="23" data-minutes="2" data-notes="[2분] 제작 전에 현재 위치, 파일 목록, Git 기준 상태를 함께 확인합니다. 빈 상태와 깨끗한 상태를 눈으로 확인해야 이후의 변경 파일이 의미를 갖습니다.">
+    <section class="slide" data-slide="33" data-minutes="2" data-notes="[2분] 제작 전에 현재 위치, 파일 목록, Git 기준 상태를 함께 확인합니다. 빈 상태와 깨끗한 상태를 눈으로 확인해야 이후의 변경 파일이 의미를 갖습니다.">
       <div><p class="eyebrow">01 · 기준 상태</p><h2>첫 화면에서 폴더와 Git<br><span class="accent">기준 상태</span>를 확인한다</h2><p>작업은 이 저장소 안에서만 합니다.</p></div>
       <div class="panel code">pwd<br>.../portfolio<br><br>ls -la<br>.<br>..<br>.git/<br><br>git status<br><strong>working tree clean</strong></div>
     </section>
-    <section class="slide wide" data-slide="24" data-minutes="2" data-notes="[2분] 이 프롬프트를 그대로 입력합니다. 핵심은 곧바로 만들라고 하지 않고, 현재 상태 조사와 Plan 제시를 먼저 요청하는 것입니다.">
+    <section class="slide wide" data-slide="34" data-minutes="2" data-notes="[2분] 이 프롬프트를 그대로 입력합니다. 핵심은 곧바로 만들라고 하지 않고, 현재 상태 조사와 Plan 제시를 먼저 요청하는 것입니다.">
       <p class="eyebrow">02 · 조사 요청</p><h2>첫 프롬프트는 수정이 <span class="nowrap">아니라</span><br><span class="accent">조사</span>를 요청한다</h2>
       <div class="panel code">이 저장소에 개인 업무 포트폴리오를 만들고 싶어.<br><br>먼저 현재 파일과 Git 상태를 확인해줘.<br>아직 파일을 수정하지 말고 아래 내용을 Plan으로 보여줘.<br>- 만들거나 바꿀 파일<br>- 화면 구성<br>- 데스크톱과 모바일 확인 방법<br>- GitHub Pages 공개 전에 내가 확인할 내용<br><br>저장소 밖의 파일은 건드리지 말고, 삭제·Commit·Push는 내 확인 전에 하지 마.</div>
     </section>
-    <section class="slide" data-slide="25" data-minutes="2" data-notes="[2분] 돌아온 Plan에서 파일 이름, 화면 구조, 확인 방법, 공개 전 사람 확인을 읽습니다. 이 네 항목이 빠졌거나 범위를 벗어나면 여기서 고칩니다.">
+    <section class="slide" data-slide="35" data-minutes="1" data-notes="[1분] 돌아온 Plan에서 파일 이름, 화면 구조, 확인 방법, 공개 전 사람 확인을 읽습니다. 이 네 항목이 빠졌거나 범위를 벗어나면 여기서 고칩니다.">
       <div><p class="eyebrow">03 · Plan 검토</p><h2>Plan에서 파일·화면·검증·배포 전 확인을 <span class="accent">읽는다</span></h2></div>
       <div class="stack"><div class="panel"><h3>파일</h3><p><code>index.html</code>, <code>styles.css</code>, <code>app.js</code>만 새로 만듭니다.</p></div><div class="panel"><h3>화면과 검증</h3><p>소개·업무 방식·연락처 한 페이지. 1440×900과 390×844에서 직접 확인합니다.</p></div><div class="panel"><h3>공개 전</h3><p>Diff에 비공개 내용이 없는지 보고, GitHub Pages 설정과 URL은 사람이 확인합니다.</p></div></div>
     </section>
-    <section class="slide full" data-slide="26" data-minutes="2" data-notes="[2분] Plan의 범위가 맞는지 말로 확인한 뒤에만 제작을 승인합니다. 승인 문장은 추가 범위, 삭제, Commit, Push를 허용하지 않는다는 점도 유지합니다.">
+    <section class="slide full" data-slide="36" data-minutes="1" data-notes="[1분] Plan의 범위가 맞는지 말로 확인한 뒤에만 제작을 승인합니다. 승인 문장은 추가 범위, 삭제, Commit, Push를 허용하지 않는다는 점도 유지합니다.">
       <div><span class="tag">04 · 제작 승인</span><h1>범위가 맞을 때만<br><span class="accent">제작을 승인</span>한다</h1><div class="panel code">Plan이 맞아.<br><strong>index.html, styles.css, app.js만</strong> 만들어줘.<br>완료 후 로컬 화면, 모바일 폭, 변경 파일을 보여줘.<br>삭제·Commit·Push는 아직 하지 마.</div></div>
     </section>
-    <section class="slide" data-slide="27" data-minutes="2" data-notes="[2분] 승인 후의 첫 버전은 세 파일로 제한합니다. HTML은 구조, CSS는 읽기 쉬운 반응형 화면, JavaScript는 작은 상호작용만 맡도록 분리합니다.">
+    <section class="slide" data-slide="37" data-minutes="2" data-notes="[2분] 승인 후의 첫 버전은 세 파일로 제한합니다. HTML은 구조, CSS는 읽기 쉬운 반응형 화면, JavaScript는 작은 상호작용만 맡도록 분리합니다.">
       <div><p class="eyebrow">05 · 첫 버전</p><h2>첫 버전은 HTML·CSS·JavaScript <span class="accent">세 파일</span>로 만든다</h2></div>
       <div class="panel code">ls<br><strong>index.html</strong><br><strong>styles.css</strong><br><strong>app.js</strong><br><br>index.html  → 소개·업무 방식·연락처<br>styles.css  → 색·간격·반응형 레이아웃<br>app.js      → 메뉴 또는 링크 상호작용</div>
     </section>
-    <section class="slide" data-slide="28" data-minutes="2" data-notes="[2분] 완료 메시지 대신 브라우저를 직접 봅니다. 데스크톱과 모바일 폭에서 제목, 줄바꿈, 버튼, 가로 넘침, 링크를 같은 기준으로 확인합니다.">
+    <section class="slide" data-slide="38" data-minutes="2" data-notes="[2분] 완료 메시지 대신 브라우저를 직접 봅니다. 데스크톱과 모바일 폭에서 제목, 줄바꿈, 버튼, 가로 넘침, 링크를 같은 기준으로 확인합니다.">
       <div><p class="eyebrow">06 · 화면 확인</p><h2>로컬 화면과 모바일 폭을<br><span class="accent">직접 확인</span>한다</h2></div>
       <div class="two-up"><div class="panel"><h3>데스크톱 · 1440×900</h3><p>첫 화면의 위계가 읽히는가?<br>여백과 카드가 넘치지 않는가?<br>링크가 동작하는가?</p></div><div class="panel"><h3>모바일 · 390×844</h3><p>가로 스크롤이 없는가?<br>글자와 버튼을 누를 수 있는가?<br>내용이 잘리지 않는가?</p></div></div>
     </section>
-    <section class="slide wide" data-slide="29" data-minutes="2" data-notes="[2분] 화면을 보고 난 뒤에는 취향만 말하지 않습니다. 어느 폭의 어느 요소가 어떻게 바뀌어야 하는지 관찰 가능한 조건으로 요청하고, 다시 확인합니다.">
+    <section class="slide wide" data-slide="39" data-minutes="1" data-notes="[1분] 화면을 보고 난 뒤에는 취향만 말하지 않습니다. 어느 폭의 어느 요소가 어떻게 바뀌어야 하는지 관찰 가능한 조건으로 요청하고, 다시 확인합니다.">
       <p class="eyebrow">07 · 관찰 가능한 수정</p><h2>“더 예쁘게”를 관찰 가능한<br><span class="accent">수정 요청</span>으로 바꾼다</h2>
       <div class="two-up"><div class="panel"><h3 class="bad">모호한 말</h3><p>“첫 화면을 더 예쁘게 해줘.”</p></div><div class="panel"><h3 class="good">확인 가능한 말</h3><p>“390×844에서 소개 문단과 첫 카드 사이 간격을 줄이고, 제목이 세 줄을 넘지 않게 해줘. 수정 뒤 두 폭에서 다시 보여줘.”</p></div></div>
     </section>
-    <section class="slide full" data-slide="30" data-minutes="1" data-notes="[1분] Untracked 파일은 일반 git diff 대상이 아니므로 /dev/null과 no-index로 각 파일 내용을 직접 비교합니다. + 줄을 읽고 --check에 공백 오류가 없는지 봅니다. 파일 차이로 인한 exit 1은 정상이며, 아직 Commit·Push는 사람 확인 전입니다.">
+    <section class="slide full" data-slide="40" data-minutes="1" data-notes="[1분] Untracked 파일은 일반 git diff 대상이 아니므로 /dev/null과 no-index로 각 파일 내용을 직접 비교합니다. + 줄을 읽고 --check에 공백 오류가 없는지 봅니다. 파일 차이로 인한 exit 1은 정상이며, 아직 Commit·Push는 사람 확인 전입니다.">
       <div><span class="tag">08 · 검토 완료</span><h1>Diff와 변경 파일이 맞으면<br>시연 <span class="accent">1차 완료</span>다</h1><div class="panel code">git status --short<br><strong>?? index.html · ?? styles.css · ?? app.js</strong><br><br>git diff --no-index /dev/null index.html<br>git diff --no-index /dev/null styles.css<br>git diff --no-index /dev/null app.js<br><br>git diff --no-index --check /dev/null index.html<br>git diff --no-index --check /dev/null styles.css<br>git diff --no-index --check /dev/null app.js<br><span class="good">+ 줄을 검토 · 공백 오류 출력 없음</span></div><p>exit 1은 파일 차이를 알리는 정상 결과입니다. 이제 사람이 내용을 검토하고 Commit·Push·공개 여부를 결정합니다.</p></div>
     </section>
-    <section class="slide full" data-slide="31" data-minutes="10" data-notes="[10분] 휴식 시간입니다. 돌아오기 전 브라우저, GitHub 로그인, Claude Code, 터미널, 인터넷 연결을 확인하게 합니다. 막힌 사람은 손을 들어 여기서 해결하고, 실습은 아직 시작하지 않습니다.">
+    <section class="slide full" data-slide="41" data-minutes="10" data-notes="[10분] 휴식 시간입니다. 돌아오기 전 브라우저, GitHub 로그인, Claude Code, 터미널, 인터넷 연결을 확인하게 합니다. 막힌 사람은 손을 들어 여기서 해결하고, 실습은 아직 시작하지 않습니다.">
       <div><span class="tag">10분 휴식 · 환경 확인</span><h1>돌아오기 전에<br><span class="accent">실습 환경</span>을 확인한다</h1><div class="four-grid"><div class="panel"><h3>브라우저</h3><p>GitHub에 로그인하고 새 탭을 엽니다.</p></div><div class="panel"><h3>터미널</h3><p><code>git --version</code>을 실행합니다.</p></div><div class="panel"><h3>Claude Code</h3><p>작업 폴더에서 실행할 준비를 합니다.</p></div><div class="panel"><h3>안 될 때 먼저</h3><p>로그인·네트워크·Git 설치 상태를 확인하고 강사에게 알립니다.</p></div></div></div>
     </section>
-    <section class="slide" data-slide="32" data-minutes="2" data-notes="[2분] STEP 01은 완료의 세 가지 증거를 각자 눈으로 확인하는 시간입니다. 아직 만들지 말고 화면, Git, 공개 주소라는 기준을 확인합니다.">
+    <section class="slide" data-slide="42" data-minutes="2" data-notes="[2분] STEP 01은 완료의 세 가지 증거를 각자 눈으로 확인하는 시간입니다. 아직 만들지 말고 화면, Git, 공개 주소라는 기준을 확인합니다.">
       <div><p class="eyebrow">STEP 01 · 2분</p><h2>완성 결과와<br><span class="accent">세 가지 증거</span>를 확인</h2></div><div class="stack"><div class="panel"><h3>복사할 프롬프트</h3><p>없음. 지금은 결과 기준을 눈으로 확인합니다.</p></div><div class="panel"><h3>정상 결과</h3><p>화면 · <code>git status</code>/<code>git diff</code> · GitHub 공개 주소를 각각 확인할 수 있습니다.</p></div><div class="panel"><h3>직접 확인</h3><p>내 포트폴리오가 공개돼도 되는 문장만 쓸 수 있는지 점검합니다.</p></div><div class="panel"><h3>안 될 때 먼저</h3><p>공개 여부가 불확실한 문장은 지우고 일반화한 문장으로 바꿉니다.</p></div></div>
     </section>
-    <section class="slide wide" data-slide="33" data-minutes="2" data-notes="[2분] STEP 02의 첫 부분입니다. 공개 가능한 재료를 빈칸에 직접 채우게 합니다. 고객명, 내부 수치, 비밀값은 쓰지 않는다는 경계를 다시 말합니다.">
+    <section class="slide wide" data-slide="43" data-minutes="2" data-notes="[2분] STEP 02의 첫 부분입니다. 공개 가능한 재료를 빈칸에 직접 채우게 합니다. 고객명, 내부 수치, 비밀값은 쓰지 않는다는 경계를 다시 말합니다.">
       <p class="eyebrow">STEP 02 · 2분</p><h2>공개 가능한 <span class="accent">소개 문장</span> 준비</h2><div class="panel code">이름과 담당 업무: [공개 가능한 문장]<br>내가 해결하는 문제: [한 문장]<br>핵심 역량 세 가지: [역량 1], [역량 2], [역량 3]<br>대표 업무: [공개 가능한 사례]<br>협업 방식: [한 문장]<br><br><strong>정상 결과:</strong> 다섯 줄이 모두 공개 가능한 문장으로 채워짐</div><p><strong>복사할 프롬프트:</strong> 아직 없습니다. 이 다섯 줄을 먼저 작성합니다.</p>
     </section>
-    <section class="slide" data-slide="34" data-minutes="2" data-notes="[2분] STEP 02의 둘째 부분입니다. 한 사람이 자신의 문장을 읽고, 동료가 공개해도 되는지와 한 문장으로 읽히는지를 확인해 줍니다.">
+    <section class="slide" data-slide="44" data-minutes="2" data-notes="[2분] STEP 02의 둘째 부분입니다. 한 사람이 자신의 문장을 읽고, 동료가 공개해도 되는지와 한 문장으로 읽히는지를 확인해 줍니다.">
       <div><p class="eyebrow">STEP 02 · 2분</p><h2>문장을 <span class="accent">공개 기준</span>으로 검토</h2></div><div class="stack"><div class="panel"><h3>직접 확인</h3><p>고객명·내부 수치·사내 URL·개인 연락처·비밀값이 없는지 짝과 함께 읽습니다.</p></div><div class="panel"><h3>정상 결과</h3><p>처음 보는 동료도 역할과 해결하는 문제를 1분 안에 이해합니다.</p></div><div class="panel"><h3>안 될 때 먼저</h3><p>고유명사와 수치를 “프로젝트”, “반복 업무”, “운영 개선”처럼 일반화합니다.</p></div><div class="panel"><h3>복사할 프롬프트</h3><p>없음. 다음 단계에서 이 다섯 줄을 그대로 붙여 넣습니다.</p></div></div>
     </section>
-    <section class="slide" data-slide="35" data-minutes="2" data-notes="[2분] STEP 03의 첫 부분입니다. GitHub에서 Public 저장소를 만들고 README 초기화를 선택합니다. README가 만드는 초기 Commit이 있어야 Clone 뒤 working tree clean이라는 기준 상태를 정확히 확인할 수 있습니다. 비밀 저장소를 공개로 바꾸는 작업은 아닙니다.">
+    <section class="slide" data-slide="45" data-minutes="2" data-notes="[2분] STEP 03의 첫 부분입니다. GitHub에서 Public 저장소를 만들고 README 초기화를 선택합니다. README가 만드는 초기 Commit이 있어야 Clone 뒤 working tree clean이라는 기준 상태를 정확히 확인할 수 있습니다. 비밀 저장소를 공개로 바꾸는 작업은 아닙니다.">
       <div><p class="eyebrow">STEP 03 · 2분</p><h2>GitHub <span class="accent">Public 저장소</span> 생성</h2></div><div class="stack"><div class="panel"><h3>직접 확인</h3><p>GitHub → New repository → 이름 <code>my-portfolio</code> → Public → <strong>Add a README file</strong>을 선택합니다.</p></div><div class="panel"><h3>정상 결과</h3><p>내 계정 아래 Public 저장소에 README와 초기 Commit이 생성되고 주소가 보입니다.</p></div><div class="panel"><h3>안 될 때 먼저</h3><p>현재 계정과 조직, README 초기화 선택을 확인하고 비공개 저장소를 Public으로 바꾸지 않습니다.</p></div><div class="panel"><h3>복사할 프롬프트</h3><p>없음. GitHub 화면에서 직접 만듭니다.</p></div></div>
     </section>
-    <section class="slide wide" data-slide="36" data-minutes="2" data-notes="[2분] STEP 03의 둘째 부분입니다. 주소를 복사하고 계정과 저장소 이름을 직접 읽어 보게 합니다. 다음 Clone 단계에 쓸 HTTPS 주소를 확인합니다.">
+    <section class="slide wide" data-slide="46" data-minutes="2" data-notes="[2분] STEP 03의 둘째 부분입니다. 주소를 복사하고 계정과 저장소 이름을 직접 읽어 보게 합니다. 다음 Clone 단계에 쓸 HTTPS 주소를 확인합니다.">
       <p class="eyebrow">STEP 03 · 2분</p><h2>저장소 <span class="accent">주소</span>를 확인</h2><div class="panel code"><strong>직접 확인</strong><br>Code → HTTPS → 주소 복사<br>https://github.com/[내 계정]/my-portfolio.git<br><br><strong>정상 결과</strong><br>브라우저 주소와 복사한 HTTPS 주소의 계정·저장소 이름이 같습니다.<br><br><strong>안 될 때 먼저</strong><br>404이면 로그인 계정과 Public 선택 여부를 다시 확인합니다.<br><br><strong>복사할 프롬프트</strong><br>없음. 다음 슬라이드에서 터미널 명령을 복사합니다.</div>
     </section>
-    <section class="slide wide" data-slide="37" data-minutes="2" data-notes="[2분] STEP 04의 첫 부분입니다. 각자의 실제 주소로 바꿔 Clone합니다. 이미 같은 이름 폴더가 있으면 덮어쓰지 말고 원인을 먼저 확인합니다.">
+    <section class="slide wide" data-slide="47" data-minutes="2" data-notes="[2분] STEP 04의 첫 부분입니다. 각자의 실제 주소로 바꿔 Clone합니다. 이미 같은 이름 폴더가 있으면 덮어쓰지 말고 원인을 먼저 확인합니다.">
       <p class="eyebrow">STEP 04 · 2분</p><h2>Clone으로 <span class="accent">작업 폴더</span> 만들기</h2><div class="panel code"><strong>복사할 프롬프트</strong><br>git clone https://github.com/[내 계정]/my-portfolio.git<br>cd my-portfolio<br><br><strong>정상 결과</strong><br>Cloning into 'my-portfolio'... 이후 폴더 안으로 이동합니다.<br><br><strong>안 될 때 먼저</strong><br>주소·로그인 권한·같은 이름 폴더 존재 여부를 확인하고 삭제하지 않습니다.</div>
     </section>
-    <section class="slide" data-slide="38" data-minutes="2" data-notes="[2분] STEP 04의 둘째 부분입니다. Clone 직후 기준 상태를 확인합니다. 현재 폴더가 맞는지와 Git 상태가 깨끗한지가 이후 모든 확인의 기준입니다.">
+    <section class="slide" data-slide="48" data-minutes="2" data-notes="[2분] STEP 04의 둘째 부분입니다. Clone 직후 기준 상태를 확인합니다. 현재 폴더가 맞는지와 Git 상태가 깨끗한지가 이후 모든 확인의 기준입니다.">
       <div><p class="eyebrow">STEP 04 · 2분</p><h2><code>git status</code>로<br><span class="accent">기준 상태</span> 확인</h2></div><div class="stack"><div class="panel"><h3>복사할 프롬프트</h3><p><code>pwd</code><br><code>git status</code></p></div><div class="panel"><h3>정상 결과</h3><p>현재 폴더가 <code>my-portfolio</code>이고 <code>working tree clean</code>이 보입니다.</p></div><div class="panel"><h3>직접 확인</h3><p>다른 저장소가 아니라 방금 만든 저장소에서 실행했는지 확인합니다.</p></div><div class="panel"><h3>안 될 때 먼저</h3><p><code>cd my-portfolio</code>로 이동한 뒤 다시 실행합니다. 모르는 파일은 삭제하지 않습니다.</p></div></div>
     </section>
-    <section class="slide wide" data-slide="39" data-minutes="2" data-notes="[2분] STEP 05의 첫 부분입니다. Claude Code를 반드시 현재 저장소에서 열도록 합니다. 현재 폴더를 확인한 후 실행하게 합니다.">
+    <section class="slide wide" data-slide="49" data-minutes="2" data-notes="[2분] STEP 05의 첫 부분입니다. Claude Code를 반드시 현재 저장소에서 열도록 합니다. 현재 폴더를 확인한 후 실행하게 합니다.">
       <p class="eyebrow">STEP 05 · 2분</p><h2>Claude Code를 <span class="accent">현재 저장소</span>에서 실행</h2><div class="panel code"><strong>복사할 프롬프트</strong><br>pwd<br>claude<br><br><strong>정상 결과</strong><br>Claude Code가 my-portfolio 폴더를 작업 범위로 표시합니다.<br><br><strong>직접 확인</strong><br>터미널 경로 끝이 my-portfolio인지 봅니다.<br><br><strong>안 될 때 먼저</strong><br><code>claude</code>를 찾지 못하면 설치·로그인 상태를 확인하고 강사에게 알립니다.</div>
     </section>
-    <section class="slide wide" data-slide="40" data-minutes="2" data-notes="[2분] STEP 05의 둘째 부분입니다. 아직 파일 수정을 요청하지 않고 조사만 시킵니다. Git 상태와 파일 목록을 답변으로 받게 합니다.">
+    <section class="slide wide" data-slide="50" data-minutes="2" data-notes="[2분] STEP 05의 둘째 부분입니다. 아직 파일 수정을 요청하지 않고 조사만 시킵니다. Git 상태와 파일 목록을 답변으로 받게 합니다.">
       <p class="eyebrow">STEP 05 · 2분</p><h2>현재 파일과 Git 상태를<br><span class="accent">조사</span> 요청</h2><div class="panel code"><strong>복사할 프롬프트</strong><br>현재 파일과 Git 상태를 확인해줘. 아직 파일을 수정하지 말고, 현재 상태와 주의할 점만 알려줘.<br><br><strong>정상 결과</strong><br>파일 목록과 Git 기준 상태를 설명하며, 수정·Commit·Push를 하지 않습니다.<br><br><strong>안 될 때 먼저</strong><br>답이 파일 수정으로 흐르면 “수정하지 말고 조사만 해줘”를 다시 보냅니다.</div>
     </section>
-    <section class="slide" data-slide="41" data-minutes="2" data-notes="[2분] STEP 05의 마지막 부분입니다. 응답을 신뢰하기 전에 터미널의 git status와 파일 목록으로 직접 대조합니다.">
+    <section class="slide" data-slide="51" data-minutes="2" data-notes="[2분] STEP 05의 마지막 부분입니다. 응답을 신뢰하기 전에 터미널의 git status와 파일 목록으로 직접 대조합니다.">
       <div><p class="eyebrow">STEP 05 · 2분</p><h2>조사 결과를<br><span class="accent">직접 대조</span></h2></div><div class="stack"><div class="panel"><h3>직접 확인</h3><p>Claude Code의 설명과 <code>git status</code>, <code>ls</code> 결과가 같은지 봅니다.</p></div><div class="panel"><h3>정상 결과</h3><p>새 파일과 수정된 파일이 없고, 작업 범위가 현재 저장소로 한정됩니다.</p></div><div class="panel"><h3>안 될 때 먼저</h3><p>예상 밖 파일이 있으면 멈추고 <code>git status</code> 결과를 강사와 확인합니다.</p></div><div class="panel"><h3>복사할 프롬프트</h3><p>없음. 다음 단계에서 Plan만 요청합니다.</p></div></div>
     </section>
-    <section class="slide wide" data-slide="42" data-minutes="2" data-notes="[2분] STEP 06의 첫 부분입니다. 실제 제작 전에 파일, 화면, 검증, 안전을 포함한 Plan만 요청합니다. 각자 자신의 공개 가능한 문장을 붙여 넣게 합니다.">
+    <section class="slide wide" data-slide="52" data-minutes="2" data-notes="[2분] STEP 06의 첫 부분입니다. 실제 제작 전에 파일, 화면, 검증, 안전을 포함한 Plan만 요청합니다. 각자 자신의 공개 가능한 문장을 붙여 넣게 합니다.">
       <p class="eyebrow">STEP 06 · 2분</p><h2>파일·화면·검증·안전을 <span class="nowrap">담은</span><br><span class="accent">Plan</span> 요청</h2><div class="panel code"><strong>복사할 프롬프트</strong><br>개인 업무 포트폴리오를 만들 Plan을 보여줘. 아직 파일을 수정하지 마.<br>- 만들 파일과 각 파일의 역할<br>- 한 페이지 화면 구성<br>- 데스크톱·모바일·링크 확인 방법<br>- 공개 전 민감정보, 삭제, Commit, Push 안전 확인<br>저장소 밖 파일은 건드리지 마.<br><br><strong>정상 결과</strong><br>제작 명령이 아니라 검토 가능한 Plan이 먼저 나옵니다.</div>
     </section>
-    <section class="slide" data-slide="43" data-minutes="2" data-notes="[2분] STEP 06의 둘째 부분입니다. Plan의 네 가지 항목을 체크하고, 비어 있으면 바로 보완 요청합니다. 여기서는 아직 제작 승인하지 않습니다.">
+    <section class="slide" data-slide="53" data-minutes="2" data-notes="[2분] STEP 06의 둘째 부분입니다. Plan의 네 가지 항목을 체크하고, 비어 있으면 바로 보완 요청합니다. 여기서는 아직 제작 승인하지 않습니다.">
       <div><p class="eyebrow">STEP 06 · 2분</p><h2>Plan을 <span class="accent">승인 전</span> 검토</h2></div><div class="stack"><div class="panel"><h3>직접 확인</h3><p>파일 범위, 화면 구성, 두 폭·링크 검증, 민감정보·Commit·Push 안전 항목을 모두 읽습니다.</p></div><div class="panel"><h3>정상 결과</h3><p>별도 설치·빌드 없이 HTML/CSS/JavaScript로 만들 계획이 보입니다.</p></div><div class="panel"><h3>안 될 때 먼저</h3><p>빠진 항목은 “그 항목을 Plan에 추가하고, 아직 수정하지 마”라고 요청합니다.</p></div><div class="panel"><h3>복사할 프롬프트</h3><p>Plan이 맞으면 다음 슬라이드의 구현 프롬프트를 그대로 보냅니다.</p></div></div>
     </section>
-    <section class="slide wide" data-slide="44" data-minutes="2" data-notes="[2분] STEP 07의 첫 부분입니다. 합의한 Plan 외 작업을 하지 않는다는 정확한 구현 프롬프트를 복사하게 합니다. 이 프롬프트에는 Commit과 Push 금지도 포함됩니다.">
+    <section class="slide wide" data-slide="54" data-minutes="2" data-notes="[2분] STEP 07의 첫 부분입니다. 합의한 Plan 외 작업을 하지 않는다는 정확한 구현 프롬프트를 복사하게 합니다. 이 프롬프트에는 Commit과 Push 금지도 포함됩니다.">
       <p class="eyebrow">STEP 07 · 2분</p><h2>합의한 Plan대로<br><span class="accent">첫 버전 제작</span></h2><div class="panel code">방금 합의한 Plan대로만 만들어줘.<br><br>포트폴리오 내용:<br>- 이름과 담당 업무: [공개 가능한 문장]<br>- 내가 해결하는 문제: [한 문장]<br>- 핵심 역량 세 가지: [역량 1], [역량 2], [역량 3]<br>- 대표 업무: [공개 가능한 사례]<br>- 협업 방식: [한 문장]<br><br>HTML, CSS, JavaScript만 사용하고 별도 설치나 빌드는 만들지 마.<br>완료 전에 데스크톱, 모바일, 깨진 링크, 변경 파일을 확인해줘.<br>내 확인 전에는 Commit이나 Push를 하지 마.</div><p><strong>복사할 프롬프트:</strong> 위 전체를 내 문장으로 바꿔 붙여 넣습니다.</p>
     </section>
-    <section class="slide" data-slide="45" data-minutes="2" data-notes="[2분] STEP 07의 둘째 부분입니다. 첫 버전의 결과를 확인하되, 완료 메시지로 승인하지 않습니다. 바뀐 파일과 자동 확인 결과를 먼저 받습니다.">
+    <section class="slide" data-slide="55" data-minutes="2" data-notes="[2분] STEP 07의 둘째 부분입니다. 첫 버전의 결과를 확인하되, 완료 메시지로 승인하지 않습니다. 바뀐 파일과 자동 확인 결과를 먼저 받습니다.">
       <div><p class="eyebrow">STEP 07 · 2분</p><h2>첫 버전의 <span class="accent">범위</span> 확인</h2></div><div class="stack"><div class="panel"><h3>정상 결과</h3><p>HTML/CSS/JavaScript 파일과 데스크톱·모바일·링크·변경 파일 확인 결과를 알려줍니다.</p></div><div class="panel"><h3>직접 확인</h3><p>예상 밖 설치·빌드·Commit·Push가 없고 Plan의 파일 범위 안인지 봅니다.</p></div><div class="panel"><h3>안 될 때 먼저</h3><p>범위를 벗어나면 “추가 작업을 멈추고 바뀐 파일과 이유만 알려줘”라고 요청합니다.</p></div><div class="panel"><h3>복사할 프롬프트</h3><p>없음. 다음 단계에서 브라우저 화면을 직접 엽니다.</p></div></div>
     </section>
-    <section class="slide" data-slide="46" data-minutes="2" data-notes="[2분] STEP 08의 첫 부분입니다. 로컬 HTML을 브라우저로 열고 실제 화면을 봅니다. Claude Code의 요약이 아닌 사용자의 관찰이 증거임을 강조합니다.">
+    <section class="slide" data-slide="56" data-minutes="2" data-notes="[2분] STEP 08의 첫 부분입니다. 로컬 HTML을 브라우저로 열고 실제 화면을 봅니다. Claude Code의 요약이 아닌 사용자의 관찰이 증거임을 강조합니다.">
       <div><p class="eyebrow">STEP 08 · 2분</p><h2>로컬 <span class="accent">데스크톱 화면</span> 직접 확인</h2></div><div class="stack"><div class="panel"><h3>직접 확인</h3><p><code>index.html</code>을 브라우저에서 열어 제목, 핵심 역량, 카드, 링크를 클릭합니다.</p></div><div class="panel"><h3>정상 결과</h3><p>첫 화면의 역할이 읽히고 카드와 링크가 깨지지 않습니다.</p></div><div class="panel"><h3>안 될 때 먼저</h3><p>어느 요소가 어느 화면에서 문제인지 적고, 화면을 닫거나 파일을 지우지 않습니다.</p></div><div class="panel"><h3>복사할 프롬프트</h3><p>없음. 다음에 실제 관찰을 바탕으로 수정합니다.</p></div></div>
     </section>
-    <section class="slide" data-slide="47" data-minutes="2" data-notes="[2분] STEP 08의 둘째 부분입니다. 브라우저 개발자 도구의 기기 모드로 390×844 폭을 확인합니다. 가로 넘침과 터치 가능한 크기를 체크합니다.">
+    <section class="slide" data-slide="57" data-minutes="2" data-notes="[2분] STEP 08의 둘째 부분입니다. 브라우저 개발자 도구의 기기 모드로 390×844 폭을 확인합니다. 가로 넘침과 터치 가능한 크기를 체크합니다.">
       <div><p class="eyebrow">STEP 08 · 2분</p><h2>모바일 폭에서<br><span class="accent">가로 넘침</span> 확인</h2></div><div class="stack"><div class="panel"><h3>직접 확인</h3><p>개발자 도구 기기 모드에서 390×844로 바꾸고 좌우 스크롤, 잘린 글자, 작은 버튼을 봅니다.</p></div><div class="panel"><h3>정상 결과</h3><p>가로 스크롤이 없고, 내용과 링크가 폭 안에서 읽힙니다.</p></div><div class="panel"><h3>안 될 때 먼저</h3><p>문제가 난 요소와 폭을 메모합니다. 다음 프롬프트에 관찰한 사실만 넣습니다.</p></div><div class="panel"><h3>복사할 프롬프트</h3><p>다음 슬라이드의 디자인 개선 프롬프트를 사용합니다.</p></div></div>
     </section>
-    <section class="slide wide" data-slide="48" data-minutes="2" data-notes="[2분] STEP 09의 첫 부분입니다. 내용 변경 없이 시각적 우선순위와 여백, 강조색, 모바일 넘침만 고친다는 정확한 프롬프트를 복사하게 합니다.">
+    <section class="slide wide" data-slide="58" data-minutes="2" data-notes="[2분] STEP 09의 첫 부분입니다. 내용 변경 없이 시각적 우선순위와 여백, 강조색, 모바일 넘침만 고친다는 정확한 프롬프트를 복사하게 합니다.">
       <p class="eyebrow">STEP 09 · 2분</p><h2>색상·여백·순서를 포함한<br><span class="accent">디자인 개선</span> 요청</h2><div class="panel code">첫 화면을 확인했어. 내용은 유지하고 아래만 개선해줘.<br>- 제목과 핵심 역량의 시각적 우선순위를 더 분명하게<br>- 카드 사이 여백을 넓게<br>- 강조색은 한 가지로 제한<br>- 모바일에서 가로 넘침 제거<br><br>수정 후 바뀐 파일과 확인 결과를 알려줘. Commit이나 Push는 하지 마.</div><p><strong>복사할 프롬프트:</strong> 위 전체를 Claude Code에 붙여 넣습니다.</p>
     </section>
-    <section class="slide" data-slide="49" data-minutes="2" data-notes="[2분] STEP 09의 둘째 부분입니다. 개선 결과를 같은 두 폭으로 다시 확인하고, 요청하지 않은 내용 변경이 없는지도 봅니다.">
+    <section class="slide" data-slide="59" data-minutes="2" data-notes="[2분] STEP 09의 둘째 부분입니다. 개선 결과를 같은 두 폭으로 다시 확인하고, 요청하지 않은 내용 변경이 없는지도 봅니다.">
       <div><p class="eyebrow">STEP 09 · 2분</p><h2>개선 뒤 <span class="accent">같은 기준</span>으로 재확인</h2></div><div class="stack"><div class="panel"><h3>정상 결과</h3><p>제목·핵심 역량의 위계, 카드 여백, 한 가지 강조색, 모바일 가로 넘침 제거가 보입니다.</p></div><div class="panel"><h3>직접 확인</h3><p>데스크톱과 390×844에서 다시 열고 내용 문장이 바뀌지 않았는지 봅니다.</p></div><div class="panel"><h3>안 될 때 먼저</h3><p>“390×844에서 [요소]가 넘친다”처럼 관찰한 문제 하나만 다시 요청합니다.</p></div><div class="panel"><h3>복사할 프롬프트</h3><p>없음. 다음은 Git으로 변경 내용을 검토하는 단계입니다.</p></div></div>
     </section>
-    <section class="slide wide" data-slide="50" data-minutes="2" data-notes="[2분] STEP 10은 Commit 전 마지막 검토입니다. 새 파일은 일반 git diff에 나오지 않으므로 /dev/null과 no-index로 각 파일을 직접 비교합니다. --check에 출력이 없으면 공백 오류가 없고, 파일 차이의 exit 1은 정상입니다. status, 삭제, 민감정보, 깨진 링크도 함께 확인하며 문제가 있으면 Commit하지 않습니다.">
+    <section class="slide wide" data-slide="60" data-minutes="2" data-notes="[2분] STEP 10은 Commit 전 마지막 검토입니다. 새 파일은 일반 git diff에 나오지 않으므로 /dev/null과 no-index로 각 파일을 직접 비교합니다. --check에 출력이 없으면 공백 오류가 없고, 파일 차이의 exit 1은 정상입니다. status, 삭제, 민감정보, 깨진 링크도 함께 확인하며 문제가 있으면 Commit하지 않습니다.">
       <p class="eyebrow">STEP 10 · 2분</p><h2>Diff·삭제·민감정보·<span class="accent">깨진 링크</span> 검토</h2><div class="panel code"><strong>복사할 프롬프트</strong><br>git status<br>git diff --no-index /dev/null index.html<br>git diff --no-index /dev/null styles.css<br>git diff --no-index /dev/null app.js<br>git diff --no-index --check /dev/null index.html<br>git diff --no-index --check /dev/null styles.css<br>git diff --no-index --check /dev/null app.js<br><br><strong>정상 결과</strong><br>각 새 파일의 + 줄을 읽고, --check 출력이 없습니다. 파일 차이의 exit 1은 정상입니다.<br><br><strong>직접 확인</strong><br>status와 Diff에서 의도한 파일·삭제·비밀값·고객 정보를 보고, 페이지의 모든 링크를 클릭합니다.<br><br><strong>안 될 때 먼저</strong><br>문제가 있으면 Commit·Push를 멈추고 해당 파일과 줄을 Claude Code에 알려 수정합니다.</div>
     </section>
-    <section class="slide wide" data-slide="51" data-minutes="2" data-notes="[2분] STEP 11의 첫 부분입니다. Diff를 사람이 승인한 뒤, Plan에서 검토하고 승인한 실제 파일만 Add합니다. index.html·styles.css·app.js는 Plan과 검토 결과가 일치할 때의 예시일 뿐입니다. Commit은 로컬 기록이고 아직 공개가 아닙니다.">
+    <section class="slide wide" data-slide="61" data-minutes="2" data-notes="[2분] STEP 11의 첫 부분입니다. Diff를 사람이 승인한 뒤, Plan에서 검토하고 승인한 실제 파일만 Add합니다. index.html·styles.css·app.js는 Plan과 검토 결과가 일치할 때의 예시일 뿐입니다. Commit은 로컬 기록이고 아직 공개가 아닙니다.">
       <p class="eyebrow">STEP 11 · 2분</p><h2>Add와 Commit으로<br><span class="accent">확인된 변경</span> 기록</h2><div class="panel code"><strong>복사할 프롬프트</strong><br>Plan에서 검토하고 승인한 실제 파일만 Add합니다.<br>예시 — Plan과 검토 결과가 일치할 때만:<br>git add index.html styles.css app.js<br>git commit -m "feat: add portfolio page"<br><br><strong>정상 결과</strong><br>승인한 실제 파일만 staging되고 Commit hash와 파일 변경 수가 보입니다.<br><br><strong>직접 확인</strong><br>Commit 직전에 <code>git status</code>와 검토한 Diff를 다시 보고, add 대상이 Plan과 일치하는지 확인합니다.<br><br><strong>안 될 때 먼저</strong><br>파일 이름이 다르거나 민감정보가 보이면 <code>git add</code>를 실행하지 말고 Plan과 검토 결과를 먼저 맞춥니다.</div>
     </section>
-    <section class="slide" data-slide="52" data-minutes="2" data-notes="[2분] STEP 11의 둘째 부분입니다. Push는 GitHub로 보내는 외부 행동입니다. GitHub 화면에서 반영된 Commit까지 직접 확인하게 합니다.">
+    <section class="slide" data-slide="62" data-minutes="2" data-notes="[2분] STEP 11의 둘째 부분입니다. Push는 GitHub로 보내는 외부 행동입니다. GitHub 화면에서 반영된 Commit까지 직접 확인하게 합니다.">
       <div><p class="eyebrow">STEP 11 · 2분</p><h2>Push와 GitHub<br><span class="accent">반영</span> 확인</h2></div><div class="stack"><div class="panel"><h3>복사할 프롬프트</h3><p><code>git push origin main</code></p></div><div class="panel"><h3>정상 결과</h3><p>Push가 성공하고 GitHub 저장소의 최신 Commit과 파일이 보입니다.</p></div><div class="panel"><h3>직접 확인</h3><p>브라우저를 새로고침해 Commit 메시지와 변경 파일이 내 것인지 확인합니다.</p></div><div class="panel"><h3>안 될 때 먼저</h3><p>인증 오류면 GitHub 로그인·remote 주소를 확인하고, 실패를 반복하지 말고 강사에게 알립니다.</p></div></div>
     </section>
-    <section class="slide full" data-slide="53" data-minutes="3" data-notes="[3분] STEP 12는 Pages 설정 전에 배포 체크를 끝내는 단계입니다. 공개될 내용, GitHub 반영, 링크, 모바일, Pages 공개 범위를 확인합니다. 체크가 끝나면 이번 세션에서 바로 Pages 설정과 공개 URL 확인으로 이어갑니다.">
+    <section class="slide full" data-slide="63" data-minutes="3" data-notes="[3분] STEP 12는 Pages 설정 전에 배포 체크를 끝내는 단계입니다. 공개될 내용, GitHub 반영, 링크, 모바일, Pages 공개 범위를 확인합니다. 체크가 끝나면 이번 세션에서 바로 Pages 설정과 공개 URL 확인으로 이어갑니다.">
       <div><span class="tag">STEP 12 · 3분</span><h1>Pages 설정 전에<br><span class="accent">배포 체크 완료</span></h1><div class="four-grid"><div class="panel"><h3>복사할 프롬프트</h3><p>없음. 사람이 공개 전 체크를 완료합니다.</p></div><div class="panel"><h3>정상 결과</h3><p>GitHub에 확인한 Commit이 있고, 공개 가능한 내용만 포함됩니다.</p></div><div class="panel"><h3>직접 확인</h3><p>데스크톱·390×844·모든 링크·<code>git status</code>·GitHub 최신 Commit을 체크합니다.</p></div><div class="panel"><h3>안 될 때 먼저</h3><p>하나라도 불확실하면 Pages를 켜지 말고, 수정 → Diff → Commit → Push → 재확인으로 돌아갑니다.</p></div></div><p>이제 사람의 판단으로 Pages 설정 단계로 넘어갈 준비가 됐습니다.</p></div>
     </section>
-    <section class="slide full" data-slide="54" data-minutes="1" data-notes="[1분] GitHub Pages는 확인하고 Push한 정적 파일을 공개 URL로 연결합니다. 배포 전에 GitHub의 최신 Commit과 파일을 다시 확인합니다.">
+    <section class="slide full" data-slide="64" data-minutes="1" data-notes="[1분] GitHub Pages는 확인하고 Push한 정적 파일을 공개 URL로 연결합니다. 배포 전에 GitHub의 최신 Commit과 파일을 다시 확인합니다.">
       <div><span class="tag">Pages · 1분</span><h1>Pages는 확인한 정적 파일을<br><span class="accent">공개 URL로 연결한다</span></h1><p>로컬 파일이 아니라 GitHub에 Push된 Commit이 배포 대상입니다.</p></div>
     </section>
-    <section class="slide wide" data-slide="55" data-minutes="1" data-notes="[1분] 저장소 화면에서 Pages 설정 경로를 그대로 따라갑니다. branch는 main, 폴더는 /(root)로 선택하고 저장 결과를 확인합니다.">
+    <section class="slide wide" data-slide="65" data-minutes="1" data-notes="[1분] 저장소 화면에서 Pages 설정 경로를 그대로 따라갑니다. branch는 main, 폴더는 /(root)로 선택하고 저장 결과를 확인합니다.">
       <p class="eyebrow">Pages 설정</p><h2>설정 경로는 <span class="accent">main과 /(root)</span>를 선택한다</h2><div class="panel code">Settings → Pages → Deploy from a branch → main → /(root)<br><br><strong>직접 확인</strong><br>Save 뒤 선택값이 main / (root)로 남아 있는지 봅니다.</div>
     </section>
-    <section class="slide" data-slide="56" data-minutes="2" data-notes="[2분] Pages가 배포를 시작해도 즉시 열리지 않을 수 있습니다. 잠시 기다린 다음 GitHub가 표시한 공개 URL을 새 탭에서 직접 엽니다.">
+    <section class="slide" data-slide="66" data-minutes="2" data-notes="[2분] Pages가 배포를 시작해도 즉시 열리지 않을 수 있습니다. 잠시 기다린 다음 GitHub가 표시한 공개 URL을 새 탭에서 직접 엽니다.">
       <div><p class="eyebrow">배포 확인</p><h2>배포는 잠시 기다린 뒤<br><span class="accent">공개 URL을 직접 연다</span></h2></div><div class="stack"><div class="panel"><h3>기다림</h3><p>Pages 상태가 배포 완료로 바뀔 때까지 잠시 기다립니다.</p></div><div class="panel"><h3>직접 열기</h3><p>GitHub Pages가 표시한 공개 URL을 새 탭에서 열고 새로고침합니다.</p></div><div class="panel"><h3>확인</h3><p>제목, 카드, 링크를 클릭하고 모바일 폭에서도 다시 봅니다.</p></div></div>
     </section>
-    <section class="slide" data-slide="57" data-minutes="1" data-notes="[1분] 404에서는 추측으로 설정을 반복하지 않습니다. Git 상태, 원격 반영, Pages 원본, 파일 경로, URL 순서로 확인해 원인을 좁힙니다.">
+    <section class="slide" data-slide="67" data-minutes="1" data-notes="[1분] 404에서는 추측으로 설정을 반복하지 않습니다. Git 상태, 원격 반영, Pages 원본, 파일 경로, URL 순서로 확인해 원인을 좁힙니다.">
       <div><p class="eyebrow">404 첫 대응</p><h2>404가 나오면 <span class="nowrap">Git 상태부터</span><br><span class="accent">순서대로 확인한다</span></h2></div><ol class="steps"><li><code>git status</code>와 최신 Commit을 확인</li><li>GitHub에 Push된 파일을 확인</li><li>Pages의 main / (root) 설정을 확인</li><li><code>index.html</code>과 공개 URL 경로를 확인</li></ol>
     </section>
-    <section class="slide wide" data-slide="58" data-minutes="2" data-notes="[2분] 로컬에서 보이는 변경도 Push하지 않으면 GitHub Pages에는 없습니다. status, diff, Commit, Push, GitHub 최신 Commit을 순서대로 확인합니다.">
+    <section class="slide wide" data-slide="68" data-minutes="2" data-notes="[2분] 로컬에서 보이는 변경도 Push하지 않으면 GitHub Pages에는 없습니다. status, diff, Commit, Push, GitHub 최신 Commit을 순서대로 확인합니다.">
       <p class="eyebrow">404 원인 · 동기화</p><h2>Push하지 않은 변경은<br><span class="accent">GitHub Pages에 보이지 않는다</span></h2><div class="panel code">git status<br>git diff<br>git add [검토·승인한 실제 파일]<br>git commit -m "feat: update portfolio"<br>git push origin main<br><br><strong>직접 확인</strong><br>GitHub 최신 Commit과 파일이 로컬에서 검토한 내용과 같은지 봅니다.</div>
     </section>
-    <section class="slide" data-slide="59" data-minutes="2" data-notes="[2분] 404의 다음 원인은 시작 파일과 주소 경로입니다. 배포 원본의 최상위에 index.html이 있는지, 프로젝트 사이트 URL에 저장소 이름 경로가 포함되는지 확인합니다.">
+    <section class="slide" data-slide="69" data-minutes="2" data-notes="[2분] 404의 다음 원인은 시작 파일과 주소 경로입니다. 배포 원본의 최상위에 index.html이 있는지, 프로젝트 사이트 URL에 저장소 이름 경로가 포함되는지 확인합니다.">
       <div><p class="eyebrow">404 원인 · 경로</p><h2><code>index.html</code> 위치와 프로젝트 URL 경로를 확인한다</h2></div><div class="two-up"><div class="panel"><h3>파일 위치</h3><p>main 브랜치의 /(root)에 <code>index.html</code>이 있어야 합니다. 하위 폴더만 확인하지 않습니다.</p></div><div class="panel"><h3>프로젝트 URL</h3><p>프로젝트 사이트는 보통 <code>https://계정.github.io/저장소이름/</code> 경로입니다. 주소를 GitHub에서 복사합니다.</p></div></div>
     </section>
-    <section class="slide" data-slide="60" data-minutes="1" data-notes="[1분] 민감정보를 공개 저장소에 올렸다면 파일에서 지우는 것만으로 끝나지 않습니다. 노출된 토큰이나 비밀번호는 즉시 폐기하고 새 자격 증명으로 교체합니다.">
+    <section class="slide" data-slide="70" data-minutes="1" data-notes="[1분] 민감정보를 공개 저장소에 올렸다면 파일에서 지우는 것만으로 끝나지 않습니다. 노출된 토큰이나 비밀번호는 즉시 폐기하고 새 자격 증명으로 교체합니다.">
       <div><p class="eyebrow">사고 대응</p><h2>민감정보를 노출했다면<br><span class="nowrap">삭제만 하지 말고</span><br><span class="accent">자격 증명을 폐기한다</span></h2></div><div class="panel"><p>토큰·비밀번호·키를 즉시 비활성화하거나 회전하고, 새 자격 증명은 공개 파일 대신 안전한 비밀 관리 위치에 둡니다.</p></div>
     </section>
-    <section class="slide" data-slide="61" data-minutes="2" data-notes="[2분] 완료는 한 가지 화면이 아니라 세 가지 독립 증거로 남깁니다. 공개 URL, Git 동기화, 모바일 화면을 각각 직접 확인하고 기록합니다.">
+    <section class="slide" data-slide="71" data-minutes="2" data-notes="[2분] 완료는 한 가지 화면이 아니라 세 가지 독립 증거로 남깁니다. 공개 URL, Git 동기화, 모바일 화면을 각각 직접 확인하고 기록합니다.">
       <div><p class="eyebrow">완료 증거</p><h2>공개 URL·Git 동기화·<br><span class="nowrap">모바일 화면이</span><br><span class="accent">완료 증거</span>다</h2></div><div class="stack"><div class="panel"><h3>01 공개 URL</h3><p>새 탭에서 직접 열고 링크를 클릭합니다.</p></div><div class="panel"><h3>02 Git 동기화</h3><p><code>git status</code>와 GitHub 최신 Commit을 대조합니다.</p></div><div class="panel"><h3>03 모바일 화면</h3><p>390×844에서 넘침과 터치 대상을 확인합니다.</p></div></div>
     </section>
-    <section class="slide" data-slide="62" data-minutes="2" data-notes="[2분] 오늘의 흐름은 큰 결과 하나에만 쓰지 않습니다. 다음 업무에서는 더 작은 작업을 정해 같은 확인 고리를 반복해 안전하게 속도를 높입니다.">
+    <section class="slide" data-slide="72" data-minutes="2" data-notes="[2분] 오늘의 흐름은 큰 결과 하나에만 쓰지 않습니다. 다음 업무에서는 더 작은 작업을 정해 같은 확인 고리를 반복해 안전하게 속도를 높입니다.">
       <div><p class="eyebrow">다음 업무</p><h2>다음 업무에서는 같은 루프를<br><span class="accent">더 작은 작업에 적용한다</span></h2></div><ol class="steps"><li>작은 결과와 완료 기준을 정한다</li><li>Plan을 읽고 범위를 승인한다</li><li>화면과 Diff를 직접 확인한다</li><li>Commit · Push · 공개 URL 증거를 남긴다</li></ol>
     </section>
-    <section class="slide full" data-slide="63" data-minutes="1" data-notes="[1분] 마지막으로 오늘의 원칙을 다시 말합니다. 작업 파트너에게 맡긴 뒤에도 화면, Git 상태, 공개 URL을 직접 확인하는 사람이 결과를 완성합니다.">
+    <section class="slide full" data-slide="73" data-minutes="1" data-notes="[1분] 마지막으로 오늘의 원칙을 다시 말합니다. 작업 파트너에게 맡긴 뒤에도 화면, Git 상태, 공개 URL을 직접 확인하는 사람이 결과를 완성합니다.">
       <div><span class="tag">Closing · 1분</span><h1>시키고 끝내지 말고, 결과를 직접 확인한다</h1><p>Plan → 제작 → 화면·Diff → Commit·Push → 공개 URL</p></div>
     </section>
   </main>

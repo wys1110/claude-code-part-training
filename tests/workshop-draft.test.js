@@ -52,7 +52,7 @@ test('opening and core sections contain the approved practical story', () => {
     '작업 파트너', 'Plan', '권한', 'git status', 'git diff', 'Commit', 'Push',
     '포트폴리오 하나 만들어줘', '완료 기준',
   ]) assert.match(html, new RegExp(phrase));
-  assert.match(html, /data-slide="21"/);
+  assert.match(html, /data-slide="31"/);
 });
 
 test('instructor demo reaches a reviewed first version before the break', () => {
@@ -63,7 +63,7 @@ test('instructor demo reaches a reviewed first version before the break', () => 
     'index.html', 'styles.css', 'app.js',
     '1440×900', '390×844', '변경 파일',
   ]) assert.match(html, new RegExp(phrase));
-  assert.match(html, /data-slide="30"/);
+  assert.match(html, /data-slide="40"/);
 });
 
 test('instructor demo reviews untracked first-version files with no-index diffs', () => {
@@ -82,39 +82,58 @@ test('participant lab contains all twelve numbered steps and completion checks',
   for (const phrase of ['복사할 프롬프트', '정상 결과', '직접 확인', '안 될 때 먼저']) {
     assert.match(html, new RegExp(phrase));
   }
-  assert.match(html, /data-slide="53"/);
+  assert.match(html, /data-slide="63"/);
 });
 
 test('participant lab teaches a clean baseline and reviews actual approved files before staging', () => {
   const html = readDeck();
   const slide = (number) => html.match(new RegExp(`<section class="slide[^>]*data-slide="${number}"[\\s\\S]*?<\\/section>`))?.[0] || '';
 
-  assert.match(slide(35), /README/);
-  assert.match(slide(35), /초기 Commit/);
+  assert.match(slide(45), /README/);
+  assert.match(slide(45), /초기 Commit/);
   for (const file of ['index.html', 'styles.css', 'app.js']) {
-    assert.match(slide(50), new RegExp(`git diff --no-index /dev/null ${file}`));
-    assert.match(slide(50), new RegExp(`git diff --no-index --check /dev/null ${file}`));
+    assert.match(slide(60), new RegExp(`git diff --no-index /dev/null ${file}`));
+    assert.match(slide(60), new RegExp(`git diff --no-index --check /dev/null ${file}`));
   }
-  assert.match(slide(50), /exit 1.*정상/);
-  assert.match(slide(51), /Plan에서.*검토.*승인/);
-  assert.match(slide(51), /실제 파일/);
+  assert.match(slide(60), /exit 1.*정상/);
+  assert.match(slide(61), /Plan에서.*검토.*승인/);
+  assert.match(slide(61), /실제 파일/);
 });
 
-test('slide 53 notes proceed to Pages and the public URL in this session', () => {
+test('slide 63 notes proceed to Pages and the public URL in this session', () => {
   const html = readDeck();
-  const notes = html.match(/<section class="slide full" data-slide="53"[\s\S]*?data-notes="([^"]+)"/)?.[1];
-  assert.ok(notes, 'slide 53 notes should exist');
+  const notes = html.match(/<section class="slide full" data-slide="63"[\s\S]*?data-notes="([^"]+)"/)?.[1];
+  assert.ok(notes, 'slide 63 notes should exist');
   assert.doesNotMatch(notes, /이후 세션|다음 세션|나중/);
   assert.match(notes, /이번 세션에서 바로 Pages 설정과 공개 URL 확인/);
 });
 
-test('draft has 63 slides totaling 120 minutes with complete notes', () => {
+test('five-skill edition has 73 slides totaling 120 minutes', () => {
+  const html = readDeck();
+  const tags = [...html.matchAll(/<section\s+class="slide[^"]*"[^>]*data-slide="(\d+)"[^>]*data-minutes="(\d+)"/g)];
+  assert.equal(tags.length, 73);
+  assert.deepEqual(tags.map(match => Number(match[1])), Array.from({ length: 73 }, (_, i) => i + 1));
+  assert.equal(tags.reduce((sum, match) => sum + Number(match[2]), 0), 120);
+});
+
+test('all 73 slide summaries are nonempty', () => {
   const html = readDeck();
   const tags = [...html.matchAll(/<section\s+class="slide[^"]*"[^>]*data-slide="(\d+)"[^>]*data-minutes="(\d+)"[^>]*data-notes="([^"]+)"/g)];
-  assert.equal(tags.length, 63);
-  assert.deepEqual(tags.map(match => Number(match[1])), Array.from({ length: 63 }, (_, i) => i + 1));
-  assert.equal(tags.reduce((sum, match) => sum + Number(match[2]), 0), 120);
+  assert.equal(tags.length, 73);
   assert.ok(tags.every(match => match[3].trim().length >= 20));
+});
+
+test('skill chapter explains all five skills through before-and-after behavior', () => {
+  const html = readDeck();
+  for (const phrase of [
+    'brainstorming', 'writing-plans', 'frontend-design',
+    'systematic-debugging', 'verification-before-completion',
+    '스킬 없음', '스킬 사용', '상황을 감지',
+    '프롬프트는 짧아져도', '요구사항의 책임은 사람에게 있다',
+  ]) assert.match(html, new RegExp(phrase));
+  for (let slide = 12; slide <= 21; slide += 1) {
+    assert.match(html, new RegExp(`data-slide="${slide}"`));
+  }
 });
 
 test('publication and troubleshooting end with observable evidence', () => {
