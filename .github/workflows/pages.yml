@@ -31,12 +31,25 @@ jobs:
           text = ''.join(pathlib.Path(f'slides-{i}.js').read_text(encoding='utf-8') for i in range(1, 5))
           ids = re.findall(r'\{id:(\d+),', text)
           minutes = [float(v) for v in re.findall(r'\{id:\d+,section:[^\n]+?minutes:([0-9.]+),', text)]
-          assert ids == [str(i) for i in range(1, 45)], f'slide ids: {ids}'
-          assert len(minutes) == 44, f'timing count: {len(minutes)}'
+          assert ids == [str(i) for i in range(1, 30)], f'slide ids: {ids}'
+          assert len(minutes) == 29, f'timing count: {len(minutes)}'
           assert abs(sum(minutes) - 120) < 0.001, f'total: {sum(minutes)}'
           for required in ('index.html','styles.css','slides-1.js','slides-2.js','slides-3.js','slides-4.js','app.js'):
               assert pathlib.Path(required).is_file(), f'missing {required}'
-          print('Validated 44 slides / 120 minutes')
+          print('Validated root deck 29 slides / 120 minutes')
+
+          workshop_path = pathlib.Path('drafts/solution-pe-portfolio-workshop/index.html')
+          workshop = workshop_path.read_text(encoding='utf-8')
+          workshop_slides = re.findall(
+              r'<section\s+class="[^"]*\bslide\b[^"]*"\s+data-slide="(\d+)"\s+data-minutes="([0-9.]+)"',
+              workshop,
+          )
+          workshop_ids = [slide_id for slide_id, _ in workshop_slides]
+          workshop_minutes = [float(value) for _, value in workshop_slides]
+          assert workshop_ids == [str(i) for i in range(1, 74)], f'workshop slide ids: {workshop_ids}'
+          assert len(workshop_minutes) == 73, f'workshop timing count: {len(workshop_minutes)}'
+          assert abs(sum(workshop_minutes) - 120) < 0.001, f'workshop total: {sum(workshop_minutes)}'
+          print('Validated workshop 73 slides / 120 minutes')
           PY
           node --check slides-1.js
           node --check slides-2.js
@@ -44,13 +57,20 @@ jobs:
           node --check slides-4.js
           node --check app.js
 
+      - name: Build minimal Pages artifact
+        run: |
+          mkdir -p _site/solution-pe-portfolio-workshop
+          cp index.html styles.css app.js slides-1.js slides-2.js slides-3.js slides-4.js _site/
+          cp drafts/solution-pe-portfolio-workshop/index.html _site/solution-pe-portfolio-workshop/index.html
+          touch _site/.nojekyll
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
       - name: Upload static presentation
         uses: actions/upload-pages-artifact@v4
         with:
-          path: .
+          path: ./_site
 
       - name: Deploy to GitHub Pages
         id: deployment
