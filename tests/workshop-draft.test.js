@@ -31,6 +31,99 @@ function parseDeckSlides(html) {
     });
 }
 
+function parseScriptSections() {
+  const script = fs.readFileSync(
+    path.join(root, 'drafts', 'solution-pe-portfolio-workshop', 'script.md'),
+    'utf8',
+  );
+  const headings = [...script.matchAll(/^## Slide (\d+) — (.+)$/gm)];
+  return headings.map((match, index) => ({
+    slide: Number(match[1]),
+    title: match[2],
+    body: script.slice(
+      match.index + match[0].length,
+      headings[index + 1]?.index ?? script.length,
+    ).trim(),
+  }));
+}
+
+function getBadgeMap(html) {
+  return new Map(parseDeckSlides(html).map((slide) => [
+    slide.slide,
+    [...slide.html.matchAll(/class="skill-badge"[^>]*>([^<]+)<\/span>/g)]
+      .map((match) => match[1]),
+  ]));
+}
+
+function findClassesNestedInsideCode(html) {
+  const stack = [];
+  const nested = [];
+  for (const match of html.matchAll(/<\/?([a-z][\w-]*)([^>]*)>/gi)) {
+    const [tag, name, attributes] = match;
+    if (tag.startsWith('</')) {
+      const index = stack.map((entry) => entry.name).lastIndexOf(name.toLowerCase());
+      if (index >= 0) stack.splice(index);
+      continue;
+    }
+    const classes = attributes.match(/class="([^"]+)"/)?.[1].split(/\s+/) || [];
+    if (classes.includes('skill-badge') && stack.some((entry) => entry.classes.includes('code'))) {
+      nested.push(tag);
+    }
+    if (!tag.endsWith('/>') && !['br', 'meta', 'link', 'input'].includes(name.toLowerCase())) {
+      stack.push({ name: name.toLowerCase(), classes });
+    }
+  }
+  return nested;
+}
+
+function createRuntimeHarness(html, fullscreen = {}) {
+  const runtime = html.match(/<script>\s*([\s\S]*?)<\/script>\s*<\/body>/)?.[1];
+  assert.ok(runtime, 'standalone deck runtime should exist');
+  const parsedSlides = parseDeckSlides(html);
+  const slideElements = parsedSlides.map((slide, index) => {
+    const attributes = new Map();
+    const classes = new Set(slide.html.match(/class="([^"]+)"/)?.[1].split(/\s+/) || []);
+    return {
+      dataset: { notes: slide.notes },
+      inert: false,
+      scrollTop: 0,
+      attributes,
+      classList: {
+        add(value) { classes.add(value); },
+        remove(value) { classes.delete(value); },
+        contains(value) { return classes.has(value); },
+      },
+      setAttribute(name, value) { attributes.set(name, String(value)); },
+      removeAttribute(name) { attributes.delete(name); },
+      hasAttribute(name) { return attributes.has(name); },
+      getAttribute(name) { return attributes.get(name) ?? null; },
+      querySelector(selector) {
+        return selector === 'h1,h2' ? { textContent: slide.title } : null;
+      },
+      index,
+    };
+  });
+  const payload = html.match(/<script type="application\/json" id="speaker-notes-data">([\s\S]*?)<\/script>/)?.[1];
+  const pageElements = {
+    'speaker-notes-data': { textContent: payload },
+    progress: { style: {} },
+    counter: { textContent: '' },
+  };
+  const documentElement = {};
+  if ('requestFullscreen' in fullscreen) documentElement.requestFullscreen = fullscreen.requestFullscreen;
+  const document = {
+    querySelectorAll(selector) { return selector === '.slide' ? slideElements : []; },
+    getElementById(id) { return pageElements[id]; },
+    addEventListener() {},
+    documentElement,
+    fullscreenElement: null,
+  };
+  if ('exitFullscreen' in fullscreen) document.exitFullscreen = fullscreen.exitFullscreen;
+  const context = { document, window: { open() { throw new Error('unexpected popup'); } } };
+  vm.runInNewContext(runtime, context);
+  return { context, slideElements, pageElements };
+}
+
 function renderPopupNotes(html, embeddedNotes, slideIndex) {
   const runtime = html.match(/<script>\s*([\s\S]*?)<\/script>\s*<\/body>/)?.[1];
   assert.ok(runtime, 'standalone deck runtime should exist');
@@ -38,8 +131,11 @@ function renderPopupNotes(html, embeddedNotes, slideIndex) {
   const parsedSlides = parseDeckSlides(html);
   const slideElements = parsedSlides.map((slide) => ({
     dataset: { notes: slide.notes },
+    inert: false,
     classList: { add() {}, remove() {} },
     scrollTop: 0,
+    setAttribute() {},
+    removeAttribute() {},
     querySelector(selector) {
       return selector === 'h1,h2' ? { textContent: slide.title } : null;
     },
@@ -125,6 +221,40 @@ test('opening and core sections contain the approved practical story', () => {
     '포트폴리오 하나 만들어줘', '완료 기준',
   ]) assert.match(html, new RegExp(phrase));
   assert.match(html, /data-slide="31"/);
+});
+
+test('opening shows the sanitized completed portfolio and carries one education identity through demo and completion', () => {
+  const html = readDeck();
+  const slides = parseDeckSlides(html);
+  const byTitle = (title) => slides.find((slide) => slide.title === title)?.html || '';
+  const repo = 'sample-user/solution-pe-portfolio';
+  const url = 'https://sample-user.github.io/solution-pe-portfolio/';
+  const targets = [
+    '오늘은 공개 URL 하나를 완성한다',
+    '시연은 빈 저장소와 공개 가능한 문장으로 시작한다',
+    'Pages는 확인한 정적 파일을 공개 URL로 연결한다',
+    '배포는 잠시 기다린 뒤 공개 URL을 직접 연다',
+    '공개 URL·Git 동기화· 모바일 화면이 완료 증거다',
+  ];
+
+  for (const title of targets) {
+    const slide = byTitle(title);
+    assert.ok(slide, `target slide should be located by title: ${title}`);
+    assert.match(slide, /교육용 예시/);
+    assert.match(slide, new RegExp(repo.replace('/', '\\/')));
+    assert.match(slide, new RegExp(url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  }
+  const opening = byTitle(targets[0]);
+  for (const phrase of ['browser-result', '원용석', 'Solution PE Staff', '핵심 역량', '대표 업무']) {
+    assert.match(opening, new RegExp(phrase));
+  }
+
+  const notesByTitle = new Map(parseScriptSections().map((section) => [section.title, section.body]));
+  for (const title of targets) {
+    assert.match(notesByTitle.get(title) || '', /교육용 예시/);
+    assert.match(notesByTitle.get(title) || '', new RegExp(repo.replace('/', '\\/')));
+    assert.match(notesByTitle.get(title) || '', new RegExp(url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  }
 });
 
 test('instructor demo reaches a reviewed first version before the break', () => {
@@ -237,6 +367,73 @@ test('skill chapter uses neon terminal treatment and workflow badges', () => {
   for (const skill of ['brainstorming', 'writing-plans', 'frontend-design', 'systematic-debugging', 'verification-before-completion']) {
     assert.ok((html.match(new RegExp(`skill-badge[^>]*>${skill}`, 'g')) || []).length >= 1);
   }
+});
+
+test('skill styling and workflow badges map exactly to their intended slides', () => {
+  const html = readDeck();
+  const slides = parseDeckSlides(html);
+  assert.deepEqual(
+    slides.filter((slide) => /\bskill-slide\b/.test(slide.html)).map((slide) => slide.slide),
+    Array.from({ length: 10 }, (_, index) => index + 12),
+  );
+
+  const actual = [...getBadgeMap(html)].filter(([, badges]) => badges.length > 0);
+  assert.deepEqual(actual, [
+    [34, ['brainstorming', 'writing-plans']],
+    [35, ['writing-plans']],
+    [39, ['frontend-design']],
+    [52, ['brainstorming', 'writing-plans']],
+    [53, ['writing-plans']],
+    [58, ['frontend-design']],
+    [67, ['systematic-debugging']],
+    [71, ['verification-before-completion']],
+  ]);
+  assert.deepEqual(findClassesNestedInsideCode(html), []);
+});
+
+test('navigation exposes only the active slide to assistive technology', () => {
+  const { context, slideElements } = createRuntimeHarness(readDeck());
+  assert.equal(slideElements[0].getAttribute('role'), 'group');
+  assert.equal(slideElements[0].getAttribute('aria-roledescription'), 'slide');
+  assert.equal(slideElements[0].getAttribute('aria-label'), '1 / 73');
+  assert.equal(slideElements[0].getAttribute('aria-hidden'), 'false');
+  assert.equal(slideElements[0].inert, false);
+  assert.equal(slideElements[0].hasAttribute('inert'), false);
+  assert.ok(slideElements.slice(1).every((slide) =>
+    slide.getAttribute('aria-hidden') === 'true' &&
+    slide.inert === true &&
+    slide.hasAttribute('inert')));
+
+  context.goTo(1);
+  assert.equal(slideElements[0].getAttribute('aria-hidden'), 'true');
+  assert.equal(slideElements[0].inert, true);
+  assert.equal(slideElements[0].hasAttribute('inert'), true);
+  assert.equal(slideElements[1].getAttribute('aria-hidden'), 'false');
+  assert.equal(slideElements[1].inert, false);
+  assert.equal(slideElements[1].hasAttribute('inert'), false);
+  assert.equal(slideElements.filter((slide) => slide.getAttribute('aria-hidden') === 'false').length, 1);
+});
+
+test('fullscreen safely handles missing and rejected APIs while preserving entry and exit', async () => {
+  const missing = createRuntimeHarness(readDeck());
+  assert.equal(await missing.context.toggleFullscreen(), false);
+
+  const rejected = createRuntimeHarness(readDeck(), {
+    requestFullscreen: () => Promise.reject(new Error('not granted')),
+  });
+  assert.equal(await rejected.context.toggleFullscreen(), false);
+
+  let requestCount = 0;
+  let exitCount = 0;
+  const normal = createRuntimeHarness(readDeck(), {
+    requestFullscreen: () => { requestCount += 1; return Promise.resolve(); },
+    exitFullscreen: () => { exitCount += 1; return Promise.resolve(); },
+  });
+  assert.equal(await normal.context.toggleFullscreen(), true);
+  normal.context.document.fullscreenElement = {};
+  assert.equal(await normal.context.toggleFullscreen(), true);
+  assert.equal(requestCount, 1);
+  assert.equal(exitCount, 1);
 });
 
 test('publication and troubleshooting end with observable evidence', () => {
