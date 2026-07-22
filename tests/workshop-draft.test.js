@@ -4,12 +4,80 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const vm = require('node:vm');
 
 const root = path.join(__dirname, '..');
 const deckPath = path.join(root, 'drafts', 'solution-pe-portfolio-workshop', 'index.html');
 
 function readDeck() {
   return fs.readFileSync(deckPath, 'utf8');
+}
+
+function parseDeckSlides(html) {
+  return [...html.matchAll(/<section\s+class="slide[^"]*"[^>]*data-slide="(\d+)"[^>]*data-minutes="(\d+)"[^>]*data-notes="([^"]+)"[\s\S]*?<\/section>/g)]
+    .map((match) => {
+      const heading = match[0].match(/<h[12][^>]*>([\s\S]*?)<\/h[12]>/)?.[1] || '';
+      return {
+        slide: Number(match[1]),
+        minutes: Number(match[2]),
+        notes: match[3],
+        title: heading.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(),
+        html: match[0],
+      };
+    });
+}
+
+function renderPopupNotes(html, embeddedNotes, slideIndex) {
+  const runtime = html.match(/<script>\s*([\s\S]*?)<\/script>\s*<\/body>/)?.[1];
+  assert.ok(runtime, 'standalone deck runtime should exist');
+
+  const parsedSlides = parseDeckSlides(html);
+  const slideElements = parsedSlides.map((slide) => ({
+    dataset: { notes: slide.notes },
+    classList: { add() {}, remove() {} },
+    scrollTop: 0,
+    querySelector(selector) {
+      return selector === 'h1,h2' ? { textContent: slide.title } : null;
+    },
+  }));
+  const popupElements = {
+    'note-title': { textContent: '' },
+    nt: { textContent: '' },
+    sn: { textContent: '' },
+  };
+  const popup = {
+    closed: false,
+    close() { this.closed = true; },
+    document: {
+      write() {},
+      close() {},
+      getElementById(id) { return popupElements[id]; },
+    },
+  };
+  const pageElements = {
+    'speaker-notes-data': { textContent: JSON.stringify(embeddedNotes) },
+    progress: { style: {} },
+    counter: { textContent: '' },
+  };
+  const context = {
+    document: {
+      querySelectorAll(selector) { return selector === '.slide' ? slideElements : []; },
+      getElementById(id) { return pageElements[id]; },
+      addEventListener() {},
+      documentElement: {},
+      fullscreenElement: null,
+    },
+    window: { open() { return popup; } },
+  };
+
+  vm.runInNewContext(runtime, context);
+  context.toggleNotes();
+  context.goTo(slideIndex);
+  return {
+    title: popupElements['note-title'].textContent,
+    body: popupElements.nt.textContent,
+    counter: popupElements.sn.textContent,
+  };
 }
 
 test('draft is a standalone Minimal Dark HTML deck with required controls', () => {
@@ -116,6 +184,22 @@ test('five-skill edition has 73 slides totaling 120 minutes', () => {
   assert.equal(tags.reduce((sum, match) => sum + Number(match[2]), 0), 120);
 });
 
+test('five-skill edition preserves the approved chapter, break, and lab timing map', () => {
+  const slides = parseDeckSlides(readDeck());
+  const minutes = new Map(slides.map(slide => [slide.slide, slide.minutes]));
+  const sum = (from, to) => Array.from(
+    { length: to - from + 1 },
+    (_, index) => minutes.get(from + index),
+  ).reduce((total, value) => total + value, 0);
+
+  assert.deepEqual(
+    Array.from({ length: 10 }, (_, index) => minutes.get(index + 12)),
+    [1, 2, 1, 2, 2, 2, 2, 2, 1, 1],
+  );
+  assert.equal(minutes.get(41), 10);
+  assert.equal(sum(42, 63), 45);
+});
+
 test('all 73 slide summaries are nonempty', () => {
   const html = readDeck();
   const tags = [...html.matchAll(/<section\s+class="slide[^"]*"[^>]*data-slide="(\d+)"[^>]*data-minutes="(\d+)"[^>]*data-notes="([^"]+)"/g)];
@@ -133,6 +217,11 @@ test('skill chapter explains all five skills through before-and-after behavior',
   ]) assert.match(html, new RegExp(phrase));
   for (let slide = 12; slide <= 21; slide += 1) {
     assert.match(html, new RegExp(`data-slide="${slide}"`));
+  }
+  const slides = new Map(parseDeckSlides(html).map(slide => [slide.slide, slide.html]));
+  for (let slide = 15; slide <= 19; slide += 1) {
+    assert.match(slides.get(slide), /compare-bad/);
+    assert.match(slides.get(slide), /compare-good/);
   }
 });
 
@@ -171,5 +260,40 @@ test('embedded full speaker notes exactly match all 63 script sections', () => {
   assert.ok(payload, 'standalone deck should embed full speaker notes JSON');
   assert.doesNotMatch(payload, /</, 'embedded JSON should escape script-closing input');
   assert.deepEqual(JSON.parse(payload), expected);
-  assert.match(html, /speakerNotes\[current\]\?\.body\s*\|\|\s*slides\[current\]\.dataset\.notes/);
+});
+
+test('stale 63-entry full notes fall back to the current slide summary', () => {
+  const html = readDeck();
+  const slides = parseDeckSlides(html);
+  const payload = html.match(/<script type="application\/json" id="speaker-notes-data">([\s\S]*?)<\/script>/)?.[1];
+  assert.ok(payload, 'standalone deck should embed full speaker notes JSON');
+  const embeddedNotes = JSON.parse(payload);
+  assert.equal(slides.length, 73);
+  assert.equal(embeddedNotes.length, 63);
+
+  const popup = renderPopupNotes(html, embeddedNotes, 11);
+  assert.equal(popup.title, slides[11].title);
+  assert.equal(popup.body, slides[11].notes);
+  assert.notEqual(popup.body, embeddedNotes[11].body);
+  assert.equal(popup.counter, 'Slide 12 / 73');
+});
+
+test('full notes require matching slide IDs and titles before positional use', () => {
+  const html = readDeck();
+  const slides = parseDeckSlides(html);
+  const alignedNotes = slides.map(slide => ({
+    slide: slide.slide,
+    title: slide.title,
+    body: `FULL NOTE ${slide.slide}`,
+  }));
+
+  assert.equal(renderPopupNotes(html, alignedNotes, 11).body, 'FULL NOTE 12');
+
+  const wrongId = alignedNotes.map(note => ({ ...note }));
+  wrongId[11].slide = 999;
+  assert.equal(renderPopupNotes(html, wrongId, 11).body, slides[11].notes);
+
+  const wrongTitle = alignedNotes.map(note => ({ ...note }));
+  wrongTitle[11].title = 'WRONG TITLE';
+  assert.equal(renderPopupNotes(html, wrongTitle, 11).body, slides[11].notes);
 });

@@ -251,6 +251,15 @@
   <script>
     const slides = [...document.querySelectorAll('.slide')];
     const speakerNotes = JSON.parse(document.getElementById('speaker-notes-data').textContent);
+    const normalizeNotesTitle = (value) => (value || '').replace(/\s+/g, ' ').trim();
+    const getSlideTitle = (slide) => {
+      const heading = slide.querySelector('h1,h2');
+      return normalizeNotesTitle(heading?.innerText || heading?.textContent);
+    };
+    const speakerNotesAligned = speakerNotes.length === slides.length &&
+      speakerNotes.every((note, index) =>
+        note?.slide === index + 1 &&
+        normalizeNotesTitle(note?.title) === getSlideTitle(slides[index]));
     let current = 0;
 
     function goTo(index) {
@@ -328,9 +337,11 @@
     function updateNotes() {
       if (!notesWindow || notesWindow.closed) return;
       try {
-        const note = speakerNotes[current]?.body || slides[current].dataset.notes || '(No notes)';
-        notesWindow.document.getElementById('note-title').textContent = speakerNotes[current]?.title || '';
-        notesWindow.document.getElementById('nt').textContent = note;
+        const fullNote = speakerNotesAligned ? speakerNotes[current] : null;
+        const noteBody = fullNote?.body || slides[current].dataset.notes || '(No notes)';
+        const noteTitle = fullNote?.title || getSlideTitle(slides[current]);
+        notesWindow.document.getElementById('note-title').textContent = noteTitle;
+        notesWindow.document.getElementById('nt').textContent = noteBody;
         notesWindow.document.getElementById('sn').textContent =
           'Slide ' + (current + 1) + ' / ' + slides.length;
       } catch(e) {}
