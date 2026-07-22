@@ -180,11 +180,22 @@ function renderPopupNotes(html, embeddedNotes, slideIndex) {
   };
 }
 
-test('draft is a standalone Minimal Dark HTML deck with required controls', () => {
+test('all 73 slides use the strong Neon Terminal visual system', () => {
   const html = readDeck();
+  const slides = parseDeckSlides(html);
+  assert.equal(slides.length, 73);
   assert.match(html, /^<!doctype html>/i);
-  assert.match(html, /--bg:\s*#0a0a0a/);
-  assert.match(html, /--accent:\s*#3b82f6/);
+  for (const token of [
+    '--terminal-bg:#050807', '--neon-green:#5cff95', '--neon-cyan:#44d9ff',
+    '--neon-red:#ff6b7a', '--terminal-ink:#eafff1', '--terminal-muted:#8aa89a',
+  ]) assert.ok(html.toLowerCase().includes(token), `missing Neon Terminal token: ${token}`);
+  assert.match(html, /\.slide\{[^}]*background:var\(--terminal-bg\)/s);
+  assert.match(html, /\.slide::before\{[^}]*linear-gradient/s);
+  assert.match(html, /\.slide::after\{content:"context\s+→\s+skill\s+→\s+evidence\s+▋"/s);
+  assert.match(html, /\.slide h1,\.slide h2,\.slide h3\{[^}]*font-family:var\(--mono\)/s);
+  assert.doesNotMatch(html, /\.skill-slide\{[^}]*background:var\(--terminal-bg\)/s);
+  assert.match(html, /@media\(prefers-reduced-motion:reduce\)/);
+  assert.match(html, /@media print\{[^}]*-webkit-print-color-adjust:exact/s);
   for (const required of [
     'function goTo',
     'function toggleFullscreen',
