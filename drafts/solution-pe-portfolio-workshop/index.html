@@ -16,12 +16,14 @@
     .fullscreen-btn{position:fixed;right:24px;top:18px;z-index:100;border:1px solid var(--border);border-radius:7px;background:var(--surface);color:var(--muted);padding:7px 13px;cursor:pointer}
     .slide{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center;padding:64px 72px 82px;opacity:0;pointer-events:none;overflow-y:auto;transition:opacity .3s ease}
     .slide.full{grid-template-columns:1fr;justify-items:center;text-align:center}
+    .slide.wide{grid-template-columns:1fr;align-content:center}
     .slide.active{opacity:1;pointer-events:auto;z-index:2}
     .slide.active .a{opacity:0;animation:fadeInUp .4s ease forwards}.a:nth-child(1){animation-delay:.05s}.a:nth-child(2){animation-delay:.1s}.a:nth-child(3){animation-delay:.15s}.a:nth-child(4){animation-delay:.2s}.a:nth-child(5){animation-delay:.25s}.a:nth-child(6){animation-delay:.3s}
     @keyframes fadeInUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
     h1{font-size:clamp(46px,5vw,76px);line-height:1.08;letter-spacing:-.045em;margin-bottom:22px}h2{font-size:clamp(34px,3.4vw,54px);line-height:1.12;letter-spacing:-.035em;margin-bottom:18px}h3{font-size:20px;margin-bottom:12px}p{font-size:clamp(18px,1.7vw,26px);line-height:1.55;color:var(--muted)}
     .accent{color:var(--accent)}.tag{display:inline-block;margin-bottom:20px;border-radius:999px;background:var(--accent);padding:6px 13px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
-    @media(max-width:760px){.slide{grid-template-columns:1fr;padding:72px 28px 80px;gap:24px}.slide.full{grid-template-columns:1fr}h1{font-size:42px}h2{font-size:34px}.hint{display:none}}
+    .eyebrow{color:var(--accent);font:600 14px var(--mono);letter-spacing:.06em;margin-bottom:16px}.panel{border:1px solid var(--border);border-radius:16px;background:var(--surface);padding:26px}.panel p{font-size:19px}.stack{display:grid;gap:14px}.steps{display:grid;gap:12px;list-style:none}.steps li{border-left:3px solid var(--accent);padding:10px 14px;background:var(--surface);font-size:18px;line-height:1.5}.code{font:600 20px/1.7 var(--mono);white-space:pre-wrap;color:#dbeafe}.code strong{color:var(--good)}.bad{color:var(--bad)}.good{color:var(--good)}.four-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.four-grid .panel{min-height:128px}.two-up{display:grid;grid-template-columns:1fr 1fr;gap:18px}.small{font-size:16px}.evidence{font:600 18px var(--mono);color:var(--good)}
+    @media(max-width:760px){.slide{grid-template-columns:1fr;padding:72px 28px 80px;gap:24px}.slide.full{grid-template-columns:1fr}.two-up,.four-grid{grid-template-columns:1fr}.panel{padding:19px}h1{font-size:42px}h2{font-size:34px}.hint{display:none}.code{font-size:16px}}
     @media print{.progress,.counter,.hint,.fullscreen-btn{display:none!important}.slide{page-break-after:always;position:relative!important;opacity:1!important;display:grid!important;width:100vw;height:100vh}.slide.full{display:flex!important}@page{size:landscape;margin:0}}
   </style>
 </head>
@@ -36,6 +38,41 @@
         <p>빈 저장소에서 공개 URL까지 · 발표 원용석</p>
       </div>
     </section>
+    <section class="slide full" data-slide="2" data-minutes="1" data-notes="[1분] 오늘의 한 가지 결과는 개인 업무 포트폴리오의 공개 URL입니다. 처음부터 끝까지 같은 사례를 따라갑니다.">
+      <div><span class="tag">오늘의 결과</span><h1>오늘은 <span class="accent">공개 URL 하나</span>를 완성한다</h1><p>빈 저장소 → 개인 업무 포트폴리오 → 확인된 공개 URL</p></div>
+    </section>
+    <section class="slide" data-slide="3" data-minutes="1" data-notes="[1분] 완료 메시지만 믿지 않고, 화면·변경 내용·공개 주소 세 증거를 함께 봅니다.">
+      <div><p class="eyebrow">완료 판단</p><h2>완료는 메시지가 아니라<br><span class="accent">세 가지 증거</span>로 판단한다</h2></div>
+      <div class="stack"><div class="panel"><h3>01 화면</h3><p>읽히고, 넘치지 않는가?</p></div><div class="panel"><h3>02 Git</h3><p>바뀐 파일과 Diff가 맞는가?</p></div><div class="panel"><h3>03 URL</h3><p>공개 주소에서 직접 열리는가?</p></div></div>
+    </section>
+    <section class="slide full" data-slide="4" data-minutes="2" data-notes="[2분] 실습에는 공개 가능한 역할과 성과만 사용합니다. 삭제, Commit, Push처럼 영향이 큰 행동은 반드시 사람이 승인합니다.">
+      <div><span class="tag">안전 경계</span><h1>공개 가능한 정보만 사용하고<br><span class="accent">중요한 행동은 확인한다</span></h1><p>개인정보 · 회사 비공개 자료 · 비밀값은 넣지 않습니다</p><div class="four-grid"><div class="panel"><h3>사용 가능</h3><p>공개 가능한 역할, 일반화한 사례</p></div><div class="panel"><h3>사용 금지</h3><p>고객·직원 정보, 토큰, 사내 URL</p></div><div class="panel"><h3>사람 확인</h3><p>삭제, Commit, Push</p></div><div class="panel"><h3>작업 범위</h3><p>현재 저장소 안의 필요한 파일</p></div></div></div>
+    </section>
+    <section class="slide full" data-slide="5" data-minutes="2" data-notes="[2분] Claude Code는 채팅 답변만 하는 도구가 아니라, 지시를 이해하고 파일과 터미널을 사용해 작업하는 파트너입니다.">
+      <div><span class="tag">Claude Code</span><h1>Claude Code는 말을 듣고<br>도구를 쓰는 <span class="accent">작업 파트너</span>다</h1><p>읽기 → Plan → 만들기 → 확인 → 사람이 승인</p></div>
+    </section>
+    <section class="slide" data-slide="6" data-minutes="2" data-notes="[2분] 사람의 역할은 더 중요해집니다. 목적, 금지사항, 완료 기준을 정하고 결과를 승인합니다.">
+      <div><p class="eyebrow">사람의 역할</p><h2>사람은 목적과 금지사항과<br><span class="accent">완료 기준</span>을 정한다</h2></div><div class="stack"><div class="panel"><h3>목적</h3><p>누가 무엇을 이해해야 하는가?</p></div><div class="panel"><h3>금지사항</h3><p>무엇을 넣거나 실행하면 안 되는가?</p></div><div class="panel"><h3>완료 기준</h3><p>어떤 화면·파일·URL을 확인할 것인가?</p></div></div>
+    </section>
+    <section class="slide" data-slide="7" data-minutes="2" data-notes="[2분] 작업 폴더의 경계를 먼저 이해합니다. 파일은 재료이고 터미널은 상태 확인과 명령 실행 도구입니다.">
+      <div><p class="eyebrow">작업 공간</p><h2>작업 폴더는 책상이고<br>파일과 터미널은 <span class="accent">도구</span>다</h2><p>저장소 밖 파일은 건드리지 않는다고 명시합니다.</p></div><div class="panel code">portfolio/<br>├─ index.html<br>├─ styles.css<br>└─ app.js<br><br><strong>$ git status</strong></div>
+    </section>
+    <section class="slide" data-slide="8" data-minutes="2" data-notes="[2분] 안전한 작업은 한 번에 끝내지 않습니다. 확인부터 Diff까지 작은 고리로 반복합니다.">
+      <div><p class="eyebrow">안전한 반복</p><h2>안전한 작업은 확인부터<br><span class="accent">Diff</span>까지 반복한다</h2></div><ol class="steps"><li>현재 상태를 확인한다</li><li>Plan과 범위를 읽는다</li><li>사람이 제작을 승인한다</li><li>화면과 <code>git diff</code>를 확인한다</li></ol>
+    </section>
+    <section class="slide" data-slide="9" data-minutes="1" data-notes="[1분] Plan은 실행 전의 작업 도면입니다. 무엇을 만들고 어떻게 확인할지 미리 읽어 불필요한 수정을 막습니다."><div><p class="eyebrow">Plan</p><h2>Plan은 만들기 전에 보는<br><span class="accent">작업 도면</span>이다</h2></div><div class="panel"><h3>Plan에서 볼 네 가지</h3><p>파일 · 화면 구성 · 검증 방법 · 배포 전 확인</p></div></section>
+    <section class="slide" data-slide="10" data-minutes="1" data-notes="[1분] 권한 확인은 기다림이 아니라 사고 방지 장치입니다. 특히 삭제와 외부 공개에는 확인이 필요합니다."><div><p class="eyebrow">권한</p><h2>권한 확인은 실수를 막는<br><span class="accent">문지기</span>다</h2></div><div class="panel"><p>읽기와 조사 → 먼저 진행 가능<br>파일 수정 → 범위 확인<br>Commit · Push · 삭제 → 내 확인 후 실행</p></div></section>
+    <section class="slide" data-slide="11" data-minutes="2" data-notes="[2분] 결과를 말로만 받지 않습니다. 브라우저 화면과 Git 상태를 함께 보고 다음 행동을 결정합니다."><div><p class="eyebrow">검증</p><h2>“완료했습니다”보다<br><span class="accent">화면과 Git 상태</span>를 본다</h2></div><div class="two-up"><div class="panel"><h3>브라우저</h3><p>데스크톱과 모바일에서 글자, 링크, 넘침을 확인</p></div><div class="panel"><h3>Git</h3><p><code>git status</code>와 <code>git diff</code>로 변경을 확인</p></div></div></section>
+    <section class="slide full" data-slide="12" data-minutes="2" data-notes="[2분] 이 요청은 결과의 모습, 금지사항, 확인 방법이 빠졌습니다. 그래서 작업 파트너도 임의로 판단하게 됩니다."><div><span class="tag">약한 요청</span><h1>“포트폴리오 만들어줘”에는<br><span class="accent">판단 기준이 없다</span></h1><div class="panel code bad">약한 요청: 포트폴리오 하나 만들어줘.</div><p>누구를 위한지 · 무엇을 빼야 하는지 · 무엇을 확인할지 알 수 없습니다.</p></div></section>
+    <section class="slide" data-slide="13" data-minutes="2" data-notes="[2분] 좋은 요청은 네 칸으로 구성합니다. 이 틀을 사용하면 작업 중 임의 판단이 줄고 결과를 검증하기 쉬워집니다."><div><p class="eyebrow">좋은 요청의 네 칸</p><h2>좋은 요청은 대상·결과·금지·확인의 <span class="accent">네 칸</span>이다</h2></div><div class="four-grid"><div class="panel"><h3>대상</h3><p>비개발자 동료</p></div><div class="panel"><h3>결과</h3><p>1분 안에 역할을 이해</p></div><div class="panel"><h3>금지</h3><p>개인정보·비공개 자료 제외</p></div><div class="panel"><h3>확인</h3><p>링크·넘침·변경 파일</p></div></div></section>
+    <section class="slide" data-slide="14" data-minutes="1" data-notes="[1분] 약한 요청과 강한 요청의 차이를 비교합니다. 강한 요청의 문장을 읽고, 네 칸이 실제 문장에 어떻게 들어갔는지 짚습니다."><div><p class="eyebrow">같은 목표, 다른 결과</p><h2>같은 목표도 요청이 구체적이면<br><span class="accent">결과가 달라진다</span></h2></div><div class="panel code"><span class="good">강한 요청:</span> 비개발자 동료가 1분 안에 내 역할을 이해하도록 한 페이지로 만들어줘.<br>모바일에서도 읽기 쉽게 하고, 개인정보와 회사 비공개 자료는 넣지 마.<br>완료 전에 깨진 링크, 화면 넘침, 변경 파일을 확인해줘.<br>내 확인 전에는 Commit이나 Push를 하지 마.</div></section>
+    <section class="slide" data-slide="15" data-minutes="1" data-notes="[1분] 개인 업무 포트폴리오에는 공개 가능 여부를 먼저 분류합니다. 실제 회사 정보가 아니라 일반화한 문장만 사용합니다."><div><p class="eyebrow">공개 전 분류</p><h2>공개할 내용과 공개하면 안 될<br><span class="accent">내용을 먼저 나눈다</span></h2></div><div class="two-up"><div class="panel"><h3 class="good">공개 가능</h3><p>나의 역할, 일반화한 업무 방식, 공개된 성과</p></div><div class="panel"><h3 class="bad">공개 금지</h3><p>고객명, 내부 수치, 화면 캡처, 비밀값</p></div></div></section>
+    <section class="slide" data-slide="16" data-minutes="2" data-notes="[2분] 제작을 바로 지시하지 않고 Plan의 네 항목을 먼저 확인합니다. 범위와 검증 기준이 맞을 때만 승인을 줍니다."><div><p class="eyebrow">제작 승인</p><h2>제작 승인은 Plan의 네 항목을<br>확인한 뒤에 한다</h2></div><ol class="steps"><li>만들거나 바꿀 파일</li><li>한 페이지의 화면 구성</li><li>데스크톱·모바일 확인 방법</li><li>GitHub 공개 전에 사람이 확인할 내용</li></ol></section>
+    <section class="slide full" data-slide="17" data-minutes="2" data-notes="[2분] Git은 실험을 두렵지 않게 하는 기록 장치입니다. 확인된 상태마다 돌아올 수 있는 저장 지점을 남깁니다."><div><span class="tag">Git</span><h1>Git은 되돌아갈 수 있는<br><span class="accent">저장 지점</span>을 만든다</h1><p>확인 → Commit → Push 순서로 공개 가능한 상태를 남깁니다.</p></div></section>
+    <section class="slide wide" data-slide="18" data-minutes="1" data-notes="[1분] git status는 지금 무엇이 바뀌었는지 알려줍니다. Commit 전에 반드시 확인할 첫 명령입니다."><p class="eyebrow">Git 상태</p><h2><code>git status</code>는 지금 바뀐 것을 알려준다</h2><div class="panel code">$ git status<br><strong>modified: index.html</strong><br><strong>modified: styles.css</strong><br><p class="small">의도한 파일만 바뀌었는지 확인합니다.</p></div></section>
+    <section class="slide wide" data-slide="19" data-minutes="2" data-notes="[2분] git diff는 파일 이름이 아니라 실제 변경 줄을 보여줍니다. 공개하면 안 되는 내용이 섞이지 않았는지 검토합니다."><p class="eyebrow">변경 내용</p><h2><code>git diff</code>는 실제로 바뀐 내용을 보여준다</h2><div class="panel code">$ git diff<br><span class="bad">- &lt;h2&gt;임시 제목&lt;/h2&gt;</span><br><span class="good">+ &lt;h2&gt;개인 업무 포트폴리오&lt;/h2&gt;</span><br><p class="small">예상한 내용만 추가·수정되었는지 봅니다.</p></div></section>
+    <section class="slide" data-slide="20" data-minutes="1" data-notes="[1분] Commit은 확인된 변경에 설명을 붙여 저장하는 시점입니다. 아직 GitHub 공개는 아닙니다."><div><p class="eyebrow">Commit</p><h2>Commit은 설명이 붙은<br><span class="accent">저장 지점</span>이다</h2></div><div class="panel code">$ git commit -m "feat: add portfolio page"<br><span class="good">확인한 변경만 기록</span></div></section>
+    <section class="slide" data-slide="21" data-minutes="2" data-notes="[2분] Push는 확인한 Commit을 GitHub로 보내는 행동입니다. 공개 URL을 만들기 전 마지막 사람 확인 지점입니다."><div><p class="eyebrow">Push</p><h2>Push는 확인한 저장 지점을<br><span class="accent">GitHub로 보낸다</span></h2></div><div class="panel code">$ git push origin main<br><br><span class="good">사람 확인 후 공개 URL을 연다</span></div></section>
   </main>
   <script>
     const slides = [...document.querySelectorAll('.slide')];

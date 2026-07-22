@@ -27,3 +27,13 @@ test('draft is a standalone Minimal Dark HTML deck with required controls', () =
     '@media print',
   ]) assert.match(html, new RegExp(required.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
 });
+
+test('opening and core sections contain the approved practical story', () => {
+  const html = readDeck();
+  for (const phrase of [
+    'Solution PE팀 Staff', '원용석', '개인 업무 포트폴리오',
+    '작업 파트너', 'Plan', '권한', 'git status', 'git diff', 'Commit', 'Push',
+    '포트폴리오 하나 만들어줘', '완료 기준',
+  ]) assert.match(html, new RegExp(phrase));
+  assert.match(html, /data-slide="21"/);
+});
