@@ -49,12 +49,14 @@ test('every slide has complete presenter guidance', () => {
   }
 });
 
-test('Pages workflow validates and publishes the 73-slide workshop at a clean path', () => {
+test('Pages workflow publishes the workshop at the root and alias paths', () => {
   const workflow = fs.readFileSync(path.join(ROOT, '.github/workflows/pages.yml'), 'utf8');
   assert.match(workflow, /range\(1, 30\)/);
   assert.match(workflow, /drafts\/solution-pe-portfolio-workshop\/index\.html/);
   assert.match(workflow, /workshop slide ids/);
   assert.match(workflow, /workshop total/);
-  assert.match(workflow, /_site\/solution-pe-portfolio-workshop\/index\.html/);
+  assert.match(workflow, /cp drafts\/solution-pe-portfolio-workshop\/index\.html _site\/index\.html/);
+  assert.match(workflow, /cp drafts\/solution-pe-portfolio-workshop\/index\.html _site\/solution-pe-portfolio-workshop\/index\.html/);
+  assert.doesNotMatch(workflow, /cp index\.html styles\.css app\.js/);
   assert.match(workflow, /path:\s*\.\/_site/);
 });

@@ -60,7 +60,7 @@ jobs:
       - name: Build minimal Pages artifact
         run: |
           mkdir -p _site/solution-pe-portfolio-workshop
-          cp index.html styles.css app.js slides-1.js slides-2.js slides-3.js slides-4.js _site/
+          cp drafts/solution-pe-portfolio-workshop/index.html _site/index.html
           cp drafts/solution-pe-portfolio-workshop/index.html _site/solution-pe-portfolio-workshop/index.html
           touch _site/.nojekyll
 
