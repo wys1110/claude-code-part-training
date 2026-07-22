@@ -37,3 +37,14 @@ test('opening and core sections contain the approved practical story', () => {
   ]) assert.match(html, new RegExp(phrase));
   assert.match(html, /data-slide="21"/);
 });
+
+test('instructor demo reaches a reviewed first version before the break', () => {
+  const html = readDeck();
+  for (const phrase of [
+    '현재 파일과 Git 상태를 확인해줘',
+    '아직 파일을 수정하지 말고',
+    'index.html', 'styles.css', 'app.js',
+    '1440×900', '390×844', '변경 파일',
+  ]) assert.match(html, new RegExp(phrase));
+  assert.match(html, /data-slide="30"/);
+});

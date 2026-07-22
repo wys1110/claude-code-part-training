@@ -73,6 +73,39 @@
     <section class="slide wide" data-slide="19" data-minutes="2" data-notes="[2분] git diff는 파일 이름이 아니라 실제 변경 줄을 보여줍니다. 공개하면 안 되는 내용이 섞이지 않았는지 검토합니다."><p class="eyebrow">변경 내용</p><h2><code>git diff</code>는 실제로 바뀐 내용을 보여준다</h2><div class="panel code">$ git diff<br><span class="bad">- &lt;h2&gt;임시 제목&lt;/h2&gt;</span><br><span class="good">+ &lt;h2&gt;개인 업무 포트폴리오&lt;/h2&gt;</span><br><p class="small">예상한 내용만 추가·수정되었는지 봅니다.</p></div></section>
     <section class="slide" data-slide="20" data-minutes="1" data-notes="[1분] Commit은 확인된 변경에 설명을 붙여 저장하는 시점입니다. 아직 GitHub 공개는 아닙니다."><div><p class="eyebrow">Commit</p><h2>Commit은 설명이 붙은<br><span class="accent">저장 지점</span>이다</h2></div><div class="panel code">$ git commit -m "feat: add portfolio page"<br><span class="good">확인한 변경만 기록</span></div></section>
     <section class="slide" data-slide="21" data-minutes="2" data-notes="[2분] Push는 확인한 Commit을 GitHub로 보내는 행동입니다. 공개 URL을 만들기 전 마지막 사람 확인 지점입니다."><div><p class="eyebrow">Push</p><h2>Push는 확인한 저장 지점을<br><span class="accent">GitHub로 보낸다</span></h2></div><div class="panel code">$ git push origin main<br><br><span class="good">사람 확인 후 공개 URL을 연다</span></div></section>
+    <section class="slide full" data-slide="22" data-minutes="2" data-notes="[2분] 이제 실제 강사 시연을 시작합니다. 빈 저장소에서 시작하고, 포트폴리오에는 공개 가능한 역할과 일반화한 사례만 넣겠다고 다시 확인합니다.">
+      <div><span class="tag">강사 시연 · 시작</span><h1>시연은 빈 저장소와<br><span class="accent">공개 가능한 문장</span>으로 시작한다</h1><p>개인정보·비공개 자료·비밀값 없이, 한 페이지 개인 업무 포트폴리오를 만듭니다.</p><div class="panel code">portfolio/<br>└─ <span class="good">(아직 작업 파일 없음)</span></div></div>
+    </section>
+    <section class="slide" data-slide="23" data-minutes="2" data-notes="[2분] 제작 전에 현재 위치, 파일 목록, Git 기준 상태를 함께 확인합니다. 빈 상태와 깨끗한 상태를 눈으로 확인해야 이후의 변경 파일이 의미를 갖습니다.">
+      <div><p class="eyebrow">01 · 기준 상태</p><h2>첫 화면에서 폴더와 Git<br><span class="accent">기준 상태</span>를 확인한다</h2><p>작업은 이 저장소 안에서만 합니다.</p></div>
+      <div class="panel code">$ pwd<br>.../portfolio<br><br>$ ls -la<br>.<br>..<br>.git/<br><br>$ git status<br><strong>working tree clean</strong></div>
+    </section>
+    <section class="slide wide" data-slide="24" data-minutes="2" data-notes="[2분] 이 프롬프트를 그대로 입력합니다. 핵심은 곧바로 만들라고 하지 않고, 현재 상태 조사와 Plan 제시를 먼저 요청하는 것입니다.">
+      <p class="eyebrow">02 · 조사 요청</p><h2>첫 프롬프트는 수정이 아니라<br><span class="accent">조사</span>를 요청한다</h2>
+      <div class="panel code">이 저장소에 개인 업무 포트폴리오를 만들고 싶어.<br><br>먼저 현재 파일과 Git 상태를 확인해줘.<br>아직 파일을 수정하지 말고 아래 내용을 Plan으로 보여줘.<br>- 만들거나 바꿀 파일<br>- 화면 구성<br>- 데스크톱과 모바일 확인 방법<br>- GitHub Pages 공개 전에 내가 확인할 내용<br><br>저장소 밖의 파일은 건드리지 말고, 삭제·Commit·Push는 내 확인 전에 하지 마.</div>
+    </section>
+    <section class="slide" data-slide="25" data-minutes="2" data-notes="[2분] 돌아온 Plan에서 파일 이름, 화면 구조, 확인 방법, 공개 전 사람 확인을 읽습니다. 이 네 항목이 빠졌거나 범위를 벗어나면 여기서 고칩니다.">
+      <div><p class="eyebrow">03 · Plan 검토</p><h2>Plan에서 파일·화면·검증·배포 전 확인을 <span class="accent">읽는다</span></h2></div>
+      <div class="stack"><div class="panel"><h3>파일</h3><p><code>index.html</code>, <code>styles.css</code>, <code>app.js</code>만 새로 만듭니다.</p></div><div class="panel"><h3>화면과 검증</h3><p>소개·업무 방식·연락처 한 페이지. 1440×900과 390×844에서 직접 확인합니다.</p></div><div class="panel"><h3>공개 전</h3><p>Diff에 비공개 내용이 없는지 보고, GitHub Pages 설정과 URL은 사람이 확인합니다.</p></div></div>
+    </section>
+    <section class="slide full" data-slide="26" data-minutes="2" data-notes="[2분] Plan의 범위가 맞는지 말로 확인한 뒤에만 제작을 승인합니다. 승인 문장은 추가 범위, 삭제, Commit, Push를 허용하지 않는다는 점도 유지합니다.">
+      <div><span class="tag">04 · 제작 승인</span><h1>범위가 맞을 때만<br><span class="accent">제작을 승인</span>한다</h1><div class="panel code">Plan이 맞아.<br><strong>index.html, styles.css, app.js만</strong> 만들어줘.<br>완료 후 로컬 화면, 모바일 폭, 변경 파일을 보여줘.<br>삭제·Commit·Push는 아직 하지 마.</div></div>
+    </section>
+    <section class="slide" data-slide="27" data-minutes="2" data-notes="[2분] 승인 후의 첫 버전은 세 파일로 제한합니다. HTML은 구조, CSS는 읽기 쉬운 반응형 화면, JavaScript는 작은 상호작용만 맡도록 분리합니다.">
+      <div><p class="eyebrow">05 · 첫 버전</p><h2>첫 버전은 HTML·CSS·JavaScript <span class="accent">세 파일</span>로 만든다</h2></div>
+      <div class="panel code">$ ls<br><strong>index.html</strong><br><strong>styles.css</strong><br><strong>app.js</strong><br><br>index.html  → 소개·업무 방식·연락처<br>styles.css  → 색·간격·반응형 레이아웃<br>app.js      → 메뉴 또는 링크 상호작용</div>
+    </section>
+    <section class="slide" data-slide="28" data-minutes="2" data-notes="[2분] 완료 메시지 대신 브라우저를 직접 봅니다. 데스크톱과 모바일 폭에서 제목, 줄바꿈, 버튼, 가로 넘침, 링크를 같은 기준으로 확인합니다.">
+      <div><p class="eyebrow">06 · 화면 확인</p><h2>로컬 화면과 모바일 폭을<br><span class="accent">직접 확인</span>한다</h2></div>
+      <div class="two-up"><div class="panel"><h3>데스크톱 · 1440×900</h3><p>첫 화면의 위계가 읽히는가?<br>여백과 카드가 넘치지 않는가?<br>링크가 동작하는가?</p></div><div class="panel"><h3>모바일 · 390×844</h3><p>가로 스크롤이 없는가?<br>글자와 버튼을 누를 수 있는가?<br>내용이 잘리지 않는가?</p></div></div>
+    </section>
+    <section class="slide wide" data-slide="29" data-minutes="2" data-notes="[2분] 화면을 보고 난 뒤에는 취향만 말하지 않습니다. 어느 폭의 어느 요소가 어떻게 바뀌어야 하는지 관찰 가능한 조건으로 요청하고, 다시 확인합니다.">
+      <p class="eyebrow">07 · 관찰 가능한 수정</p><h2>“더 예쁘게”를 관찰 가능한<br><span class="accent">수정 요청</span>으로 바꾼다</h2>
+      <div class="two-up"><div class="panel"><h3 class="bad">모호한 말</h3><p>“첫 화면을 더 예쁘게 해줘.”</p></div><div class="panel"><h3 class="good">확인 가능한 말</h3><p>“390×844에서 소개 문단과 첫 카드 사이 간격을 줄이고, 제목이 세 줄을 넘지 않게 해줘. 수정 뒤 두 폭에서 다시 보여줘.”</p></div></div>
+    </section>
+    <section class="slide full" data-slide="30" data-minutes="1" data-notes="[1분] 마지막으로 Diff와 변경 파일을 확인합니다. 의도한 세 파일만 바뀌었고 화면 검증도 끝났다면, Commit이나 Push 전에 시연의 첫 버전은 검토 완료입니다.">
+      <div><span class="tag">08 · 검토 완료</span><h1>Diff와 변경 파일이 맞으면<br>시연 <span class="accent">1차 완료</span>다</h1><div class="panel code">$ git status --short<br><strong>?? index.html</strong><br><strong>?? styles.css</strong><br><strong>?? app.js</strong><br><br>$ git diff --check<br><span class="good">공백 오류 없음 · 의도한 세 파일만 확인</span></div><p>이제 사람이 내용을 검토하고 Commit·Push·공개 여부를 결정합니다.</p></div>
+    </section>
   </main>
   <script>
     const slides = [...document.querySelectorAll('.slide')];
