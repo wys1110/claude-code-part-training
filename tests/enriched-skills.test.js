@@ -44,9 +44,17 @@ test('five skills have detailed overview and practical pages', () => {
   assert.match(html, /brainstorming을 사용해 아래 작업을 구체화해줘/);
   assert.match(html, /systematic-debugging을 사용해 조사해줘/);
   assert.match(html, /verification-before-completion을 사용해 아래 완료 기준을 검증해줘/);
+
+  const skillTimings = Array.from(
+    html.matchAll(/<section\s+class="[^"]*\bskill-rich-slide\b[^"]*"\s+data-slide="(\d+)"\s+data-minutes="([0-9.]+)"/g),
+    match => ({ page: Number(match[1]), minutes: Number(match[2]) }),
+  );
+  assert.equal(skillTimings.length, 10);
+  assert.deepEqual(skillTimings.map(item => item.page), Array.from({ length: 10 }, (_, index) => index + 16));
+  assert.ok(skillTimings.every(item => item.minutes >= 2));
 });
 
-test('detailed skill speaker notes remain aligned', () => {
+test('detailed skill speaker notes remain aligned and allow fuller delivery', () => {
   const html = buildDetailedWorkshop();
   const match = html.match(/<script type="application\/json" id="speaker-notes-data">([\s\S]*?)<\/script>/);
   assert.ok(match);
@@ -57,4 +65,7 @@ test('detailed skill speaker notes remain aligned', () => {
   assert.equal(notes[15].title, 'brainstorming은 만들기 전에 목적과 범위를 맞춘다');
   assert.equal(notes[16].title, 'brainstorming은 네 질문으로 요구사항을 고정한다');
   assert.equal(notes[24].title, 'verification-before-completion은 네 증거를 한 번에 묶는다');
+  for (let page = 16; page <= 25; page += 1) {
+    assert.match(notes[page - 1].body, /^\[약 2분\]/);
+  }
 });
