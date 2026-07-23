@@ -1,0 +1,61 @@
+name: Validate presentation
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Build 81-slide workshop
+        run: |
+          python scripts/build_workshop.py drafts/solution-pe-portfolio-workshop/index.html /tmp/workshop.html
+          python scripts/enrich_skill_pages.py /tmp/workshop.html /tmp/workshop.html
+          python scripts/add_tool_comparison.py /tmp/workshop.html /tmp/workshop.html
+
+      - name: Validate final output
+        run: |
+          python - <<'PY'
+          import json, pathlib, re
+          built = pathlib.Path('/tmp/workshop.html').read_text(encoding='utf-8')
+          slides = re.findall(
+              r'<section\s+class="[^"]*\bslide\b[^"]*"\s+data-slide="(\d+)"\s+data-minutes="([0-9.]+)"',
+              built,
+          )
+          assert [slide_id for slide_id, _ in slides] == [str(i) for i in range(1, 82)], slides
+          assert all(float(minutes) > 0 for _, minutes in slides)
+          assert 'Claude Code vs Codex: 무엇이 다른가?' in built
+          assert '도구가 아니라 작업 방식으로 선택한다' in built
+          assert '<span class="contents-range">28–29</span>' in built
+          assert '<span class="contents-range">80–81</span>' in built
+          assert 'https://docs.anthropic.com/en/docs/claude-code/overview' in built
+          assert 'https://openai.com/codex/' in built
+          notes_match = re.search(
+              r'<script type="application/json" id="speaker-notes-data">(.*?)</script>',
+              built,
+              re.S,
+          )
+          assert notes_match
+          notes = json.loads(notes_match.group(1))
+          assert [note['slide'] for note in notes] == list(range(1, 82))
+          assert notes[27]['title'] == 'Claude Code vs Codex: 무엇이 다른가?'
+          assert notes[28]['title'] == '도구가 아니라 작업 방식으로 선택한다'
+          print('Validated 81 slides with comparison pages 28–29')
+          PY
+
+      - name: Run source checks
+        run: |
+          python -m py_compile scripts/build_workshop.py scripts/enrich_skill_pages.py scripts/add_tool_comparison.py
+          node --check slides-1.js
+          node --check slides-2.js
+          node --check slides-3.js
+          node --check slides-4.js
+          node --check app.js
+          node --test
