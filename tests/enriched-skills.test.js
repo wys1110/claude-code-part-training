@@ -37,18 +37,29 @@ test('five skills have explanation-rich overview and practical pages', () => {
 
   assert.deepEqual(slideIds, Array.from({ length: 79 }, (_, index) => index + 1));
   assert.ok((html.match(/skill-rich-slide/g) || []).length >= 10);
-  assert.equal((html.match(/왜 필요한가/g) || []).length, 5);
-  assert.equal((html.match(/실제 업무 상황/g) || []).length, 5);
-  assert.equal((html.match(/COPYABLE PROMPT/g) || []).length, 5);
-  assert.equal((html.match(/EXPECTED RESPONSE/g) || []).length, 5);
-  assert.equal((html.match(/FAILURE PATTERNS/g) || []).length, 5);
-  assert.equal((html.match(/좋은 요청 예시/g) || []).length, 5);
-  assert.equal((html.match(/사람이 결정할 것/g) || []).length, 5);
+
+  for (const marker of [
+    'DEFINITION',
+    'WHEN NOT TO USE',
+    'BEFORE → AFTER',
+    'CORE PRINCIPLES',
+    'COPYABLE PROMPT',
+    'PROMPT ANATOMY',
+    'EXAMPLE OUTPUT',
+    'QUALITY GATE',
+    'FAILURE PATTERNS',
+    'REQUEST EXAMPLE',
+  ]) {
+    assert.equal((html.match(new RegExp(marker, 'g')) || []).length, 5, marker);
+  }
+
+  assert.match(html, /사용하지 말아야 할 때/);
+  assert.match(html, /실제 적용 사례/);
+  assert.match(html, /프롬프트 문장별 역할/);
+  assert.match(html, /좋은 결과 예시/);
   assert.match(html, /brainstorming을 사용해 아래 작업을 구체화해줘/);
   assert.match(html, /systematic-debugging을 사용해 조사해줘/);
   assert.match(html, /verification-before-completion을 사용해 아래 완료 기준을 검증해줘/);
-  assert.match(html, /요청이 짧을수록 Claude는 빈칸을 추측으로 채우기 쉽습니다/);
-  assert.match(html, /79장 발표 자료를 main에 병합했지만 공개 Pages는 74장을 보여 줄 수 있습니다/);
 
   const skillTimings = Array.from(
     html.matchAll(/<section\s+class="[^"]*\bskill-rich-slide\b[^"]*"\s+data-slide="(\d+)"\s+data-minutes="([0-9.]+)"/g),
@@ -72,6 +83,6 @@ test('detailed skill speaker notes remain aligned and support fuller delivery', 
   assert.equal(notes[24].title, 'verification-before-completion은 네 증거를 한 번에 묶는다');
   for (let page = 16; page <= 25; page += 1) {
     assert.match(notes[page - 1].body, /^\[약 3분\]/);
-    assert.ok(notes[page - 1].body.length > 250, `slide ${page} note is too short`);
+    assert.ok(notes[page - 1].body.length > 250, `page ${page} note is too short`);
   }
 });
