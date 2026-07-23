@@ -49,14 +49,16 @@ test('every slide has complete presenter guidance', () => {
   }
 });
 
-test('Pages workflow publishes the workshop at the root and alias paths', () => {
+test('Pages workflow builds the 74-slide workshop at the root and alias paths', () => {
   const workflow = fs.readFileSync(path.join(ROOT, '.github/workflows/pages.yml'), 'utf8');
   assert.match(workflow, /range\(1, 30\)/);
   assert.match(workflow, /drafts\/solution-pe-portfolio-workshop\/index\.html/);
   assert.match(workflow, /workshop slide ids/);
   assert.match(workflow, /workshop total/);
-  assert.match(workflow, /cp drafts\/solution-pe-portfolio-workshop\/index\.html _site\/index\.html/);
-  assert.match(workflow, /cp drafts\/solution-pe-portfolio-workshop\/index\.html _site\/solution-pe-portfolio-workshop\/index\.html/);
+  assert.match(workflow, /list\(range\(1, 75\)\)/);
+  assert.match(workflow, /<h2>CONTENTS<\/h2>/);
+  assert.match(workflow, /python scripts\/build_workshop\.py drafts\/solution-pe-portfolio-workshop\/index\.html _site\/index\.html/);
+  assert.match(workflow, /cp _site\/index\.html _site\/solution-pe-portfolio-workshop\/index\.html/);
   assert.doesNotMatch(workflow, /cp index\.html styles\.css app\.js/);
   assert.match(workflow, /path:\s*\.\/_site/);
 });
