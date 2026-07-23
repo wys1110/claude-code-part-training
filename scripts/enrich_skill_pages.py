@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Enrich the ten public skill slides without changing slide count or timing."""
+"""Enrich the ten public skill slides with content-driven timing."""
 
 from __future__ import annotations
 
@@ -50,12 +50,21 @@ def replace_slide(document: str, page: int, inner: str) -> str:
         opening = match.group(1)
         if "skill-rich-slide" not in opening:
             opening = opening.replace('class="', 'class="skill-rich-slide ', 1)
+        opening, timing_count = re.subn(
+            r'data-minutes="[^"]+"', 'data-minutes="2"', opening, count=1
+        )
+        if timing_count != 1:
+            raise ValueError(f"could not update timing for slide {page}")
         return opening + inner + "\n    </section>"
 
     document, count = pattern.subn(replacement, document, count=1)
     if count != 1:
         raise ValueError(f"could not replace slide {page}")
     return document
+
+
+def two_minute_note(body: object) -> str:
+    return re.sub(r'^\[(?:약\s*)?1분\]', '[약 2분]', str(body))
 
 
 def enrich(source: str) -> str:
@@ -92,9 +101,9 @@ def enrich(source: str) -> str:
         overview_index = int(item["overview_page"]) - 1
         detail_index = int(item["detail_page"]) - 1
         notes[overview_index]["title"] = item["overview_title"]
-        notes[overview_index]["body"] = item["overview_note"]
+        notes[overview_index]["body"] = two_minute_note(item["overview_note"])
         notes[detail_index]["title"] = item["detail_title"]
-        notes[detail_index]["body"] = item["detail_note"]
+        notes[detail_index]["body"] = two_minute_note(item["detail_note"])
     serialized = json.dumps(notes, ensure_ascii=False, separators=(",", ":"))
     document = notes_pattern.sub(
         lambda found: found.group(1) + serialized + found.group(3), document, count=1
@@ -106,6 +115,16 @@ def enrich(source: str) -> str:
                 raise ValueError(f"missing enriched marker: {marker}")
     if document.count("skill-rich-slide") < 10:
         raise ValueError("expected ten enriched skill slides")
+
+    skill_minutes = {
+        int(page): float(minutes)
+        for page, minutes in re.findall(
+            r'<section\s+class="[^"]*\bskill-rich-slide\b[^"]*"\s+data-slide="(\d+)"\s+data-minutes="([0-9.]+)"',
+            document,
+        )
+    }
+    if len(skill_minutes) != 10 or any(value < 2 for value in skill_minutes.values()):
+        raise ValueError(f"expected ten skill slides with at least two minutes each, got {skill_minutes}")
     return document
 
 
