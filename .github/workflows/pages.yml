@@ -77,13 +77,21 @@ jobs:
           ):
               assert f'<h2>{title}</h2>' in built, title
           assert built.count('skill-rich-slide') >= 10
-          assert built.count('COPYABLE PROMPT') == 5
-          assert built.count('EXPECTED RESPONSE') == 5
-          assert built.count('FAILURE PATTERNS') == 5
-          assert built.count('왜 필요한가') == 5
-          assert built.count('실제 업무 상황') == 5
-          assert built.count('좋은 요청 예시') == 5
-          assert built.count('사람이 결정할 것') == 5
+          for marker in (
+              'DEFINITION',
+              'WHEN NOT TO USE',
+              'BEFORE → AFTER',
+              'CORE PRINCIPLES',
+              'COPYABLE PROMPT',
+              'PROMPT ANATOMY',
+              'EXAMPLE OUTPUT',
+              'QUALITY GATE',
+              'FAILURE PATTERNS',
+              'REQUEST EXAMPLE',
+          ):
+              assert built.count(marker) == 5, (marker, built.count(marker))
+          for korean_marker in ('사용하지 말아야 할 때', '실제 적용 사례', '프롬프트 문장별 역할', '좋은 결과 예시'):
+              assert korean_marker in built, korean_marker
           skill_slides = re.findall(
               r'<section\s+class="[^"]*\bskill-rich-slide\b[^"]*"\s+data-slide="(\d+)"\s+data-minutes="([0-9.]+)"',
               built,
@@ -100,7 +108,9 @@ jobs:
           assert [note['slide'] for note in notes] == list(range(1, 80))
           assert notes[1]['title'] == 'CONTENTS'
           for page in range(16, 26):
-              assert notes[page - 1]['body'].startswith('[약 3분]'), (page, notes[page - 1]['body'][:20])
+              body = notes[page - 1]['body']
+              assert body.startswith('[약 3분]'), (page, body[:20])
+              assert len(body) > 250, (page, len(body))
           print(f'Validated explanation-rich public workshop 79 slides / {sum(built_minutes):g} minutes of flexible timing')
           PY
 
