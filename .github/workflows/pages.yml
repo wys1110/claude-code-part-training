@@ -49,19 +49,45 @@ jobs:
           assert workshop_ids == [str(i) for i in range(1, 74)], f'workshop slide ids: {workshop_ids}'
           assert len(workshop_minutes) == 73, f'workshop timing count: {len(workshop_minutes)}'
           assert abs(sum(workshop_minutes) - 120) < 0.001, f'workshop total: {sum(workshop_minutes)}'
-          print('Validated workshop 73 slides / 120 minutes')
+          print('Validated workshop source 73 slides / 120 minutes')
           PY
+
+          python scripts/build_workshop.py drafts/solution-pe-portfolio-workshop/index.html /tmp/workshop.html
+          python - <<'PY'
+          import json, pathlib, re
+          built = pathlib.Path('/tmp/workshop.html').read_text(encoding='utf-8')
+          built_ids = re.findall(
+              r'<section\s+class="[^"]*\bslide\b[^"]*"\s+data-slide="(\d+)"',
+              built,
+          )
+          assert built_ids == [str(i) for i in range(1, 75)], f'built slide ids: {built_ids}'
+          assert '<h2>CONTENTS</h2>' in built
+          assert '03–12' in built and '73–74' in built
+          notes_match = re.search(
+              r'<script type="application/json" id="speaker-notes-data">(.*?)</script>',
+              built,
+              re.S,
+          )
+          assert notes_match, 'speaker notes missing'
+          notes = json.loads(notes_match.group(1))
+          assert [note['slide'] for note in notes] == list(range(1, 75))
+          assert notes[1]['title'] == 'CONTENTS'
+          print('Validated public workshop 74 slides with CONTENTS at page 2')
+          PY
+
           node --check slides-1.js
           node --check slides-2.js
           node --check slides-3.js
           node --check slides-4.js
           node --check app.js
+          node --test
 
       - name: Build minimal Pages artifact
         run: |
           mkdir -p _site/solution-pe-portfolio-workshop
-          cp drafts/solution-pe-portfolio-workshop/index.html _site/index.html
-          cp drafts/solution-pe-portfolio-workshop/index.html _site/solution-pe-portfolio-workshop/index.html
+          python scripts/build_workshop.py drafts/solution-pe-portfolio-workshop/index.html _site/index.html
+          cp _site/index.html _site/solution-pe-portfolio-workshop/index.html
+          cmp _site/index.html _site/solution-pe-portfolio-workshop/index.html
           touch _site/.nojekyll
 
       - name: Configure Pages
