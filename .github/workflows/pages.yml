@@ -53,6 +53,7 @@ jobs:
           PY
 
           python scripts/build_workshop.py drafts/solution-pe-portfolio-workshop/index.html /tmp/workshop.html
+          python scripts/enrich_skill_pages.py /tmp/workshop.html /tmp/workshop.html
           python - <<'PY'
           import json, pathlib, re
           built = pathlib.Path('/tmp/workshop.html').read_text(encoding='utf-8')
@@ -75,6 +76,11 @@ jobs:
               'verification-before-completion은 네 증거를 한 번에 묶는다',
           ):
               assert f'<h2>{title}</h2>' in built, title
+          assert built.count('skill-rich-slide') >= 10
+          assert built.count('COPYABLE PROMPT') == 5
+          assert built.count('FAILURE PATTERNS') == 5
+          assert '좋은 요청 예시' in built
+          assert '사람이 결정할 것' in built
           notes_match = re.search(
               r'<script type="application/json" id="speaker-notes-data">(.*?)</script>',
               built,
@@ -84,9 +90,10 @@ jobs:
           notes = json.loads(notes_match.group(1))
           assert [note['slide'] for note in notes] == list(range(1, 80))
           assert notes[1]['title'] == 'CONTENTS'
-          print('Validated public workshop 79 slides / 120 minutes with five two-page skills')
+          print('Validated detailed public workshop 79 slides / 120 minutes')
           PY
 
+          python -m py_compile scripts/build_workshop.py scripts/enrich_skill_pages.py
           node --check slides-1.js
           node --check slides-2.js
           node --check slides-3.js
@@ -98,6 +105,7 @@ jobs:
         run: |
           mkdir -p _site/solution-pe-portfolio-workshop
           python scripts/build_workshop.py drafts/solution-pe-portfolio-workshop/index.html _site/index.html
+          python scripts/enrich_skill_pages.py _site/index.html _site/index.html
           cp _site/index.html _site/solution-pe-portfolio-workshop/index.html
           cmp _site/index.html _site/solution-pe-portfolio-workshop/index.html
           touch _site/.nojekyll
