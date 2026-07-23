@@ -51,18 +51,35 @@ jobs:
           PY
 
       - name: Run source checks
+        id: source-checks
         shell: bash
         run: |
-          set -o pipefail
-          python -m py_compile scripts/build_workshop.py scripts/enrich_skill_pages.py scripts/add_tool_comparison.py
-          node --check slides-1.js >/dev/null
-          node --check slides-2.js >/dev/null
-          node --check slides-3.js >/dev/null
-          node --check slides-4.js >/dev/null
-          node --check app.js >/dev/null
-          if ! node --test --test-reporter=spec > /tmp/node-test.log 2>&1; then
-            echo 'Node test failure:'
-            cat /tmp/node-test.log
-            exit 1
+          set +e
+          python -m py_compile scripts/build_workshop.py scripts/enrich_skill_pages.py scripts/add_tool_comparison.py > /tmp/source-check.log 2>&1
+          status=$?
+          for file in slides-1.js slides-2.js slides-3.js slides-4.js app.js; do
+            if [ "$status" -eq 0 ]; then
+              node --check "$file" >> /tmp/source-check.log 2>&1
+              status=$?
+            fi
+          done
+          if [ "$status" -eq 0 ]; then
+            node --test --test-reporter=spec > /tmp/node-test.log 2>&1
+            status=$?
+          else
+            : > /tmp/node-test.log
+          fi
+          cat /tmp/source-check.log /tmp/node-test.log > /tmp/validation.log
+          if [ "$status" -ne 0 ]; then
+            echo "Source checks failed; see validation-log artifact"
+            exit "$status"
           fi
           echo 'All source checks passed'
+
+      - name: Upload validation log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-log
+          path: /tmp/validation.log
+          if-no-files-found: error
