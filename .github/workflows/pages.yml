@@ -54,6 +54,7 @@ jobs:
 
           python scripts/build_workshop.py drafts/solution-pe-portfolio-workshop/index.html /tmp/workshop.html
           python scripts/enrich_skill_pages.py /tmp/workshop.html /tmp/workshop.html
+          python scripts/add_tool_comparison.py /tmp/workshop.html /tmp/workshop.html
           python - <<'PY'
           import json, pathlib, re
           built = pathlib.Path('/tmp/workshop.html').read_text(encoding='utf-8')
@@ -63,11 +64,11 @@ jobs:
           )
           built_ids = [slide_id for slide_id, _ in built_slides]
           built_minutes = [float(value) for _, value in built_slides]
-          assert built_ids == [str(i) for i in range(1, 80)], f'built slide ids: {built_ids}'
-          assert len(built_minutes) == 79, f'built timing count: {len(built_minutes)}'
+          assert built_ids == [str(i) for i in range(1, 82)], f'built slide ids: {built_ids}'
+          assert len(built_minutes) == 81, f'built timing count: {len(built_minutes)}'
           assert all(value > 0 for value in built_minutes), f'invalid built timing values: {built_minutes}'
           assert '<h2>CONTENTS</h2>' in built
-          assert '13–27' in built and '78–79' in built
+          assert '13–27' in built and '28–29' in built and '80–81' in built
           for title in (
               'brainstorming은 네 질문으로 요구사항을 고정한다',
               'writing-plans는 네 칸으로 실행 가능성을 확인한다',
@@ -97,7 +98,24 @@ jobs:
               built,
           )
           assert len(skill_slides) == 10, f'detailed skill timing count: {skill_slides}'
+          assert [page for page, _ in skill_slides] == [str(i) for i in range(16, 26)], skill_slides
           assert all(float(value) >= 3 for _, value in skill_slides), f'detailed skill timings: {skill_slides}'
+          for marker in (
+              'Claude Code vs Codex: 무엇이 다른가?',
+              '도구가 아니라 작업 방식으로 선택한다',
+              'TERMINAL-FIRST',
+              'MULTI-SURFACE',
+              'CLAUDE.md',
+              'Skills와 Plugins',
+              'https://docs.anthropic.com/en/docs/claude-code/overview',
+              'https://openai.com/codex/',
+          ):
+              assert marker in built, marker
+          comparison_slides = re.findall(
+              r'<section\s+class="[^"]*\btool-comparison-slide\b[^"]*"\s+data-slide="(\d+)"\s+data-minutes="([0-9.]+)"',
+              built,
+          )
+          assert comparison_slides == [('28', '3'), ('29', '3')], comparison_slides
           notes_match = re.search(
               r'<script type="application/json" id="speaker-notes-data">(.*?)</script>',
               built,
@@ -105,16 +123,22 @@ jobs:
           )
           assert notes_match, 'speaker notes missing'
           notes = json.loads(notes_match.group(1))
-          assert [note['slide'] for note in notes] == list(range(1, 80))
+          assert [note['slide'] for note in notes] == list(range(1, 82))
           assert notes[1]['title'] == 'CONTENTS'
+          assert notes[27]['title'] == 'Claude Code vs Codex: 무엇이 다른가?'
+          assert notes[28]['title'] == '도구가 아니라 작업 방식으로 선택한다'
           for page in range(16, 26):
               body = notes[page - 1]['body']
               assert body.startswith('[약 3분]'), (page, body[:20])
               assert len(body) > 250, (page, len(body))
-          print(f'Validated explanation-rich public workshop 79 slides / {sum(built_minutes):g} minutes of flexible timing')
+          for page in (28, 29):
+              body = notes[page - 1]['body']
+              assert body.startswith('[약 3분]'), (page, body[:20])
+              assert len(body) > 300, (page, len(body))
+          print(f'Validated public workshop 81 slides / {sum(built_minutes):g} minutes with Claude Code vs Codex comparison')
           PY
 
-          python -m py_compile scripts/build_workshop.py scripts/enrich_skill_pages.py
+          python -m py_compile scripts/build_workshop.py scripts/enrich_skill_pages.py scripts/add_tool_comparison.py
           node --check slides-1.js
           node --check slides-2.js
           node --check slides-3.js
@@ -127,6 +151,7 @@ jobs:
           mkdir -p _site/solution-pe-portfolio-workshop
           python scripts/build_workshop.py drafts/solution-pe-portfolio-workshop/index.html _site/index.html
           python scripts/enrich_skill_pages.py _site/index.html _site/index.html
+          python scripts/add_tool_comparison.py _site/index.html _site/index.html
           cp _site/index.html _site/solution-pe-portfolio-workshop/index.html
           cmp _site/index.html _site/solution-pe-portfolio-workshop/index.html
           touch _site/.nojekyll
