@@ -158,9 +158,13 @@ def enrich(source: str) -> str:
     )
 
     for item in SKILLS:
-        for marker in (item["overview_title"], item["detail_title"], item["result_example"]):
-            if safe(marker) not in document and str(marker) not in document:
-                raise ValueError(f"missing enriched marker: {marker}")
+        for rendered_marker in (
+            safe(item["overview_title"]),
+            safe(item["detail_title"]),
+            pre(item["result_example"]),
+        ):
+            if rendered_marker not in document:
+                raise ValueError(f"missing enriched marker: {rendered_marker}")
     if document.count("skill-rich-slide") < 10:
         raise ValueError("expected ten enriched skill slides")
     for marker in ("DEFINITION", "WHEN NOT TO USE", "BEFORE → AFTER", "PROMPT ANATOMY", "EXAMPLE OUTPUT"):
