@@ -56,13 +56,25 @@ jobs:
           python - <<'PY'
           import json, pathlib, re
           built = pathlib.Path('/tmp/workshop.html').read_text(encoding='utf-8')
-          built_ids = re.findall(
-              r'<section\s+class="[^"]*\bslide\b[^"]*"\s+data-slide="(\d+)"',
+          built_slides = re.findall(
+              r'<section\s+class="[^"]*\bslide\b[^"]*"\s+data-slide="(\d+)"\s+data-minutes="([0-9.]+)"',
               built,
           )
-          assert built_ids == [str(i) for i in range(1, 75)], f'built slide ids: {built_ids}'
+          built_ids = [slide_id for slide_id, _ in built_slides]
+          built_minutes = [float(value) for _, value in built_slides]
+          assert built_ids == [str(i) for i in range(1, 80)], f'built slide ids: {built_ids}'
+          assert len(built_minutes) == 79, f'built timing count: {len(built_minutes)}'
+          assert abs(sum(built_minutes) - 120) < 0.001, f'built total: {sum(built_minutes)}'
           assert '<h2>CONTENTS</h2>' in built
-          assert '03–12' in built and '73–74' in built
+          assert '13–27' in built and '78–79' in built
+          for title in (
+              'brainstorming은 네 질문으로 요구사항을 고정한다',
+              'writing-plans는 네 칸으로 실행 가능성을 확인한다',
+              'frontend-design은 30초 읽기 순서를 설계한다',
+              'systematic-debugging은 네 단계로 원인을 좁힌다',
+              'verification-before-completion은 네 증거를 한 번에 묶는다',
+          ):
+              assert f'<h2>{title}</h2>' in built, title
           notes_match = re.search(
               r'<script type="application/json" id="speaker-notes-data">(.*?)</script>',
               built,
@@ -70,9 +82,9 @@ jobs:
           )
           assert notes_match, 'speaker notes missing'
           notes = json.loads(notes_match.group(1))
-          assert [note['slide'] for note in notes] == list(range(1, 75))
+          assert [note['slide'] for note in notes] == list(range(1, 80))
           assert notes[1]['title'] == 'CONTENTS'
-          print('Validated public workshop 74 slides with CONTENTS at page 2')
+          print('Validated public workshop 79 slides / 120 minutes with five two-page skills')
           PY
 
           node --check slides-1.js
