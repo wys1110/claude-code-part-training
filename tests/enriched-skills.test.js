@@ -28,7 +28,7 @@ function buildDetailedWorkshop() {
   return fs.readFileSync(output, 'utf8');
 }
 
-test('five skills have detailed overview and practical pages', () => {
+test('five skills have explanation-rich overview and practical pages', () => {
   const html = buildDetailedWorkshop();
   const slideIds = Array.from(
     html.matchAll(/<section\s+class="[^"]*\bslide\b[^"]*"\s+data-slide="(\d+)"/g),
@@ -37,13 +37,18 @@ test('five skills have detailed overview and practical pages', () => {
 
   assert.deepEqual(slideIds, Array.from({ length: 79 }, (_, index) => index + 1));
   assert.ok((html.match(/skill-rich-slide/g) || []).length >= 10);
+  assert.equal((html.match(/왜 필요한가/g) || []).length, 5);
+  assert.equal((html.match(/실제 업무 상황/g) || []).length, 5);
   assert.equal((html.match(/COPYABLE PROMPT/g) || []).length, 5);
+  assert.equal((html.match(/EXPECTED RESPONSE/g) || []).length, 5);
   assert.equal((html.match(/FAILURE PATTERNS/g) || []).length, 5);
   assert.equal((html.match(/좋은 요청 예시/g) || []).length, 5);
   assert.equal((html.match(/사람이 결정할 것/g) || []).length, 5);
   assert.match(html, /brainstorming을 사용해 아래 작업을 구체화해줘/);
   assert.match(html, /systematic-debugging을 사용해 조사해줘/);
   assert.match(html, /verification-before-completion을 사용해 아래 완료 기준을 검증해줘/);
+  assert.match(html, /요청이 짧을수록 Claude는 빈칸을 추측으로 채우기 쉽습니다/);
+  assert.match(html, /79장 발표 자료를 main에 병합했지만 공개 Pages는 74장을 보여 줄 수 있습니다/);
 
   const skillTimings = Array.from(
     html.matchAll(/<section\s+class="[^"]*\bskill-rich-slide\b[^"]*"\s+data-slide="(\d+)"\s+data-minutes="([0-9.]+)"/g),
@@ -51,10 +56,10 @@ test('five skills have detailed overview and practical pages', () => {
   );
   assert.equal(skillTimings.length, 10);
   assert.deepEqual(skillTimings.map(item => item.page), Array.from({ length: 10 }, (_, index) => index + 16));
-  assert.ok(skillTimings.every(item => item.minutes >= 2));
+  assert.ok(skillTimings.every(item => item.minutes >= 3));
 });
 
-test('detailed skill speaker notes remain aligned and allow fuller delivery', () => {
+test('detailed skill speaker notes remain aligned and support fuller delivery', () => {
   const html = buildDetailedWorkshop();
   const match = html.match(/<script type="application\/json" id="speaker-notes-data">([\s\S]*?)<\/script>/);
   assert.ok(match);
@@ -66,6 +71,7 @@ test('detailed skill speaker notes remain aligned and allow fuller delivery', ()
   assert.equal(notes[16].title, 'brainstorming은 네 질문으로 요구사항을 고정한다');
   assert.equal(notes[24].title, 'verification-before-completion은 네 증거를 한 번에 묶는다');
   for (let page = 16; page <= 25; page += 1) {
-    assert.match(notes[page - 1].body, /^\[약 2분\]/);
+    assert.match(notes[page - 1].body, /^\[약 3분\]/);
+    assert.ok(notes[page - 1].body.length > 250, `slide ${page} note is too short`);
   }
 });
