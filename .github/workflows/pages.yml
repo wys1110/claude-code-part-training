@@ -78,15 +78,18 @@ jobs:
               assert f'<h2>{title}</h2>' in built, title
           assert built.count('skill-rich-slide') >= 10
           assert built.count('COPYABLE PROMPT') == 5
+          assert built.count('EXPECTED RESPONSE') == 5
           assert built.count('FAILURE PATTERNS') == 5
-          assert '좋은 요청 예시' in built
-          assert '사람이 결정할 것' in built
+          assert built.count('왜 필요한가') == 5
+          assert built.count('실제 업무 상황') == 5
+          assert built.count('좋은 요청 예시') == 5
+          assert built.count('사람이 결정할 것') == 5
           skill_slides = re.findall(
               r'<section\s+class="[^"]*\bskill-rich-slide\b[^"]*"\s+data-slide="(\d+)"\s+data-minutes="([0-9.]+)"',
               built,
           )
           assert len(skill_slides) == 10, f'detailed skill timing count: {skill_slides}'
-          assert all(float(value) >= 2 for _, value in skill_slides), f'detailed skill timings: {skill_slides}'
+          assert all(float(value) >= 3 for _, value in skill_slides), f'detailed skill timings: {skill_slides}'
           notes_match = re.search(
               r'<script type="application/json" id="speaker-notes-data">(.*?)</script>',
               built,
@@ -97,8 +100,8 @@ jobs:
           assert [note['slide'] for note in notes] == list(range(1, 80))
           assert notes[1]['title'] == 'CONTENTS'
           for page in range(16, 26):
-              assert notes[page - 1]['body'].startswith('[약 2분]'), (page, notes[page - 1]['body'][:20])
-          print(f'Validated detailed public workshop 79 slides / {sum(built_minutes):g} minutes of flexible timing')
+              assert notes[page - 1]['body'].startswith('[약 3분]'), (page, notes[page - 1]['body'][:20])
+          print(f'Validated explanation-rich public workshop 79 slides / {sum(built_minutes):g} minutes of flexible timing')
           PY
 
           python -m py_compile scripts/build_workshop.py scripts/enrich_skill_pages.py
