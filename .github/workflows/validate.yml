@@ -51,11 +51,18 @@ jobs:
           PY
 
       - name: Run source checks
+        shell: bash
         run: |
+          set -o pipefail
           python -m py_compile scripts/build_workshop.py scripts/enrich_skill_pages.py scripts/add_tool_comparison.py
-          node --check slides-1.js
-          node --check slides-2.js
-          node --check slides-3.js
-          node --check slides-4.js
-          node --check app.js
-          node --test
+          node --check slides-1.js >/dev/null
+          node --check slides-2.js >/dev/null
+          node --check slides-3.js >/dev/null
+          node --check slides-4.js >/dev/null
+          node --check app.js >/dev/null
+          if ! node --test --test-reporter=spec > /tmp/node-test.log 2>&1; then
+            echo 'Node test failure:'
+            cat /tmp/node-test.log
+            exit 1
+          fi
+          echo 'All source checks passed'
