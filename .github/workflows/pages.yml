@@ -54,6 +54,7 @@ jobs:
 
           python scripts/build_workshop.py drafts/solution-pe-portfolio-workshop/index.html /tmp/workshop.html
           python scripts/enrich_skill_pages.py /tmp/workshop.html /tmp/workshop.html
+          python scripts/add_companion_skills.py /tmp/workshop.html /tmp/workshop.html
           python scripts/add_tool_comparison.py /tmp/workshop.html /tmp/workshop.html
           python - <<'PY'
           import json, pathlib, re
@@ -101,6 +102,20 @@ jobs:
           assert [page for page, _ in skill_slides] == [str(i) for i in range(16, 26)], skill_slides
           assert all(float(value) >= 3 for _, value in skill_slides), f'detailed skill timings: {skill_slides}'
           for marker in (
+              'Caveman과 Ponytail은 말과 구현을 각각 줄인다',
+              'CAVEMAN · 응답 압축',
+              'PONYTAIL · 구현 최소화',
+              'JuliusBrussee/caveman',
+              'DietrichGebert/ponytail',
+              '보안·검증·접근성·오류 처리',
+          ):
+              assert marker in built, marker
+          companion_slides = re.findall(
+              r'<section\s+class="[^"]*\bcompanion-skills-slide\b[^"]*"\s+data-slide="(\d+)"\s+data-minutes="([0-9.]+)"',
+              built,
+          )
+          assert companion_slides == [('26', '3')], companion_slides
+          for marker in (
               'Claude Code vs Codex: 무엇이 다른가?',
               '도구가 아니라 작업 방식으로 선택한다',
               'TERMINAL-FIRST',
@@ -125,6 +140,8 @@ jobs:
           notes = json.loads(notes_match.group(1))
           assert [note['slide'] for note in notes] == list(range(1, 82))
           assert notes[1]['title'] == 'CONTENTS'
+          assert notes[25]['title'] == 'Caveman과 Ponytail은 말과 구현을 각각 줄인다'
+          assert notes[25]['body'].startswith('[약 3분]')
           assert notes[27]['title'] == 'Claude Code vs Codex: 무엇이 다른가?'
           assert notes[28]['title'] == '도구가 아니라 작업 방식으로 선택한다'
           for page in range(16, 26):
@@ -135,10 +152,10 @@ jobs:
               body = notes[page - 1]['body']
               assert body.startswith('[약 3분]'), (page, body[:20])
               assert len(body) > 300, (page, len(body))
-          print(f'Validated public workshop 81 slides / {sum(built_minutes):g} minutes with Claude Code vs Codex comparison')
+          print(f'Validated public workshop 81 slides / {sum(built_minutes):g} minutes with companion skills and tool comparison')
           PY
 
-          python -m py_compile scripts/build_workshop.py scripts/enrich_skill_pages.py scripts/add_tool_comparison.py
+          python -m py_compile scripts/build_workshop.py scripts/enrich_skill_pages.py scripts/add_companion_skills.py scripts/add_tool_comparison.py
           node --check slides-1.js
           node --check slides-2.js
           node --check slides-3.js
@@ -151,6 +168,7 @@ jobs:
           mkdir -p _site/solution-pe-portfolio-workshop
           python scripts/build_workshop.py drafts/solution-pe-portfolio-workshop/index.html _site/index.html
           python scripts/enrich_skill_pages.py _site/index.html _site/index.html
+          python scripts/add_companion_skills.py _site/index.html _site/index.html
           python scripts/add_tool_comparison.py _site/index.html _site/index.html
           cp _site/index.html _site/solution-pe-portfolio-workshop/index.html
           cmp _site/index.html _site/solution-pe-portfolio-workshop/index.html
