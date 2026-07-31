@@ -18,6 +18,7 @@ jobs:
         run: |
           python scripts/build_workshop.py drafts/solution-pe-portfolio-workshop/index.html /tmp/workshop.html
           python scripts/enrich_skill_pages.py /tmp/workshop.html /tmp/workshop.html
+          python scripts/add_companion_skills.py /tmp/workshop.html /tmp/workshop.html
           python scripts/add_tool_comparison.py /tmp/workshop.html /tmp/workshop.html
 
       - name: Validate final output
@@ -31,12 +32,26 @@ jobs:
           )
           assert [slide_id for slide_id, _ in slides] == [str(i) for i in range(1, 82)], slides
           assert all(float(minutes) > 0 for _, minutes in slides)
-          assert 'Claude Code vs Codex: 무엇이 다른가?' in built
-          assert '도구가 아니라 작업 방식으로 선택한다' in built
+          for marker in (
+              'Caveman과 Ponytail은 말과 구현을 각각 줄인다',
+              'CAVEMAN · 응답 압축',
+              'PONYTAIL · 구현 최소화',
+              'JuliusBrussee/caveman',
+              'DietrichGebert/ponytail',
+              '보안·검증·접근성·오류 처리',
+              'Claude Code vs Codex: 무엇이 다른가?',
+              '도구가 아니라 작업 방식으로 선택한다',
+          ):
+              assert marker in built, marker
           assert '<span class="contents-range">28–29</span>' in built
           assert '<span class="contents-range">80–81</span>' in built
           assert 'https://docs.anthropic.com/en/docs/claude-code/overview' in built
           assert 'https://openai.com/codex/' in built
+          companion_slides = re.findall(
+              r'<section\s+class="[^"]*\bcompanion-skills-slide\b[^"]*"\s+data-slide="(\d+)"\s+data-minutes="([0-9.]+)"',
+              built,
+          )
+          assert companion_slides == [('26', '3')], companion_slides
           notes_match = re.search(
               r'<script type="application/json" id="speaker-notes-data">(.*?)</script>',
               built,
@@ -45,9 +60,11 @@ jobs:
           assert notes_match
           notes = json.loads(notes_match.group(1))
           assert [note['slide'] for note in notes] == list(range(1, 82))
+          assert notes[25]['title'] == 'Caveman과 Ponytail은 말과 구현을 각각 줄인다'
+          assert notes[25]['body'].startswith('[약 3분]')
           assert notes[27]['title'] == 'Claude Code vs Codex: 무엇이 다른가?'
           assert notes[28]['title'] == '도구가 아니라 작업 방식으로 선택한다'
-          print('Validated 81 slides with comparison pages 28–29')
+          print('Validated 81 slides with companion page 26 and comparison pages 28–29')
           PY
 
       - name: Run source checks
@@ -55,7 +72,7 @@ jobs:
         shell: bash
         run: |
           set +e
-          python -m py_compile scripts/build_workshop.py scripts/enrich_skill_pages.py scripts/add_tool_comparison.py > /tmp/source-check.log 2>&1
+          python -m py_compile scripts/build_workshop.py scripts/enrich_skill_pages.py scripts/add_companion_skills.py scripts/add_tool_comparison.py > /tmp/source-check.log 2>&1
           status=$?
           for file in slides-1.js slides-2.js slides-3.js slides-4.js app.js; do
             if [ "$status" -eq 0 ]; then
