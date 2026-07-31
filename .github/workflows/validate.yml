@@ -25,6 +25,7 @@ jobs:
         run: |
           python - <<'PY'
           import json, pathlib, re
+
           built = pathlib.Path('/tmp/workshop.html').read_text(encoding='utf-8')
           slides = re.findall(
               r'<section\s+class="[^"]*\bslide\b[^"]*"\s+data-slide="(\d+)"\s+data-minutes="([0-9.]+)"',
@@ -32,26 +33,38 @@ jobs:
           )
           assert [slide_id for slide_id, _ in slides] == [str(i) for i in range(1, 82)], slides
           assert all(float(minutes) > 0 for _, minutes in slides)
+
           for marker in (
-              'Caveman과 Ponytail은 말과 구현을 각각 줄인다',
-              'CAVEMAN · 응답 압축',
-              'PONYTAIL · 구현 최소화',
+              '오늘 사용할 스킬은 세 개뿐이다',
+              'brainstorming은 네 질문으로 요구사항을 고정한다',
+              'Caveman은 정확성을 유지하면서 답을 압축한다',
+              'Ponytail은 최소 구현 사다리를 따른다',
+              'brainstorming · Caveman · Ponytail만 설치한다',
               'JuliusBrussee/caveman',
               'DietrichGebert/ponytail',
-              '보안·검증·접근성·오류 처리',
               'Claude Code vs Codex: 무엇이 다른가?',
               '도구가 아니라 작업 방식으로 선택한다',
           ):
               assert marker in built, marker
+          for removed in (
+              'writing-plans',
+              'frontend-design',
+              'systematic-debugging',
+              'verification-before-completion',
+          ):
+              assert removed not in built, removed
+
+          skill_pages = re.findall(
+              r'<section\s+class="[^"]*\bthree-skill-slide\b[^"]*"\s+data-slide="(\d+)"\s+data-minutes="([0-9.]+)"',
+              built,
+          )
+          assert [page for page, _ in skill_pages] == [str(i) for i in range(13, 27)], skill_pages
+          assert all(float(minutes) >= 2 for _, minutes in skill_pages)
           assert '<span class="contents-range">28–29</span>' in built
           assert '<span class="contents-range">80–81</span>' in built
           assert 'https://docs.anthropic.com/en/docs/claude-code/overview' in built
           assert 'https://openai.com/codex/' in built
-          companion_slides = re.findall(
-              r'<section\s+class="[^"]*\bcompanion-skills-slide\b[^"]*"\s+data-slide="(\d+)"\s+data-minutes="([0-9.]+)"',
-              built,
-          )
-          assert companion_slides == [('26', '3')], companion_slides
+
           notes_match = re.search(
               r'<script type="application/json" id="speaker-notes-data">(.*?)</script>',
               built,
@@ -60,11 +73,14 @@ jobs:
           assert notes_match
           notes = json.loads(notes_match.group(1))
           assert [note['slide'] for note in notes] == list(range(1, 82))
-          assert notes[25]['title'] == 'Caveman과 Ponytail은 말과 구현을 각각 줄인다'
-          assert notes[25]['body'].startswith('[약 3분]')
+          assert notes[12]['title'] == '오늘 사용할 스킬은 세 개뿐이다'
+          assert notes[16]['title'] == 'brainstorming은 네 질문으로 요구사항을 고정한다'
+          assert notes[17]['title'] == 'Caveman은 정확성을 유지하면서 답을 압축한다'
+          assert notes[22]['title'] == 'Ponytail은 최소 구현 사다리를 따른다'
+          assert notes[25]['title'] == 'brainstorming · Caveman · Ponytail만 설치한다'
           assert notes[27]['title'] == 'Claude Code vs Codex: 무엇이 다른가?'
           assert notes[28]['title'] == '도구가 아니라 작업 방식으로 선택한다'
-          print('Validated 81 slides with companion page 26 and comparison pages 28–29')
+          print('Validated 81 slides with only brainstorming, Caveman, and Ponytail')
           PY
 
       - name: Run source checks
