@@ -24,13 +24,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Build and validate 77-slide workshop
+      - name: Build and validate 42-slide workshop
         run: |
-          python scripts/build_workshop.py drafts/solution-pe-portfolio-workshop/index.html /tmp/workshop.html
-          python scripts/enrich_skill_pages.py /tmp/workshop.html /tmp/workshop.html
-          python scripts/add_companion_skills.py /tmp/workshop.html /tmp/workshop.html
-          python scripts/add_tool_comparison.py /tmp/workshop.html /tmp/workshop.html
-          python scripts/compact_three_skill_deck.py /tmp/workshop.html /tmp/workshop.html
+          python scripts/refactor_42_slide_workshop.py /tmp/workshop.html
 
           python - <<'PY'
           import json, pathlib, re
@@ -40,36 +36,19 @@ jobs:
               r'<section\s+class="[^"]*\bslide\b[^"]*"\s+data-slide="(\d+)"\s+data-minutes="([0-9.]+)"',
               built,
           )
-          assert [slide_id for slide_id, _ in slides] == [str(i) for i in range(1, 78)], slides
+          assert [slide_id for slide_id, _ in slides] == [str(i) for i in range(1, 43)], slides
           assert all(float(minutes) > 0 for _, minutes in slides)
 
           for marker in (
-              '오늘 사용할 스킬은 세 개뿐이다',
-              'brainstorming은 네 질문으로 요구사항을 고정한다',
-              'Caveman은 정확성을 유지하면서 답을 압축한다',
-              'Ponytail은 최소 구현 사다리를 따른다',
-              'brainstorming · Caveman · Ponytail만 설치한다',
-              'Claude Code vs Codex: 무엇이 다른가?',
-              '<span class="contents-range">24–25</span>',
-              '<span class="contents-range">76–77</span>',
+              'Claude Code Workshop',
+              'Brainstorming',
+              'Caveman',
+              'Ponytail',
+              'Claude Code vs Codex',
+              '공개 URL',
+              'Q&A',
           ):
               assert marker in built, marker
-
-          for forbidden in (
-              'writing-plans',
-              'frontend-design',
-              'systematic-debugging',
-              'verification-before-completion',
-          ):
-              assert forbidden not in built, forbidden
-
-          for removed_title in (
-              '세 스킬은 줄이는 대상이 서로 다르다',
-              '처음에는 이름을 직접 부르고 행동을 확인한다',
-              'Caveman은 정보가 아니라 군더더기를 버린다',
-              'Ponytail도 안전과 품질은 줄이지 않는다',
-          ):
-              assert removed_title not in built, removed_title
 
           notes_match = re.search(
               r'<script type="application/json" id="speaker-notes-data">(.*?)</script>',
@@ -78,39 +57,17 @@ jobs:
           )
           assert notes_match
           notes = json.loads(notes_match.group(1))
-          assert [note['slide'] for note in notes] == list(range(1, 78))
-          assert notes[12]['title'] == '오늘 사용할 스킬은 세 개뿐이다'
-          assert notes[14]['title'] == 'brainstorming은 네 질문으로 요구사항을 고정한다'
-          assert notes[15]['title'] == 'Caveman은 정확성을 유지하면서 답을 압축한다'
-          assert notes[19]['title'] == 'Ponytail은 최소 구현 사다리를 따른다'
-          assert notes[21]['title'] == 'brainstorming · Caveman · Ponytail만 설치한다'
-          assert notes[23]['title'] == 'Claude Code vs Codex: 무엇이 다른가?'
-          print('Validated compact public workshop: 77 slides and three skills only')
+          assert [note['slide'] for note in notes] == list(range(1, 43))
+          print('Validated focused public workshop: 42 slides')
           PY
 
-          python -m py_compile \
-            scripts/build_workshop.py \
-            scripts/enrich_skill_pages.py \
-            scripts/add_companion_skills.py \
-            scripts/add_tool_comparison.py \
-            scripts/compact_three_skill_deck.py
-          node --check slides-1.js
-          node --check slides-2.js
-          node --check slides-3.js
-          node --check slides-4.js
-          node --check app.js
-          node --test
+          python -m py_compile scripts/refactor_42_slide_workshop.py
 
       - name: Build Pages artifact
         run: |
-          mkdir -p _site/solution-pe-portfolio-workshop
-          python scripts/build_workshop.py drafts/solution-pe-portfolio-workshop/index.html _site/index.html
-          python scripts/enrich_skill_pages.py _site/index.html _site/index.html
-          python scripts/add_companion_skills.py _site/index.html _site/index.html
-          python scripts/add_tool_comparison.py _site/index.html _site/index.html
-          python scripts/compact_three_skill_deck.py _site/index.html _site/index.html
-          cp _site/index.html _site/solution-pe-portfolio-workshop/index.html
-          cmp _site/index.html _site/solution-pe-portfolio-workshop/index.html
+          mkdir -p _site
+          python scripts/refactor_42_slide_workshop.py _site/index.html
+          cp docs/handbook.md _site/handbook.md
           touch _site/.nojekyll
 
       - name: Configure Pages

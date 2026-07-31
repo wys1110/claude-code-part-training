@@ -49,23 +49,17 @@ test('every slide has complete presenter guidance', () => {
   }
 });
 
-test('Pages workflow builds the 77-slide three-skill workshop at root and alias paths', () => {
+test('Pages workflow builds the focused 42-slide workshop at the root URL only', () => {
   const workflow = fs.readFileSync(path.join(ROOT, '.github/workflows/pages.yml'), 'utf8');
-  assert.match(workflow, /range\(1, 78\)/);
-  assert.match(workflow, /drafts\/solution-pe-portfolio-workshop\/index\.html/);
-  assert.match(workflow, /오늘 사용할 스킬은 세 개뿐이다/);
+  assert.match(workflow, /range\(1, 43\)/);
+  assert.match(workflow, /refactor_42_slide_workshop\.py/);
+  assert.match(workflow, /Claude Code Workshop/);
+  assert.match(workflow, /Brainstorming/);
+  assert.match(workflow, /Caveman/);
+  assert.match(workflow, /Ponytail/);
   assert.match(workflow, /Claude Code vs Codex/);
-  assert.match(workflow, /compact_three_skill_deck\.py/);
-  assert.match(workflow, /24–25/);
-  assert.match(workflow, /76–77/);
-  assert.doesNotMatch(workflow, /range\(1, 82\)/);
-  assert.doesNotMatch(workflow, /81-slide|81 slides|80–81/);
-  assert.doesNotMatch(workflow, /120 minutes|120분|sum\([^\n]+\)\s*-\s*120/);
-  assert.match(workflow, /python scripts\/build_workshop\.py drafts\/solution-pe-portfolio-workshop\/index\.html _site\/index\.html/);
-  assert.match(workflow, /python scripts\/enrich_skill_pages\.py _site\/index\.html _site\/index\.html/);
-  assert.match(workflow, /python scripts\/add_companion_skills\.py _site\/index\.html _site\/index\.html/);
-  assert.match(workflow, /python scripts\/add_tool_comparison\.py _site\/index\.html _site\/index\.html/);
-  assert.match(workflow, /python scripts\/compact_three_skill_deck\.py _site\/index\.html _site\/index\.html/);
-  assert.match(workflow, /cp _site\/index\.html _site\/solution-pe-portfolio-workshop\/index\.html/);
+  assert.match(workflow, /cp docs\/handbook\.md _site\/handbook\.md/);
   assert.match(workflow, /path:\s*\.\/_site/);
+  assert.doesNotMatch(workflow, /solution-pe-portfolio-workshop/);
+  assert.doesNotMatch(workflow, /range\(1, 78\)|77-slide|77 slides/);
 });
