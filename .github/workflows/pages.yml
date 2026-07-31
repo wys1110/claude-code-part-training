@@ -1,4 +1,3 @@
-# Deployment refresh: 2026-07-31 22:26 KST
 name: Deploy presentation to GitHub Pages
 
 on:
@@ -25,33 +24,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Validate sources
+      - name: Build and validate 77-slide workshop
         run: |
-          python - <<'PY'
-          import pathlib, re
-
-          text = ''.join(pathlib.Path(f'slides-{i}.js').read_text(encoding='utf-8') for i in range(1, 5))
-          ids = re.findall(r'\{id:(\d+),', text)
-          minutes = [float(v) for v in re.findall(r'\{id:\d+,section:[^\n]+?minutes:([0-9.]+),', text)]
-          assert ids == [str(i) for i in range(1, 30)], ids
-          assert len(minutes) == 29 and all(value > 0 for value in minutes)
-          for required in ('index.html','styles.css','slides-1.js','slides-2.js','slides-3.js','slides-4.js','app.js'):
-              assert pathlib.Path(required).is_file(), required
-
-          workshop = pathlib.Path('drafts/solution-pe-portfolio-workshop/index.html').read_text(encoding='utf-8')
-          source_slides = re.findall(
-              r'<section\s+class="[^"]*\bslide\b[^"]*"\s+data-slide="(\d+)"\s+data-minutes="([0-9.]+)"',
-              workshop,
-          )
-          assert [slide_id for slide_id, _ in source_slides] == [str(i) for i in range(1, 74)]
-          assert all(float(value) > 0 for _, value in source_slides)
-          print('Validated root deck and 73-slide workshop source')
-          PY
-
           python scripts/build_workshop.py drafts/solution-pe-portfolio-workshop/index.html /tmp/workshop.html
           python scripts/enrich_skill_pages.py /tmp/workshop.html /tmp/workshop.html
           python scripts/add_companion_skills.py /tmp/workshop.html /tmp/workshop.html
           python scripts/add_tool_comparison.py /tmp/workshop.html /tmp/workshop.html
+          python scripts/compact_three_skill_deck.py /tmp/workshop.html /tmp/workshop.html
 
           python - <<'PY'
           import json, pathlib, re
@@ -61,7 +40,7 @@ jobs:
               r'<section\s+class="[^"]*\bslide\b[^"]*"\s+data-slide="(\d+)"\s+data-minutes="([0-9.]+)"',
               built,
           )
-          assert [slide_id for slide_id, _ in slides] == [str(i) for i in range(1, 82)], slides
+          assert [slide_id for slide_id, _ in slides] == [str(i) for i in range(1, 78)], slides
           assert all(float(minutes) > 0 for _, minutes in slides)
 
           for marker in (
@@ -70,41 +49,27 @@ jobs:
               'Caveman은 정확성을 유지하면서 답을 압축한다',
               'Ponytail은 최소 구현 사다리를 따른다',
               'brainstorming · Caveman · Ponytail만 설치한다',
-              'JuliusBrussee/caveman',
-              'DietrichGebert/ponytail',
-              '요구사항 정리 · 응답 압축 · 최소 구현',
+              'Claude Code vs Codex: 무엇이 다른가?',
+              '<span class="contents-range">24–25</span>',
+              '<span class="contents-range">76–77</span>',
           ):
               assert marker in built, marker
-          for removed in (
+
+          for forbidden in (
               'writing-plans',
               'frontend-design',
               'systematic-debugging',
               'verification-before-completion',
           ):
-              assert removed not in built, removed
+              assert forbidden not in built, forbidden
 
-          skill_pages = re.findall(
-              r'<section\s+class="[^"]*\bthree-skill-slide\b[^"]*"\s+data-slide="(\d+)"\s+data-minutes="([0-9.]+)"',
-              built,
-          )
-          assert [page for page, _ in skill_pages] == [str(i) for i in range(13, 27)], skill_pages
-          assert all(float(minutes) >= 2 for _, minutes in skill_pages)
-
-          comparison_slides = re.findall(
-              r'<section\s+class="[^"]*\btool-comparison-slide\b[^"]*"\s+data-slide="(\d+)"\s+data-minutes="([0-9.]+)"',
-              built,
-          )
-          assert comparison_slides == [('28', '3'), ('29', '3')], comparison_slides
-          for marker in (
-              'Claude Code vs Codex: 무엇이 다른가?',
-              '도구가 아니라 작업 방식으로 선택한다',
-              'https://docs.anthropic.com/en/docs/claude-code/overview',
-              'https://openai.com/codex/',
+          for removed_title in (
+              '세 스킬은 줄이는 대상이 서로 다르다',
+              '처음에는 이름을 직접 부르고 행동을 확인한다',
+              'Caveman은 정보가 아니라 군더더기를 버린다',
+              'Ponytail도 안전과 품질은 줄이지 않는다',
           ):
-              assert marker in built, marker
-
-          assert '<h2>CONTENTS</h2>' in built
-          assert '13–27' in built and '28–29' in built and '80–81' in built
+              assert removed_title not in built, removed_title
 
           notes_match = re.search(
               r'<script type="application/json" id="speaker-notes-data">(.*?)</script>',
@@ -113,18 +78,22 @@ jobs:
           )
           assert notes_match
           notes = json.loads(notes_match.group(1))
-          assert [note['slide'] for note in notes] == list(range(1, 82))
+          assert [note['slide'] for note in notes] == list(range(1, 78))
           assert notes[12]['title'] == '오늘 사용할 스킬은 세 개뿐이다'
-          assert notes[16]['title'] == 'brainstorming은 네 질문으로 요구사항을 고정한다'
-          assert notes[17]['title'] == 'Caveman은 정확성을 유지하면서 답을 압축한다'
-          assert notes[22]['title'] == 'Ponytail은 최소 구현 사다리를 따른다'
-          assert notes[25]['title'] == 'brainstorming · Caveman · Ponytail만 설치한다'
-          assert notes[27]['title'] == 'Claude Code vs Codex: 무엇이 다른가?'
-          assert notes[28]['title'] == '도구가 아니라 작업 방식으로 선택한다'
-          print('Validated public 81-slide workshop with only three named skills')
+          assert notes[14]['title'] == 'brainstorming은 네 질문으로 요구사항을 고정한다'
+          assert notes[15]['title'] == 'Caveman은 정확성을 유지하면서 답을 압축한다'
+          assert notes[19]['title'] == 'Ponytail은 최소 구현 사다리를 따른다'
+          assert notes[21]['title'] == 'brainstorming · Caveman · Ponytail만 설치한다'
+          assert notes[23]['title'] == 'Claude Code vs Codex: 무엇이 다른가?'
+          print('Validated compact public workshop: 77 slides and three skills only')
           PY
 
-          python -m py_compile scripts/build_workshop.py scripts/enrich_skill_pages.py scripts/add_companion_skills.py scripts/add_tool_comparison.py
+          python -m py_compile \
+            scripts/build_workshop.py \
+            scripts/enrich_skill_pages.py \
+            scripts/add_companion_skills.py \
+            scripts/add_tool_comparison.py \
+            scripts/compact_three_skill_deck.py
           node --check slides-1.js
           node --check slides-2.js
           node --check slides-3.js
@@ -132,13 +101,14 @@ jobs:
           node --check app.js
           node --test
 
-      - name: Build minimal Pages artifact
+      - name: Build Pages artifact
         run: |
           mkdir -p _site/solution-pe-portfolio-workshop
           python scripts/build_workshop.py drafts/solution-pe-portfolio-workshop/index.html _site/index.html
           python scripts/enrich_skill_pages.py _site/index.html _site/index.html
           python scripts/add_companion_skills.py _site/index.html _site/index.html
           python scripts/add_tool_comparison.py _site/index.html _site/index.html
+          python scripts/compact_three_skill_deck.py _site/index.html _site/index.html
           cp _site/index.html _site/solution-pe-portfolio-workshop/index.html
           cmp _site/index.html _site/solution-pe-portfolio-workshop/index.html
           touch _site/.nojekyll

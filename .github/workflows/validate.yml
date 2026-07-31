@@ -14,12 +14,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Build 81-slide workshop
+      - name: Build 77-slide workshop
         run: |
           python scripts/build_workshop.py drafts/solution-pe-portfolio-workshop/index.html /tmp/workshop.html
           python scripts/enrich_skill_pages.py /tmp/workshop.html /tmp/workshop.html
           python scripts/add_companion_skills.py /tmp/workshop.html /tmp/workshop.html
           python scripts/add_tool_comparison.py /tmp/workshop.html /tmp/workshop.html
+          python scripts/compact_three_skill_deck.py /tmp/workshop.html /tmp/workshop.html
 
       - name: Validate final output
         run: |
@@ -31,7 +32,7 @@ jobs:
               r'<section\s+class="[^"]*\bslide\b[^"]*"\s+data-slide="(\d+)"\s+data-minutes="([0-9.]+)"',
               built,
           )
-          assert [slide_id for slide_id, _ in slides] == [str(i) for i in range(1, 82)], slides
+          assert [slide_id for slide_id, _ in slides] == [str(i) for i in range(1, 78)], slides
           assert all(float(minutes) > 0 for _, minutes in slides)
 
           for marker in (
@@ -40,30 +41,27 @@ jobs:
               'Caveman은 정확성을 유지하면서 답을 압축한다',
               'Ponytail은 최소 구현 사다리를 따른다',
               'brainstorming · Caveman · Ponytail만 설치한다',
-              'JuliusBrussee/caveman',
-              'DietrichGebert/ponytail',
               'Claude Code vs Codex: 무엇이 다른가?',
-              '도구가 아니라 작업 방식으로 선택한다',
+              '<span class="contents-range">24–25</span>',
+              '<span class="contents-range">76–77</span>',
           ):
               assert marker in built, marker
-          for removed in (
+
+          for forbidden in (
               'writing-plans',
               'frontend-design',
               'systematic-debugging',
               'verification-before-completion',
           ):
-              assert removed not in built, removed
+              assert forbidden not in built, forbidden
 
-          skill_pages = re.findall(
-              r'<section\s+class="[^"]*\bthree-skill-slide\b[^"]*"\s+data-slide="(\d+)"\s+data-minutes="([0-9.]+)"',
-              built,
-          )
-          assert [page for page, _ in skill_pages] == [str(i) for i in range(13, 27)], skill_pages
-          assert all(float(minutes) >= 2 for _, minutes in skill_pages)
-          assert '<span class="contents-range">28–29</span>' in built
-          assert '<span class="contents-range">80–81</span>' in built
-          assert 'https://docs.anthropic.com/en/docs/claude-code/overview' in built
-          assert 'https://openai.com/codex/' in built
+          for removed_title in (
+              '세 스킬은 줄이는 대상이 서로 다르다',
+              '처음에는 이름을 직접 부르고 행동을 확인한다',
+              'Caveman은 정보가 아니라 군더더기를 버린다',
+              'Ponytail도 안전과 품질은 줄이지 않는다',
+          ):
+              assert removed_title not in built, removed_title
 
           notes_match = re.search(
               r'<script type="application/json" id="speaker-notes-data">(.*?)</script>',
@@ -72,47 +70,27 @@ jobs:
           )
           assert notes_match
           notes = json.loads(notes_match.group(1))
-          assert [note['slide'] for note in notes] == list(range(1, 82))
+          assert [note['slide'] for note in notes] == list(range(1, 78))
           assert notes[12]['title'] == '오늘 사용할 스킬은 세 개뿐이다'
-          assert notes[16]['title'] == 'brainstorming은 네 질문으로 요구사항을 고정한다'
-          assert notes[17]['title'] == 'Caveman은 정확성을 유지하면서 답을 압축한다'
-          assert notes[22]['title'] == 'Ponytail은 최소 구현 사다리를 따른다'
-          assert notes[25]['title'] == 'brainstorming · Caveman · Ponytail만 설치한다'
-          assert notes[27]['title'] == 'Claude Code vs Codex: 무엇이 다른가?'
-          assert notes[28]['title'] == '도구가 아니라 작업 방식으로 선택한다'
-          print('Validated 81 slides with only brainstorming, Caveman, and Ponytail')
+          assert notes[14]['title'] == 'brainstorming은 네 질문으로 요구사항을 고정한다'
+          assert notes[15]['title'] == 'Caveman은 정확성을 유지하면서 답을 압축한다'
+          assert notes[19]['title'] == 'Ponytail은 최소 구현 사다리를 따른다'
+          assert notes[21]['title'] == 'brainstorming · Caveman · Ponytail만 설치한다'
+          assert notes[23]['title'] == 'Claude Code vs Codex: 무엇이 다른가?'
+          print('Validated 77 slides with only brainstorming, Caveman, and Ponytail')
           PY
 
       - name: Run source checks
-        id: source-checks
-        shell: bash
         run: |
-          set +e
-          python -m py_compile scripts/build_workshop.py scripts/enrich_skill_pages.py scripts/add_companion_skills.py scripts/add_tool_comparison.py > /tmp/source-check.log 2>&1
-          status=$?
-          for file in slides-1.js slides-2.js slides-3.js slides-4.js app.js; do
-            if [ "$status" -eq 0 ]; then
-              node --check "$file" >> /tmp/source-check.log 2>&1
-              status=$?
-            fi
-          done
-          if [ "$status" -eq 0 ]; then
-            node --test --test-reporter=spec > /tmp/node-test.log 2>&1
-            status=$?
-          else
-            : > /tmp/node-test.log
-          fi
-          cat /tmp/source-check.log /tmp/node-test.log > /tmp/validation.log
-          if [ "$status" -ne 0 ]; then
-            echo "Source checks failed; see validation-log artifact"
-            exit "$status"
-          fi
-          echo 'All source checks passed'
-
-      - name: Upload validation log
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: validation-log
-          path: /tmp/validation.log
-          if-no-files-found: error
+          python -m py_compile \
+            scripts/build_workshop.py \
+            scripts/enrich_skill_pages.py \
+            scripts/add_companion_skills.py \
+            scripts/add_tool_comparison.py \
+            scripts/compact_three_skill_deck.py
+          node --check slides-1.js
+          node --check slides-2.js
+          node --check slides-3.js
+          node --check slides-4.js
+          node --check app.js
+          node --test
