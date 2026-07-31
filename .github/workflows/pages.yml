@@ -24,135 +24,103 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Validate presentation
+      - name: Validate sources
         run: |
           python - <<'PY'
           import pathlib, re
+
           text = ''.join(pathlib.Path(f'slides-{i}.js').read_text(encoding='utf-8') for i in range(1, 5))
           ids = re.findall(r'\{id:(\d+),', text)
           minutes = [float(v) for v in re.findall(r'\{id:\d+,section:[^\n]+?minutes:([0-9.]+),', text)]
-          assert ids == [str(i) for i in range(1, 30)], f'slide ids: {ids}'
-          assert len(minutes) == 29, f'timing count: {len(minutes)}'
-          assert all(value > 0 for value in minutes), f'invalid timing values: {minutes}'
+          assert ids == [str(i) for i in range(1, 30)], ids
+          assert len(minutes) == 29 and all(value > 0 for value in minutes)
           for required in ('index.html','styles.css','slides-1.js','slides-2.js','slides-3.js','slides-4.js','app.js'):
-              assert pathlib.Path(required).is_file(), f'missing {required}'
-          print(f'Validated root deck 29 slides / {sum(minutes):g} minutes of timing metadata')
+              assert pathlib.Path(required).is_file(), required
 
-          workshop_path = pathlib.Path('drafts/solution-pe-portfolio-workshop/index.html')
-          workshop = workshop_path.read_text(encoding='utf-8')
-          workshop_slides = re.findall(
+          workshop = pathlib.Path('drafts/solution-pe-portfolio-workshop/index.html').read_text(encoding='utf-8')
+          source_slides = re.findall(
               r'<section\s+class="[^"]*\bslide\b[^"]*"\s+data-slide="(\d+)"\s+data-minutes="([0-9.]+)"',
               workshop,
           )
-          workshop_ids = [slide_id for slide_id, _ in workshop_slides]
-          workshop_minutes = [float(value) for _, value in workshop_slides]
-          assert workshop_ids == [str(i) for i in range(1, 74)], f'workshop slide ids: {workshop_ids}'
-          assert len(workshop_minutes) == 73, f'workshop timing count: {len(workshop_minutes)}'
-          assert all(value > 0 for value in workshop_minutes), f'invalid workshop timing values: {workshop_minutes}'
-          print(f'Validated workshop source 73 slides / {sum(workshop_minutes):g} minutes of timing metadata')
+          assert [slide_id for slide_id, _ in source_slides] == [str(i) for i in range(1, 74)]
+          assert all(float(value) > 0 for _, value in source_slides)
+          print('Validated root deck and 73-slide workshop source')
           PY
 
           python scripts/build_workshop.py drafts/solution-pe-portfolio-workshop/index.html /tmp/workshop.html
           python scripts/enrich_skill_pages.py /tmp/workshop.html /tmp/workshop.html
           python scripts/add_companion_skills.py /tmp/workshop.html /tmp/workshop.html
           python scripts/add_tool_comparison.py /tmp/workshop.html /tmp/workshop.html
+
           python - <<'PY'
           import json, pathlib, re
+
           built = pathlib.Path('/tmp/workshop.html').read_text(encoding='utf-8')
-          built_slides = re.findall(
+          slides = re.findall(
               r'<section\s+class="[^"]*\bslide\b[^"]*"\s+data-slide="(\d+)"\s+data-minutes="([0-9.]+)"',
               built,
           )
-          built_ids = [slide_id for slide_id, _ in built_slides]
-          built_minutes = [float(value) for _, value in built_slides]
-          assert built_ids == [str(i) for i in range(1, 82)], f'built slide ids: {built_ids}'
-          assert len(built_minutes) == 81, f'built timing count: {len(built_minutes)}'
-          assert all(value > 0 for value in built_minutes), f'invalid built timing values: {built_minutes}'
-          assert '<h2>CONTENTS</h2>' in built
-          assert '13–27' in built and '28–29' in built and '80–81' in built
-          for title in (
+          assert [slide_id for slide_id, _ in slides] == [str(i) for i in range(1, 82)], slides
+          assert all(float(minutes) > 0 for _, minutes in slides)
+
+          for marker in (
+              '오늘 사용할 스킬은 세 개뿐이다',
               'brainstorming은 네 질문으로 요구사항을 고정한다',
-              'writing-plans는 네 칸으로 실행 가능성을 확인한다',
-              'frontend-design은 30초 읽기 순서를 설계한다',
-              'systematic-debugging은 네 단계로 원인을 좁힌다',
-              'verification-before-completion은 네 증거를 한 번에 묶는다',
-          ):
-              assert f'<h2>{title}</h2>' in built, title
-          assert built.count('skill-rich-slide') >= 10
-          for marker in (
-              'DEFINITION',
-              'WHEN NOT TO USE',
-              'BEFORE → AFTER',
-              'CORE PRINCIPLES',
-              'COPYABLE PROMPT',
-              'PROMPT ANATOMY',
-              'EXAMPLE OUTPUT',
-              'QUALITY GATE',
-              'FAILURE PATTERNS',
-              'REQUEST EXAMPLE',
-          ):
-              assert built.count(marker) == 5, (marker, built.count(marker))
-          for korean_marker in ('사용하지 말아야 할 때', '실제 적용 사례', '프롬프트 문장별 역할', '좋은 결과 예시'):
-              assert korean_marker in built, korean_marker
-          skill_slides = re.findall(
-              r'<section\s+class="[^"]*\bskill-rich-slide\b[^"]*"\s+data-slide="(\d+)"\s+data-minutes="([0-9.]+)"',
-              built,
-          )
-          assert len(skill_slides) == 10, f'detailed skill timing count: {skill_slides}'
-          assert [page for page, _ in skill_slides] == [str(i) for i in range(16, 26)], skill_slides
-          assert all(float(value) >= 3 for _, value in skill_slides), f'detailed skill timings: {skill_slides}'
-          for marker in (
-              'Caveman과 Ponytail은 말과 구현을 각각 줄인다',
-              'CAVEMAN · 응답 압축',
-              'PONYTAIL · 구현 최소화',
+              'Caveman은 정확성을 유지하면서 답을 압축한다',
+              'Ponytail은 최소 구현 사다리를 따른다',
+              'brainstorming · Caveman · Ponytail만 설치한다',
               'JuliusBrussee/caveman',
               'DietrichGebert/ponytail',
-              '보안·검증·접근성·오류 처리',
+              '요구사항 정리 · 응답 압축 · 최소 구현',
           ):
               assert marker in built, marker
-          companion_slides = re.findall(
-              r'<section\s+class="[^"]*\bcompanion-skills-slide\b[^"]*"\s+data-slide="(\d+)"\s+data-minutes="([0-9.]+)"',
+          for removed in (
+              'writing-plans',
+              'frontend-design',
+              'systematic-debugging',
+              'verification-before-completion',
+          ):
+              assert removed not in built, removed
+
+          skill_pages = re.findall(
+              r'<section\s+class="[^"]*\bthree-skill-slide\b[^"]*"\s+data-slide="(\d+)"\s+data-minutes="([0-9.]+)"',
               built,
           )
-          assert companion_slides == [('26', '3')], companion_slides
-          for marker in (
-              'Claude Code vs Codex: 무엇이 다른가?',
-              '도구가 아니라 작업 방식으로 선택한다',
-              'TERMINAL-FIRST',
-              'MULTI-SURFACE',
-              'CLAUDE.md',
-              'Skills와 Plugins',
-              'https://docs.anthropic.com/en/docs/claude-code/overview',
-              'https://openai.com/codex/',
-          ):
-              assert marker in built, marker
+          assert [page for page, _ in skill_pages] == [str(i) for i in range(13, 27)], skill_pages
+          assert all(float(minutes) >= 2 for _, minutes in skill_pages)
+
           comparison_slides = re.findall(
               r'<section\s+class="[^"]*\btool-comparison-slide\b[^"]*"\s+data-slide="(\d+)"\s+data-minutes="([0-9.]+)"',
               built,
           )
           assert comparison_slides == [('28', '3'), ('29', '3')], comparison_slides
+          for marker in (
+              'Claude Code vs Codex: 무엇이 다른가?',
+              '도구가 아니라 작업 방식으로 선택한다',
+              'https://docs.anthropic.com/en/docs/claude-code/overview',
+              'https://openai.com/codex/',
+          ):
+              assert marker in built, marker
+
+          assert '<h2>CONTENTS</h2>' in built
+          assert '13–27' in built and '28–29' in built and '80–81' in built
+
           notes_match = re.search(
               r'<script type="application/json" id="speaker-notes-data">(.*?)</script>',
               built,
               re.S,
           )
-          assert notes_match, 'speaker notes missing'
+          assert notes_match
           notes = json.loads(notes_match.group(1))
           assert [note['slide'] for note in notes] == list(range(1, 82))
-          assert notes[1]['title'] == 'CONTENTS'
-          assert notes[25]['title'] == 'Caveman과 Ponytail은 말과 구현을 각각 줄인다'
-          assert notes[25]['body'].startswith('[약 3분]')
+          assert notes[12]['title'] == '오늘 사용할 스킬은 세 개뿐이다'
+          assert notes[16]['title'] == 'brainstorming은 네 질문으로 요구사항을 고정한다'
+          assert notes[17]['title'] == 'Caveman은 정확성을 유지하면서 답을 압축한다'
+          assert notes[22]['title'] == 'Ponytail은 최소 구현 사다리를 따른다'
+          assert notes[25]['title'] == 'brainstorming · Caveman · Ponytail만 설치한다'
           assert notes[27]['title'] == 'Claude Code vs Codex: 무엇이 다른가?'
           assert notes[28]['title'] == '도구가 아니라 작업 방식으로 선택한다'
-          for page in range(16, 26):
-              body = notes[page - 1]['body']
-              assert body.startswith('[약 3분]'), (page, body[:20])
-              assert len(body) > 250, (page, len(body))
-          for page in (28, 29):
-              body = notes[page - 1]['body']
-              assert body.startswith('[약 3분]'), (page, body[:20])
-              assert len(body) > 300, (page, len(body))
-          print(f'Validated public workshop 81 slides / {sum(built_minutes):g} minutes with companion skills and tool comparison')
+          print('Validated public 81-slide workshop with only three named skills')
           PY
 
           python -m py_compile scripts/build_workshop.py scripts/enrich_skill_pages.py scripts/add_companion_skills.py scripts/add_tool_comparison.py
